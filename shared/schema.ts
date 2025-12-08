@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { pgTable, text, varchar, timestamp, integer } from "drizzle-orm/pg-core";
+import { pgTable, text, varchar, timestamp, integer, boolean } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -56,3 +56,68 @@ export const eventFiltersSchema = z.object({
 });
 
 export type EventFilters = z.infer<typeof eventFiltersSchema>;
+
+export const cuisineTypes = [
+  "italian",
+  "american",
+  "french",
+  "spanish",
+  "mediterranean",
+  "asian",
+  "mexican",
+  "steakhouse",
+  "seafood",
+  "cafe",
+] as const;
+
+export type CuisineType = (typeof cuisineTypes)[number];
+
+export const priceRanges = ["$", "$$", "$$$", "$$$$"] as const;
+export type PriceRange = (typeof priceRanges)[number];
+
+export const restaurants = pgTable("restaurants", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull(),
+  cuisine: text("cuisine").notNull().$type<CuisineType>(),
+  description: text("description"),
+  address: text("address"),
+  phone: text("phone"),
+  website: text("website"),
+  priceRange: text("price_range").$type<PriceRange>(),
+  hours: text("hours"),
+  imageUrl: text("image_url"),
+});
+
+export const insertRestaurantSchema = createInsertSchema(restaurants).omit({
+  id: true,
+});
+
+export type InsertRestaurant = z.infer<typeof insertRestaurantSchema>;
+export type Restaurant = typeof restaurants.$inferSelect;
+
+export const specialTypes = ["weekly", "holiday", "happy-hour", "brunch"] as const;
+export type SpecialType = (typeof specialTypes)[number];
+
+export const specials = pgTable("specials", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  restaurantId: varchar("restaurant_id").notNull(),
+  title: text("title").notNull(),
+  description: text("description"),
+  type: text("type").notNull().$type<SpecialType>(),
+  price: text("price"),
+  validFrom: timestamp("valid_from"),
+  validTo: timestamp("valid_to"),
+  daysAvailable: text("days_available"),
+  isActive: boolean("is_active").default(true),
+});
+
+export const insertSpecialSchema = createInsertSchema(specials).omit({
+  id: true,
+});
+
+export type InsertSpecial = z.infer<typeof insertSpecialSchema>;
+export type Special = typeof specials.$inferSelect;
+
+export interface RestaurantWithSpecials extends Restaurant {
+  specials: Special[];
+}

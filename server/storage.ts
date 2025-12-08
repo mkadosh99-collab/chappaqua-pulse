@@ -1,4 +1,14 @@
-import { type Event, type InsertEvent, type EventCategory } from "@shared/schema";
+import { 
+  type Event, 
+  type InsertEvent, 
+  type EventCategory,
+  type Restaurant,
+  type InsertRestaurant,
+  type Special,
+  type InsertSpecial,
+  type RestaurantWithSpecials,
+  type SpecialType
+} from "@shared/schema";
 import { randomUUID } from "crypto";
 
 export interface IStorage {
@@ -10,14 +20,34 @@ export interface IStorage {
   clearEvents(): Promise<void>;
   getLastUpdated(): Date | null;
   setLastUpdated(date: Date): void;
+  
+  getRestaurants(): Promise<Restaurant[]>;
+  getRestaurantById(id: string): Promise<Restaurant | undefined>;
+  createRestaurant(restaurant: InsertRestaurant): Promise<Restaurant>;
+  createManyRestaurants(restaurants: InsertRestaurant[]): Promise<Restaurant[]>;
+  clearRestaurants(): Promise<void>;
+  
+  getSpecials(): Promise<Special[]>;
+  getSpecialsByRestaurant(restaurantId: string): Promise<Special[]>;
+  getSpecialsByType(type: SpecialType): Promise<Special[]>;
+  getActiveSpecials(): Promise<Special[]>;
+  createSpecial(special: InsertSpecial): Promise<Special>;
+  createManySpecials(specials: InsertSpecial[]): Promise<Special[]>;
+  clearSpecials(): Promise<void>;
+  
+  getRestaurantsWithSpecials(): Promise<RestaurantWithSpecials[]>;
 }
 
 export class MemStorage implements IStorage {
   private events: Map<string, Event>;
+  private restaurants: Map<string, Restaurant>;
+  private specials: Map<string, Special>;
   private lastUpdated: Date | null = null;
 
   constructor() {
     this.events = new Map();
+    this.restaurants = new Map();
+    this.specials = new Map();
   }
 
   async getEvents(): Promise<Event[]> {
@@ -75,6 +105,110 @@ export class MemStorage implements IStorage {
 
   setLastUpdated(date: Date): void {
     this.lastUpdated = date;
+  }
+
+  async getRestaurants(): Promise<Restaurant[]> {
+    return Array.from(this.restaurants.values());
+  }
+
+  async getRestaurantById(id: string): Promise<Restaurant | undefined> {
+    return this.restaurants.get(id);
+  }
+
+  async createRestaurant(insertRestaurant: InsertRestaurant): Promise<Restaurant> {
+    const id = randomUUID();
+    const restaurant: Restaurant = {
+      id,
+      name: insertRestaurant.name,
+      cuisine: insertRestaurant.cuisine as Restaurant["cuisine"],
+      description: insertRestaurant.description ?? null,
+      address: insertRestaurant.address ?? null,
+      phone: insertRestaurant.phone ?? null,
+      website: insertRestaurant.website ?? null,
+      priceRange: (insertRestaurant.priceRange as Restaurant["priceRange"]) ?? null,
+      hours: insertRestaurant.hours ?? null,
+      imageUrl: insertRestaurant.imageUrl ?? null,
+    };
+    this.restaurants.set(id, restaurant);
+    return restaurant;
+  }
+
+  async createManyRestaurants(insertRestaurants: InsertRestaurant[]): Promise<Restaurant[]> {
+    const createdRestaurants: Restaurant[] = [];
+    for (const insertRestaurant of insertRestaurants) {
+      const restaurant = await this.createRestaurant(insertRestaurant);
+      createdRestaurants.push(restaurant);
+    }
+    return createdRestaurants;
+  }
+
+  async clearRestaurants(): Promise<void> {
+    this.restaurants.clear();
+  }
+
+  async getSpecials(): Promise<Special[]> {
+    return Array.from(this.specials.values());
+  }
+
+  async getSpecialsByRestaurant(restaurantId: string): Promise<Special[]> {
+    const specials = Array.from(this.specials.values());
+    return specials.filter((special) => special.restaurantId === restaurantId);
+  }
+
+  async getSpecialsByType(type: SpecialType): Promise<Special[]> {
+    const specials = Array.from(this.specials.values());
+    return specials.filter((special) => special.type === type);
+  }
+
+  async getActiveSpecials(): Promise<Special[]> {
+    const specials = Array.from(this.specials.values());
+    return specials.filter((special) => special.isActive);
+  }
+
+  async createSpecial(insertSpecial: InsertSpecial): Promise<Special> {
+    const id = randomUUID();
+    const special: Special = {
+      id,
+      restaurantId: insertSpecial.restaurantId,
+      title: insertSpecial.title,
+      description: insertSpecial.description ?? null,
+      type: insertSpecial.type as Special["type"],
+      price: insertSpecial.price ?? null,
+      validFrom: insertSpecial.validFrom ?? null,
+      validTo: insertSpecial.validTo ?? null,
+      daysAvailable: insertSpecial.daysAvailable ?? null,
+      isActive: insertSpecial.isActive ?? true,
+    };
+    this.specials.set(id, special);
+    return special;
+  }
+
+  async createManySpecials(insertSpecials: InsertSpecial[]): Promise<Special[]> {
+    const createdSpecials: Special[] = [];
+    for (const insertSpecial of insertSpecials) {
+      const special = await this.createSpecial(insertSpecial);
+      createdSpecials.push(special);
+    }
+    return createdSpecials;
+  }
+
+  async clearSpecials(): Promise<void> {
+    this.specials.clear();
+  }
+
+  async getRestaurantsWithSpecials(): Promise<RestaurantWithSpecials[]> {
+    const restaurants = await this.getRestaurants();
+    const result: RestaurantWithSpecials[] = [];
+    
+    for (const restaurant of restaurants) {
+      const specials = await this.getSpecialsByRestaurant(restaurant.id);
+      result.push({
+        ...restaurant,
+        specials,
+      });
+    }
+    
+    return result;
   }
 }
 
