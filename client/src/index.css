@@ -43,7 +43,7 @@
   --chart-3: 262 83% 58%;
   --chart-4: 32 95% 44%;
   --chart-5: 340 82% 52%;
-  --font-sans: Open Sans, sans-serif;
+  --font-sans: Inter, sans-serif;
   --font-serif: Georgia, serif;
   --font-mono: Menlo, monospace;
   --radius: .5rem;
@@ -196,6 +196,15 @@
  * need to be distinguished from eachother visually.
  */
 @layer utilities {
+
+  /* Hide scrollbar for horizontal filter scrolling */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
 
   /* Hide ugly search cancel button in Chrome until we can style it properly */
   input[type="search"]::-webkit-search-cancel-button {
