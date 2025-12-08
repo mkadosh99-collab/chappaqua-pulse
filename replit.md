@@ -1,8 +1,8 @@
-# Chappaqua Events App
+# Chappaqua Pulse
 
 ## Overview
 
-A community discovery platform for Chappaqua, NY featuring two main sections:
+**Chappaqua Pulse** - A weekly tracker into what's happening in Chappaqua, NY. A community discovery platform featuring two main sections:
 
 1. **Events**: Aggregates and displays weekly events from local organizations including the library, performing arts center, recreation department, schools, and government. Events are scraped from various sources and presented in an information-dense, scannable interface optimized for quick event discovery.
 

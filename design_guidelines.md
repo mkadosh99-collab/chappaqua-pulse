@@ -1,4 +1,4 @@
-# Chappaqua Events App - Design Guidelines
+# Chappaqua Pulse - Design Guidelines
 
 ## Design Approach
 **System**: Material Design principles adapted for local event discovery

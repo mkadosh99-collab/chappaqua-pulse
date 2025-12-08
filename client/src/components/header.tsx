@@ -12,12 +12,11 @@ export function Header() {
             </div>
             <div>
               <h1 className="text-xl font-semibold tracking-tight" data-testid="text-app-title">
-                Chappaqua Events
+                Chappaqua Pulse
               </h1>
-              <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                <MapPin className="w-3 h-3" />
-                <span>Chappaqua, NY</span>
-              </div>
+              <p className="text-xs text-muted-foreground">
+                A weekly tracker into what's happening in Chappaqua
+              </p>
             </div>
           </div>
           <ThemeToggle />
