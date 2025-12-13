@@ -24,6 +24,8 @@ export const eventCategories = [
   "recreation",
   "schools",
   "government",
+  "sports",
+  "holiday",
 ] as const;
 
 export type EventCategory = (typeof eventCategories)[number];

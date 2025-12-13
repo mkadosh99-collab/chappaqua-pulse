@@ -7,7 +7,9 @@ import {
   TreePine, 
   GraduationCap, 
   Landmark,
-  LayoutGrid 
+  LayoutGrid,
+  Trophy,
+  PartyPopper
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -47,6 +49,16 @@ const categoryConfig: Record<EventCategory, { label: string; icon: typeof Buildi
     label: "Government", 
     icon: Landmark,
     color: "bg-slate-100 text-slate-700 dark:bg-slate-800/60 dark:text-slate-300"
+  },
+  sports: { 
+    label: "Sports", 
+    icon: Trophy,
+    color: "bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-300"
+  },
+  holiday: { 
+    label: "Holiday", 
+    icon: PartyPopper,
+    color: "bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300"
   },
 };
 
