@@ -7,6 +7,36 @@ import { startOfWeek, endOfWeek, parseISO } from "date-fns";
 
 let isInitialized = false;
 let initializationPromise: Promise<void> | null = null;
+let scheduledRefreshInterval: NodeJS.Timeout | null = null;
+
+const REFRESH_INTERVAL_MS = 60 * 60 * 1000; // 1 hour
+
+async function refreshData() {
+  try {
+    console.log(`[${new Date().toISOString()}] Scheduled refresh starting...`);
+    
+    const events = await scrapeAllEvents();
+    await storage.clearEvents();
+    await storage.createManyEvents(events);
+    console.log(`[${new Date().toISOString()}] Refreshed ${events.length} events`);
+    
+    storage.setLastUpdated(new Date());
+  } catch (error) {
+    console.error(`[${new Date().toISOString()}] Scheduled refresh failed:`, error);
+  }
+}
+
+function startScheduledRefresh() {
+  if (scheduledRefreshInterval) {
+    clearInterval(scheduledRefreshInterval);
+  }
+  
+  scheduledRefreshInterval = setInterval(async () => {
+    await refreshData();
+  }, REFRESH_INTERVAL_MS);
+  
+  console.log(`Scheduled refresh started - will refresh every ${REFRESH_INTERVAL_MS / 1000 / 60} minutes`);
+}
 
 async function initializeData() {
   if (isInitialized) return;
@@ -40,6 +70,8 @@ async function initializeData() {
       
       storage.setLastUpdated(new Date());
       isInitialized = true;
+      
+      startScheduledRefresh();
     } catch (error) {
       console.error("Error initializing data:", error);
       throw error;
