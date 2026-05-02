@@ -12,6 +12,7 @@ export function getChappaquaRestaurants(): InsertRestaurant[] {
       website: "https://bassobypxk.com/",
       priceRange: "$$$",
       hours: "Tue-Sun 5-10pm, Brunch Sun 11:30am-2:30pm",
+      imageUrl: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&q=80",
     },
     {
       name: "The Kittle House Inn & Restaurant",
@@ -22,6 +23,7 @@ export function getChappaquaRestaurants(): InsertRestaurant[] {
       website: "https://www.thekittlehouseinn.com/",
       priceRange: "$$$$",
       hours: "Tue-Sat 5:30-9pm, Sun Brunch 11am-2pm",
+      imageUrl: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=80",
     },
     {
       name: "Ibiza Kitchen",
@@ -32,6 +34,7 @@ export function getChappaquaRestaurants(): InsertRestaurant[] {
       website: "https://www.ibiza-kitchenny.com/",
       priceRange: "$$$",
       hours: "Tue-Thu 5-9:30pm, Fri-Sat 5-10pm, Sun 5-9pm",
+      imageUrl: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&q=80",
     },
     {
       name: "Quaker Hill Tavern",
@@ -42,6 +45,7 @@ export function getChappaquaRestaurants(): InsertRestaurant[] {
       website: "https://quakerhilltavern.net/",
       priceRange: "$$",
       hours: "Mon-Sun 11:30am-10pm",
+      imageUrl: "https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?w=600&q=80",
     },
     {
       name: "Le Jardin du Roi",
@@ -52,6 +56,7 @@ export function getChappaquaRestaurants(): InsertRestaurant[] {
       website: "https://lejardinchappaqua.com/",
       priceRange: "$$",
       hours: "Mon-Sat 8am-9pm, Sun 8am-4pm",
+      imageUrl: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=80",
     },
     {
       name: "Bia American Kitchen",
@@ -62,6 +67,7 @@ export function getChappaquaRestaurants(): InsertRestaurant[] {
       website: "https://biaamericankitchen.com/",
       priceRange: "$$",
       hours: "Tue-Sun 5-10pm",
+      imageUrl: "https://images.unsplash.com/photo-1544025162-d76694265947?w=600&q=80",
     },
     {
       name: "Mentor's Mediterranean Steakhouse",
@@ -71,6 +77,7 @@ export function getChappaquaRestaurants(): InsertRestaurant[] {
       phone: "(914) 238-9600",
       priceRange: "$$$$",
       hours: "Wed-Sun 5-10pm",
+      imageUrl: "https://images.unsplash.com/photo-1544025162-d76694265947?w=600&q=80",
     },
     {
       name: "Chappaqua Deli & Cafe",
@@ -80,6 +87,7 @@ export function getChappaquaRestaurants(): InsertRestaurant[] {
       phone: "(914) 238-3232",
       priceRange: "$",
       hours: "Mon-Sat 6am-4pm, Sun 7am-3pm",
+      imageUrl: "https://images.unsplash.com/photo-1559329007-40df8a9345d8?w=600&q=80",
     },
   ];
 }

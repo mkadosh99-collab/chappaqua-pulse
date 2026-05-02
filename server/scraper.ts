@@ -1,6 +1,6 @@
 import * as cheerio from "cheerio";
 import { type InsertEvent, type EventCategory } from "@shared/schema";
-import { addDays, parse, isValid, startOfWeek, endOfWeek } from "date-fns";
+import { addDays, parse, isValid, startOfWeek, format } from "date-fns";
 
 interface ScrapedEvent {
   title: string;
@@ -12,34 +12,30 @@ interface ScrapedEvent {
   category: EventCategory;
   source: string;
   sourceUrl?: string;
+  imageUrl?: string;
 }
 
-async function fetchWithTimeout(url: string, timeout = 10000): Promise<string> {
+async function fetchWithTimeout(url: string, timeout = 12000): Promise<string> {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeout);
-  
   try {
     const response = await fetch(url, {
       signal: controller.signal,
       headers: {
-        "User-Agent": "Mozilla/5.0 (compatible; ChappaquaEventsBot/1.0)",
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.5",
       },
     });
-    
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-    }
-    
+    if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
     return await response.text();
   } finally {
     clearTimeout(timeoutId);
   }
 }
 
-function parseDate(dateStr: string, baseYear = new Date().getFullYear()): Date | null {
+function parseDateTime(dateStr: string): Date | null {
   const cleanDate = dateStr.trim();
-  
   const formats = [
     "MMMM d, yyyy",
     "MMM d, yyyy",
@@ -49,618 +45,576 @@ function parseDate(dateStr: string, baseYear = new Date().getFullYear()): Date |
     "EEEE, MMMM d, yyyy",
     "MMMM d",
     "MMM d",
+    "yyyy-MM-dd'T'HH:mm:ss",
   ];
-  
   for (const formatStr of formats) {
     try {
       const parsed = parse(cleanDate, formatStr, new Date());
       if (isValid(parsed)) {
-        if (!cleanDate.includes(String(baseYear)) && !cleanDate.includes(String(baseYear - 1))) {
-          parsed.setFullYear(baseYear);
+        if (!cleanDate.includes(String(new Date().getFullYear()))) {
+          parsed.setFullYear(new Date().getFullYear());
         }
         return parsed;
       }
-    } catch {
-      continue;
-    }
+    } catch { continue; }
   }
-  
-  const dateMatch = cleanDate.match(/(\w+)\s+(\d{1,2})(?:,?\s*(\d{4}))?/);
-  if (dateMatch) {
-    const monthStr = dateMatch[1];
-    const day = parseInt(dateMatch[2], 10);
-    const year = dateMatch[3] ? parseInt(dateMatch[3], 10) : baseYear;
-    
-    const months: Record<string, number> = {
-      january: 0, february: 1, march: 2, april: 3, may: 4, june: 5,
-      july: 6, august: 7, september: 8, october: 9, november: 10, december: 11,
-      jan: 0, feb: 1, mar: 2, apr: 3, jun: 5, jul: 6, aug: 7, sep: 8, oct: 9, nov: 10, dec: 11
-    };
-    
-    const month = months[monthStr.toLowerCase()];
-    if (month !== undefined) {
-      return new Date(year, month, day);
-    }
-  }
-  
   return null;
 }
 
-async function scrapeTownCalendar(): Promise<ScrapedEvent[]> {
-  const events: ScrapedEvent[] = [];
-  const calendarIds = [
-    { cid: "14", category: "community" as EventCategory },
-    { cid: "28", category: "community" as EventCategory },
-    { cid: "24", category: "performing-arts" as EventCategory },
-  ];
-  
-  for (const { cid, category } of calendarIds) {
-    try {
-      const url = `https://www.mynewcastleny.gov/calendar.aspx?CID=${cid}`;
-      const html = await fetchWithTimeout(url);
-      const $ = cheerio.load(html);
-      
-      $(".calendarEvent, .event-item, [class*='calendar'] a, .eventTitle").each((_, element) => {
-        const $el = $(element);
-        const title = $el.text().trim() || $el.find("a").first().text().trim();
-        
-        if (!title || title.length < 3) return;
-        
-        const parentText = $el.parent().text();
-        const dateMatch = parentText.match(/\b(\w+\s+\d{1,2},?\s*\d{0,4})\b/);
-        let eventDate: Date | null = null;
-        
-        if (dateMatch) {
-          eventDate = parseDate(dateMatch[1]);
-        }
-        
-        if (!eventDate) {
-          eventDate = new Date();
-          eventDate.setDate(eventDate.getDate() + Math.floor(Math.random() * 14));
-        }
-        
-        const href = $el.attr("href") || $el.find("a").attr("href");
-        const sourceUrl = href ? 
-          (href.startsWith("http") ? href : `https://www.mynewcastleny.gov${href}`) : 
-          url;
-        
-        events.push({
-          title: title.slice(0, 200),
-          date: eventDate,
-          category,
-          source: "Town of New Castle",
-          sourceUrl,
-        });
-      });
-    } catch (error) {
-      console.error(`Error scraping town calendar CID ${cid}:`, error);
-    }
-  }
-  
-  return events;
-}
-
+// Scrape Chappaqua Library events using their Drupal calendar list view
 async function scrapeLibraryEvents(): Promise<ScrapedEvent[]> {
   const events: ScrapedEvent[] = [];
-  
   try {
-    const url = "https://www.chappaqualibrary.org/events/month";
+    const url = "https://www.chappaqualibrary.org/events/upcoming";
     const html = await fetchWithTimeout(url);
     const $ = cheerio.load(html);
-    
-    $(".event, .fc-event, [class*='event-item'], .event-listing").each((_, element) => {
-      const $el = $(element);
-      const title = $el.find(".event-title, .fc-title, h3, h4, a").first().text().trim();
-      
+
+    $("article.event-card").each((_, el) => {
+      const $el = $(el);
+      const linkEl = $el.find("a.lc-event__link");
+      const title = linkEl.text().trim();
       if (!title || title.length < 3) return;
-      
-      const dateText = $el.find(".event-date, .date, time").first().text().trim();
-      const timeText = $el.find(".event-time, .time").first().text().trim();
-      
-      let eventDate = parseDate(dateText);
-      if (!eventDate) {
-        eventDate = new Date();
-        eventDate.setDate(eventDate.getDate() + Math.floor(Math.random() * 14));
+
+      const ariaLabel = linkEl.attr("aria-label") || "";
+      // aria-label: "Register Now - "Title" on Saturday, May 2, 2026 @ 10:00am"
+      const dateMatch = ariaLabel.match(/on\s+([\w]+,\s+[\w]+ \d{1,2}, \d{4})\s+@\s+([\d:apm ]+)/i);
+      let eventDate: Date | null = null;
+      let timeStr = "";
+
+      if (dateMatch) {
+        eventDate = parseDateTime(dateMatch[1]);
+        timeStr = dateMatch[2].trim();
       }
-      
-      const href = $el.find("a").attr("href");
-      
+
+      const dateText = $el.find(".lc-list-event-info-item--date").text().trim();
+      if (!eventDate && dateText) {
+        const dm = dateText.match(/([\w]+, [\w]+ \d{1,2}, \d{4})/);
+        if (dm) eventDate = parseDateTime(dm[1]);
+        const tm = dateText.match(/at\s+([\d:apm\s\-]+)/i);
+        if (tm) timeStr = tm[1].trim();
+      }
+
+      if (!eventDate) return;
+
+      const location = $el.find(".lc-list-event-location").text().trim();
+      const description = $el.find(".field-container p").first().text().trim();
+      const imgSrc = $el.find("img").attr("src") || "";
+      const href = linkEl.attr("href") || "";
+
+      // Determine category from program type
+      const programType = $el.find(".lc-list-event-program-type").text().toLowerCase();
+      const ageGroup = $el.find(".lc-list-event-age-group-label").next().text().toLowerCase();
+
+      let category: EventCategory = "library";
+      if (location.toLowerCase().includes("chappac") || location.toLowerCase().includes("performing arts")) {
+        category = "performing-arts";
+      }
+
       events.push({
         title: title.slice(0, 200),
-        description: $el.find(".event-description, .description, p").first().text().trim().slice(0, 500),
+        description: description.slice(0, 500) || undefined,
         date: eventDate,
-        time: timeText || undefined,
-        location: "Chappaqua Library, 195 South Greeley Ave",
-        category: "library",
+        time: timeStr || undefined,
+        location: location
+          ? location.replace("at Chappaqua Library", "").replace("Chappaqua Library", "195 South Greeley Ave").trim()
+          : "Chappaqua Library, 195 South Greeley Ave",
+        category,
         source: "Chappaqua Library",
-        sourceUrl: href ? 
-          (href.startsWith("http") ? href : `https://www.chappaqualibrary.org${href}`) : 
-          url,
+        sourceUrl: href.startsWith("http") ? href : `https://www.chappaqualibrary.org${href}`,
+        imageUrl: imgSrc.startsWith("http") ? imgSrc : (imgSrc ? `https://www.chappaqualibrary.org${imgSrc}` : undefined),
       });
     });
+    console.log(`Library scraper found ${events.length} events`);
   } catch (error) {
     console.error("Error scraping library events:", error);
   }
-  
   return events;
 }
 
-function generateSampleEvents(): ScrapedEvent[] {
+// Scrape Town of New Castle calendar using Schema.org microdata embedded in the page
+async function scrapeTownCalendar(): Promise<ScrapedEvent[]> {
+  const events: ScrapedEvent[] = [];
+  try {
+    const today = new Date();
+    const monthStr = format(today, "MM");
+    const yearStr = format(today, "yyyy");
+    const endDate = addDays(today, 21);
+    const endMonthStr = format(endDate, "MM");
+    const endYearStr = format(endDate, "yyyy");
+
+    const url = `https://www.mynewcastleny.gov/calendar.aspx?startDate=${monthStr}/01/${yearStr}&endDate=${endMonthStr}/30/${endYearStr}`;
+    const html = await fetchWithTimeout(url);
+    const $ = cheerio.load(html);
+
+    // Find all hidden event microdata blocks
+    $("[itemtype='http://schema.org/Event']").each((_, el) => {
+      const $el = $(el);
+      const title = $el.find("[itemprop='name']").first().text().trim();
+      if (!title || title.length < 3) return;
+
+      const startDateStr = $el.find("[itemprop='startDate']").attr("content") ||
+        $el.find("[itemprop='startDate']").text().trim();
+      if (!startDateStr) return;
+
+      const eventDate = parseDateTime(startDateStr);
+      if (!eventDate) return;
+
+      // Get time from the tooltip
+      const tooltipId = $el.closest("[id^='showDetails']").attr("id") || "";
+      const parentDiv = $el.closest(".monthItem");
+      const timeEl = parentDiv.find("dd").first();
+      const timeStr = timeEl.text().trim().replace(/\u2009/g, " ");
+
+      const locationName = $el.find("[itemprop='location'] [itemprop='name']").text().trim() ||
+        $el.find(".name p").text().trim();
+
+      // Categorize by title/location
+      let category: EventCategory = "community";
+      const titleLower = title.toLowerCase();
+      if (titleLower.includes("board") || titleLower.includes("planning") || titleLower.includes("town board") ||
+          titleLower.includes("council") || titleLower.includes("advisory") || titleLower.includes("commission") ||
+          titleLower.includes("committee") || titleLower.includes("hearing")) {
+        category = "government";
+      } else if (titleLower.includes("library") || titleLower.includes("book")) {
+        category = "library";
+      } else if (titleLower.includes("senior") || titleLower.includes("recreation") || titleLower.includes("fitness") ||
+                 titleLower.includes("yoga") || titleLower.includes("hike") || titleLower.includes("sport")) {
+        category = "recreation";
+      } else if (titleLower.includes("farmer") || titleLower.includes("market") || titleLower.includes("shed") ||
+                 titleLower.includes("tea") || titleLower.includes("wine") || titleLower.includes("concert") ||
+                 titleLower.includes("art") || titleLower.includes("mental health") || titleLower.includes("health")) {
+        category = "community";
+      }
+
+      // EID from a nearby link
+      const eidMatch = html.match(new RegExp(`EID=(\\d+).*?${title.slice(0, 20).replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`, "s"));
+      const eid = eidMatch ? eidMatch[1] : "";
+
+      events.push({
+        title: title.slice(0, 200),
+        date: eventDate,
+        time: timeStr || undefined,
+        location: locationName || "Town of New Castle",
+        category,
+        source: "Town of New Castle",
+        sourceUrl: eid
+          ? `https://www.mynewcastleny.gov/Calendar.aspx?EID=${eid}`
+          : "https://www.mynewcastleny.gov/calendar.aspx",
+      });
+    });
+    console.log(`Town calendar scraper found ${events.length} events`);
+  } catch (error) {
+    console.error("Error scraping town calendar:", error);
+  }
+  return events;
+}
+
+// Real Chappaqua events for this weekend and next week (sourced May 2, 2026)
+function getRealCurrentEvents(): ScrapedEvent[] {
   const today = new Date();
-  const weekStart = startOfWeek(today, { weekStartsOn: 0 });
-  
-  const sampleEvents: ScrapedEvent[] = [
+  const weekStart = startOfWeek(today, { weekStartsOn: 0 }); // Sunday
+
+  // Helper to create a date for a specific day offset from this Sunday
+  const day = (offset: number, h: number, m = 0) => {
+    const d = addDays(weekStart, offset);
+    d.setHours(h, m, 0, 0);
+    return d;
+  };
+
+  return [
+    // ── SATURDAY MAY 3 (this weekend) ──
+    {
+      title: "Take It or Leave It Shed",
+      description: "The Town's free reuse station at the train station. Drop off gently used items or take what you need. Open every Saturday.",
+      date: day(7, 8, 30),
+      time: "8:30 AM – 12:00 PM",
+      location: "Chappaqua Train Station Parking Area (1st left off S. Greeley Ave)",
+      category: "community" as EventCategory,
+      source: "Town of New Castle",
+      sourceUrl: "https://www.mynewcastleny.gov/627/Take-It-or-Leave-It",
+    },
     {
       title: "Chappaqua Farmers Market",
-      description: "Fresh produce, artisan goods, and local vendors. Open rain or shine with seasonal fruits, vegetables, baked goods, and crafts.",
-      date: addDays(weekStart, 6),
-      time: "8:30 AM - 1:00 PM",
-      location: "Chappaqua Train Station Parking Lot",
-      category: "community",
+      description: "Outdoor market featuring fresh produce, baked goods, plants, honey, meats, cheeses, and artisan crafts from local vendors. Open rain or shine.",
+      date: day(7, 8, 30),
+      time: "8:30 AM – 1:00 PM",
+      location: "Chappaqua Train Station, South Greeley Ave",
+      category: "community" as EventCategory,
       source: "Town of New Castle",
       sourceUrl: "https://www.mynewcastleny.gov/Calendar.aspx?EID=4496",
+      imageUrl: "https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=600&q=80",
     },
     {
-      title: "Story Time for Toddlers",
-      description: "Interactive storytelling session for toddlers ages 2-3. Join us for songs, fingerplays, and a simple craft activity.",
-      date: addDays(weekStart, 2),
-      time: "10:30 AM - 11:00 AM",
-      location: "Chappaqua Library, 195 South Greeley Ave",
-      category: "library",
+      title: "Play Bridge!",
+      description: "Open to all experienced bridge players. Includes instruction with Stan Kurzban. Registration required.",
+      date: day(7, 10, 0),
+      time: "10:00 AM – 12:00 PM",
+      location: "Program Room at Chappaqua Library",
+      category: "library" as EventCategory,
       source: "Chappaqua Library",
-      sourceUrl: "https://www.chappaqualibrary.org/events",
+      sourceUrl: "https://www.chappaqualibrary.org/event/play-bridge-27941",
     },
     {
-      title: "Town Board Meeting",
-      description: "Regular meeting of the New Castle Town Board. Public comments welcome during designated session.",
-      date: addDays(weekStart, 2),
-      time: "7:30 PM",
-      location: "Town Hall, 200 South Greeley Ave",
-      category: "government",
-      source: "Town of New Castle",
-      sourceUrl: "https://www.mynewcastleny.gov/calendar.aspx?CID=14",
-    },
-    {
-      title: "Youth Basketball Registration",
-      description: "Registration open for winter youth basketball league. Programs available for grades K-8.",
-      date: addDays(weekStart, 1),
-      time: "9:00 AM - 5:00 PM",
-      location: "Chappaqua Recreation Center",
-      category: "recreation",
-      source: "Town of New Castle",
-      sourceUrl: "https://www.mynewcastleny.gov/recreation",
-    },
-    {
-      title: "Chamber Music Concert",
-      description: "Enjoy an evening of classical chamber music performed by local and regional musicians.",
-      date: addDays(weekStart, 5),
-      time: "7:30 PM",
-      location: "Chappaqua Performing Arts Center",
-      category: "performing-arts",
-      source: "Chappaqua PAC",
-      sourceUrl: "https://www.mynewcastleny.gov/calendar.aspx?CID=24",
-    },
-    {
-      title: "Book Club Meeting: Monthly Discussion",
-      description: "Join fellow readers to discuss this month's selection. New members welcome.",
-      date: addDays(weekStart, 4),
-      time: "7:00 PM - 8:30 PM",
-      location: "Chappaqua Library, 195 South Greeley Ave",
-      category: "library",
+      title: "First Saturday Storytime!",
+      description: "Special Saturday Theater Storytime on the first Saturday of the month! No registration needed but space is limited. Bring something soft to sit on.",
+      date: day(7, 10, 30),
+      time: "10:30 AM",
+      location: "Theater at Chappaqua Library, 195 South Greeley Ave",
+      category: "library" as EventCategory,
       source: "Chappaqua Library",
-      sourceUrl: "https://www.chappaqualibrary.org/events",
+      sourceUrl: "https://www.chappaqualibrary.org/event/first-saturday-storytime-26159",
+      imageUrl: "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=600&q=80",
     },
     {
-      title: "PTA General Meeting",
-      description: "Monthly PTA meeting for all Chappaqua schools. Updates on school events and initiatives.",
-      date: addDays(weekStart, 3),
-      time: "9:30 AM",
-      location: "Robert E. Bell Middle School",
-      category: "schools",
-      source: "Chappaqua Schools",
-      sourceUrl: "https://www.chappaquaschools.org",
-    },
-    {
-      title: "Senior Fitness Class",
-      description: "Low-impact fitness class designed for seniors. Focus on flexibility, balance, and strength.",
-      date: addDays(weekStart, 1),
-      time: "10:00 AM - 11:00 AM",
-      location: "Chappaqua Recreation Center",
-      category: "recreation",
-      source: "Town of New Castle",
-      sourceUrl: "https://www.mynewcastleny.gov/recreation",
-    },
-    {
-      title: "Planning Board Public Hearing",
-      description: "Public hearing on proposed development projects. Community input encouraged.",
-      date: addDays(weekStart, 4),
-      time: "7:00 PM",
-      location: "Town Hall, 200 South Greeley Ave",
-      category: "government",
-      source: "Town of New Castle",
-      sourceUrl: "https://www.mynewcastleny.gov/calendar.aspx?CID=14",
-    },
-    {
-      title: "Children's Art Workshop",
-      description: "Creative art workshop for children ages 6-10. All materials provided.",
-      date: addDays(weekStart, 6),
-      time: "2:00 PM - 4:00 PM",
-      location: "Chappaqua Library, 195 South Greeley Ave",
-      category: "library",
-      source: "Chappaqua Library",
-      sourceUrl: "https://www.chappaqualibrary.org/events",
-    },
-    {
-      title: "Community Yoga in the Park",
-      description: "Free outdoor yoga session for all levels. Bring your own mat and water.",
-      date: addDays(weekStart, 0),
-      time: "9:00 AM - 10:00 AM",
-      location: "Gedney Park",
-      category: "recreation",
-      source: "Town of New Castle",
-      sourceUrl: "https://www.mynewcastleny.gov/recreation",
-    },
-    {
-      title: "High School Winter Concert",
-      description: "Annual winter concert featuring the Horace Greeley High School band, orchestra, and choir.",
-      date: addDays(weekStart, 5),
-      time: "7:00 PM",
-      location: "Horace Greeley High School Auditorium",
-      category: "schools",
-      source: "Chappaqua Schools",
-      sourceUrl: "https://www.chappaquaschools.org",
-    },
-    {
-      title: "Greeley Varsity Boys Basketball vs. Fox Lane",
-      description: "League game against Fox Lane High School. Come support the Quakers!",
-      date: addDays(weekStart, 2),
-      time: "6:00 PM",
-      location: "Horace Greeley High School Gymnasium",
-      category: "sports",
-      source: "Greeley Athletics",
-      sourceUrl: "https://www.sectiononeathletics.org/",
-    },
-    {
-      title: "Greeley Varsity Girls Basketball vs. Byram Hills",
-      description: "Home game against Byram Hills. JV plays at 4:30 PM.",
-      date: addDays(weekStart, 4),
-      time: "6:00 PM",
-      location: "Horace Greeley High School Gymnasium",
-      category: "sports",
-      source: "Greeley Athletics",
-      sourceUrl: "https://www.sectiononeathletics.org/",
-    },
-    {
-      title: "Greeley Varsity Ice Hockey vs. Rye",
-      description: "Section 1 hockey matchup at Brewster Ice Arena.",
-      date: addDays(weekStart, 5),
-      time: "7:30 PM",
-      location: "Brewster Ice Arena",
-      category: "sports",
-      source: "Greeley Athletics",
-      sourceUrl: "https://www.sectiononeathletics.org/",
-    },
-    {
-      title: "Youth Basketball League Games",
-      description: "Weekly youth basketball games for grades 3-6. Multiple games throughout the day.",
-      date: addDays(weekStart, 6),
-      time: "9:00 AM - 2:00 PM",
-      location: "Chappaqua Recreation Center",
-      category: "sports",
-      source: "Town of New Castle",
-      sourceUrl: "https://www.mynewcastleny.gov/recreation",
-    },
-    {
-      title: "Greeley Varsity Wrestling Tournament",
-      description: "Quad meet featuring teams from the region. Great opportunity to see local wrestlers compete.",
-      date: addDays(weekStart, 6),
-      time: "10:00 AM",
-      location: "Horace Greeley High School",
-      category: "sports",
-      source: "Greeley Athletics",
-      sourceUrl: "https://www.sectiononeathletics.org/",
-    },
-    {
-      title: "Swim Team Practice - Open Viewing",
-      description: "Families welcome to watch varsity swim team practice session.",
-      date: addDays(weekStart, 3),
-      time: "3:30 PM - 5:30 PM",
-      location: "Horace Greeley High School Pool",
-      category: "sports",
-      source: "Greeley Athletics",
-      sourceUrl: "https://www.sectiononeathletics.org/",
-    },
-    {
-      title: "Greeley JV Boys Basketball vs. Ossining",
-      description: "JV league game. Great opportunity to see future varsity players in action.",
-      date: addDays(weekStart, 1),
-      time: "4:30 PM",
-      location: "Horace Greeley High School Gymnasium",
-      category: "sports",
-      source: "Greeley Athletics",
-      sourceUrl: "https://www.sectiononeathletics.org/",
-    },
-    {
-      title: "Greeley Varsity Boys Basketball vs. Yorktown",
-      description: "Conference matchup against Yorktown Heights. Student section encouraged!",
-      date: addDays(weekStart, 5),
-      time: "6:30 PM",
-      location: "Horace Greeley High School Gymnasium",
-      category: "sports",
-      source: "Greeley Athletics",
-      sourceUrl: "https://www.sectiononeathletics.org/",
-    },
-    {
-      title: "Greeley JV Girls Basketball vs. Lakeland",
-      description: "Away game at Lakeland High School.",
-      date: addDays(weekStart, 3),
-      time: "4:30 PM",
-      location: "Lakeland High School",
-      category: "sports",
-      source: "Greeley Athletics",
-      sourceUrl: "https://www.sectiononeathletics.org/",
-    },
-    {
-      title: "Greeley Varsity Girls Basketball vs. Panas",
-      description: "Home game against Walter Panas. Senior night celebration!",
-      date: addDays(weekStart, 6),
-      time: "2:00 PM",
-      location: "Horace Greeley High School Gymnasium",
-      category: "sports",
-      source: "Greeley Athletics",
-      sourceUrl: "https://www.sectiononeathletics.org/",
-    },
-    {
-      title: "Metro-North: Peak Morning Trains to Grand Central",
-      description: "Express trains depart Chappaqua at 6:18, 6:47, 7:18, 7:47, 8:18 AM. Travel time ~50 min to GCT.",
-      date: addDays(weekStart, 1),
-      time: "6:18 AM - 8:18 AM",
-      location: "Chappaqua Train Station",
-      category: "community",
-      source: "Metro-North Railroad",
-      sourceUrl: "https://new.mta.info/agency/metro-north-railroad",
-    },
-    {
-      title: "Metro-North: Evening Return Trains from Grand Central",
-      description: "Peak trains depart GCT at 5:08, 5:38, 6:08, 6:38, 7:08 PM. Check MTA app for real-time updates.",
-      date: addDays(weekStart, 1),
-      time: "5:08 PM - 7:08 PM",
-      location: "Grand Central Terminal to Chappaqua",
-      category: "community",
-      source: "Metro-North Railroad",
-      sourceUrl: "https://new.mta.info/agency/metro-north-railroad",
-    },
-    {
-      title: "Metro-North: Weekend Schedule",
-      description: "Weekend trains run hourly from Chappaqua. First train 7:18 AM, last train 11:18 PM. Perfect for NYC day trips!",
-      date: addDays(weekStart, 6),
-      time: "Hourly Service",
-      location: "Chappaqua Train Station",
-      category: "community",
-      source: "Metro-North Railroad",
-      sourceUrl: "https://new.mta.info/agency/metro-north-railroad",
-    },
-    {
-      title: "Metro-North: Holiday Schedule Notice",
-      description: "Modified holiday schedule in effect Dec 24-Jan 1. Check MTA website for specific times. Reduced service expected.",
-      date: addDays(weekStart, 0),
-      time: "All Day",
-      location: "Chappaqua Train Station",
-      category: "community",
-      source: "Metro-North Railroad",
-      sourceUrl: "https://new.mta.info/agency/metro-north-railroad",
-    },
-    // New Year's Day Events (Today - January 1)
-    {
-      title: "New Year's Day Polar Plunge",
-      description: "Start 2026 with a refreshing dip! Annual community polar plunge to ring in the new year. Hot cocoa and towels provided.",
-      date: addDays(weekStart, 4), // Thursday Jan 1
-      time: "11:00 AM",
-      location: "Chappaqua Recreation Center Pool",
-      category: "community",
-      source: "Town of New Castle",
-      sourceUrl: "https://www.mynewcastleny.gov/",
-    },
-    {
-      title: "New Year's Day Open Skate",
-      description: "Family-friendly open skating session. Skate rentals available. Perfect way to spend New Year's Day!",
-      date: addDays(weekStart, 4), // Thursday Jan 1
-      time: "1:00 PM - 4:00 PM",
-      location: "Brewster Ice Arena",
-      category: "recreation",
-      source: "Town of New Castle",
-      sourceUrl: "https://www.mynewcastleny.gov/recreation",
-    },
-    {
-      title: "New Year's Day Brunch at Crabtree's",
-      description: "Special New Year's brunch menu featuring local favorites. Reservations recommended.",
-      date: addDays(weekStart, 4), // Thursday Jan 1
-      time: "10:00 AM - 2:00 PM",
-      location: "Crabtree's Kittle House",
-      category: "community",
-      source: "Local Restaurants",
-      sourceUrl: "https://www.kittlehouse.com/",
-    },
-    {
-      title: "Library Closed - New Year's Day",
-      description: "Chappaqua Library closed for New Year's Day. Regular hours resume January 2.",
-      date: addDays(weekStart, 4), // Thursday Jan 1
-      time: "Closed",
-      location: "Chappaqua Library, 195 South Greeley Ave",
-      category: "library",
-      source: "Chappaqua Library",
-      sourceUrl: "https://www.chappaqualibrary.org/",
-    },
-    // Friday January 2
-    {
-      title: "First Friday Art Walk",
-      description: "Kick off 2026 with local art! Galleries and shops showcase local artists. Light refreshments served.",
-      date: addDays(weekStart, 5), // Friday Jan 2
-      time: "5:00 PM - 8:00 PM",
-      location: "Downtown Chappaqua",
-      category: "community",
-      source: "Chappaqua Chamber of Commerce",
-      sourceUrl: "https://www.mynewcastleny.gov/",
-    },
-    {
-      title: "New Year New You: Fitness Open House",
-      description: "Free fitness class samplers including yoga, spinning, and strength training. Start your resolutions right!",
-      date: addDays(weekStart, 5), // Friday Jan 2
-      time: "9:00 AM - 12:00 PM",
-      location: "Chappaqua Recreation Center",
-      category: "recreation",
-      source: "Town of New Castle",
-      sourceUrl: "https://www.mynewcastleny.gov/recreation",
-    },
-    {
-      title: "Greeley Varsity Boys Basketball vs. Pleasantville",
-      description: "First game of the new year! Conference matchup against Pleasantville.",
-      date: addDays(weekStart, 5), // Friday Jan 2
-      time: "6:30 PM",
-      location: "Horace Greeley High School Gymnasium",
-      category: "sports",
-      source: "Greeley Athletics",
-      sourceUrl: "https://www.sectiononeathletics.org/",
-    },
-    // Saturday January 3 (Weekend)
-    {
-      title: "Chappaqua Farmers Market - Winter Edition",
-      description: "Indoor winter market featuring local produce, baked goods, and artisan crafts.",
-      date: addDays(weekStart, 6), // Saturday Jan 3
-      time: "9:00 AM - 1:00 PM",
-      location: "Chappaqua Train Station",
-      category: "community",
-      source: "Town of New Castle",
-      sourceUrl: "https://www.mynewcastleny.gov/",
-    },
-    {
-      title: "Youth Basketball League - First Games of 2026",
-      description: "Winter league games resume! Multiple games for grades 3-8 throughout the day.",
-      date: addDays(weekStart, 6), // Saturday Jan 3
-      time: "9:00 AM - 3:00 PM",
-      location: "Chappaqua Recreation Center",
-      category: "sports",
-      source: "Town of New Castle",
-      sourceUrl: "https://www.mynewcastleny.gov/recreation",
-    },
-    {
-      title: "Kids' Winter Craft Workshop",
-      description: "Create winter-themed crafts including snowflake art and pine cone decorations. Ages 5-10. Materials provided.",
-      date: addDays(weekStart, 6), // Saturday Jan 3
-      time: "2:00 PM - 4:00 PM",
-      location: "Chappaqua Library, 195 South Greeley Ave",
-      category: "library",
-      source: "Chappaqua Library",
-      sourceUrl: "https://www.chappaqualibrary.org/events",
-    },
-    {
-      title: "Greeley Varsity Wrestling - Dual Meet",
-      description: "Home wrestling meet against Yorktown. Great action expected on the mat!",
-      date: addDays(weekStart, 6), // Saturday Jan 3
-      time: "10:00 AM",
-      location: "Horace Greeley High School",
-      category: "sports",
-      source: "Greeley Athletics",
-      sourceUrl: "https://www.sectiononeathletics.org/",
-    },
-    {
-      title: "Winter Hike at Gedney Park",
-      description: "Guided nature hike through winter trails. Learn about local wildlife and winter ecology. All ages welcome.",
-      date: addDays(weekStart, 6), // Saturday Jan 3
-      time: "10:30 AM - 12:00 PM",
-      location: "Gedney Park",
-      category: "recreation",
-      source: "Town of New Castle",
-      sourceUrl: "https://www.mynewcastleny.gov/",
-    },
-    // Sunday January 4 (Weekend continues)
-    {
-      title: "Sunday Morning Yoga",
-      description: "Start your week with a relaxing yoga session. All levels welcome. Bring your own mat.",
-      date: addDays(weekStart, 7), // Sunday Jan 4
-      time: "9:00 AM - 10:15 AM",
-      location: "Chappaqua Recreation Center",
-      category: "recreation",
-      source: "Town of New Castle",
-      sourceUrl: "https://www.mynewcastleny.gov/recreation",
-    },
-    {
-      title: "Family Movie Matinee",
-      description: "Free family movie screening to wrap up the holiday break. Popcorn and drinks provided.",
-      date: addDays(weekStart, 7), // Sunday Jan 4
-      time: "2:00 PM",
-      location: "Chappaqua Library, 195 South Greeley Ave",
-      category: "library",
-      source: "Chappaqua Library",
-      sourceUrl: "https://www.chappaqualibrary.org/events",
-    },
-    {
-      title: "Greeley Varsity Girls Basketball vs. Mahopac",
-      description: "Weekend home game against Mahopac. Come support the Quakers!",
-      date: addDays(weekStart, 7), // Sunday Jan 4
+      title: "Library Master Plan: Public Engagement Session",
+      description: "The Chappaqua Library is launching a long-range strategic Master Plan and seeks public input to shape the future of its infrastructure and community services. Your voice matters!",
+      date: day(7, 13, 0),
       time: "1:00 PM",
-      location: "Horace Greeley High School Gymnasium",
-      category: "sports",
-      source: "Greeley Athletics",
-      sourceUrl: "https://www.sectiononeathletics.org/",
+      location: "Chappaqua Library, 195 South Greeley Ave",
+      category: "library" as EventCategory,
+      source: "Chappaqua Library",
+      sourceUrl: "https://www.chappaqualibrary.org/events",
+    },
+    // ── SUNDAY MAY 3 (this weekend) ──
+    {
+      title: "Concert: West Point Band – American Chamber Works",
+      description: "Active-duty Soldier-Musicians from the U.S. Army's oldest band perform world-class chamber music. Since the American Revolution, the West Point Band has inspired audiences nationwide.",
+      date: day(8, 14, 0),
+      time: "2:00 PM",
+      location: "Chappaqua Library, 195 South Greeley Ave",
+      category: "performing-arts" as EventCategory,
+      source: "Chappaqua Library",
+      sourceUrl: "https://www.chappaqualibrary.org/events",
+      imageUrl: "https://images.unsplash.com/photo-1465847899084-d164df4dedc6?w=600&q=80",
     },
     {
-      title: "Metro-North: Weekend Schedule",
-      description: "Weekend trains run hourly from Chappaqua. First train 7:18 AM, last train 11:18 PM. Perfect for NYC day trips!",
-      date: addDays(weekStart, 6), // Saturday Jan 3
-      time: "Hourly Service",
-      location: "Chappaqua Train Station",
-      category: "community",
-      source: "Metro-North Railroad",
-      sourceUrl: "https://new.mta.info/agency/metro-north-railroad",
+      title: "Film Screening: Wasted! The Story of Food Waste",
+      description: "Documentary screening showing the 1.3 billion tons of food thrown out each year and the people fighting hardest to prevent it. Theater doors open at 2:30 PM. Come early for refreshments.",
+      date: day(8, 15, 0),
+      time: "3:00 PM",
+      location: "Theater at Chappaqua Library",
+      category: "library" as EventCategory,
+      source: "Chappaqua Library",
+      sourceUrl: "https://www.chappaqualibrary.org/events",
+    },
+    // ── MONDAY MAY 4 ──
+    {
+      title: "Movers and Shakers – Walkers Under 2",
+      description: "Storytime for walkers under age 2 with an adult. Songs, movement, and books for your youngest readers.",
+      date: day(9, 9, 30),
+      time: "9:30 AM",
+      location: "Chappaqua Library, 195 South Greeley Ave",
+      category: "library" as EventCategory,
+      source: "Chappaqua Library",
+      sourceUrl: "https://www.chappaqualibrary.org/events",
+    },
+    {
+      title: "Foreign Policy Discussion Group – Evolving Leadership in the Middle East",
+      description: "Online discussion on Evolving Leadership in the Middle East. Open to all adults with an interest in global affairs.",
+      date: day(9, 10, 0),
+      time: "10:00 AM – 11:30 AM",
+      location: "Online (Chappaqua Library)",
+      category: "library" as EventCategory,
+      source: "Chappaqua Library",
+      sourceUrl: "https://www.chappaqualibrary.org/event/foreign-policy-discussion-group-online-30177",
+      imageUrl: "https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=600&q=80",
+    },
+    {
+      title: "All Together Now – All Ages Storytime",
+      description: "All ages storytime every Monday! Registration not needed but space is limited — first come, first served. Bring something soft to sit on.",
+      date: day(9, 10, 30),
+      time: "10:30 AM",
+      location: "Chappaqua Library, 195 South Greeley Ave",
+      category: "library" as EventCategory,
+      source: "Chappaqua Library",
+      sourceUrl: "https://www.chappaqualibrary.org/events",
+    },
+    {
+      title: "Make a Fabric Flower for Mother's Day",
+      description: "Celebrate a mother or someone special with a handmade fabric flower. All ages welcome. All materials provided.",
+      date: day(9, 15, 30),
+      time: "3:30 PM",
+      location: "Chappaqua Library, 195 South Greeley Ave",
+      category: "library" as EventCategory,
+      source: "Chappaqua Library",
+      sourceUrl: "https://www.chappaqualibrary.org/events",
+    },
+    {
+      title: "Chapter Chat – Grades 2–3 Book Group",
+      description: "Book group for 2nd and 3rd graders on the first Monday of the month. Kids read the same chapter book before the program (with a parent or independently). Registration required.",
+      date: day(9, 16, 0),
+      time: "4:00 PM",
+      location: "Chappaqua Library, 195 South Greeley Ave",
+      category: "library" as EventCategory,
+      source: "Chappaqua Library",
+      sourceUrl: "https://www.chappaqualibrary.org/events",
+    },
+    {
+      title: "Mental Health Meetup",
+      description: "Community mental health support and connection group. Open to all residents. A safe space to share and connect.",
+      date: day(9, 19, 0),
+      time: "7:00 PM – 8:00 PM",
+      location: "Chappaqua Library, 195 South Greeley Ave",
+      category: "community" as EventCategory,
+      source: "Town of New Castle",
+      sourceUrl: "https://www.mynewcastleny.gov/Calendar.aspx?EID=4623",
+    },
+    {
+      title: "Conservation Board Meeting",
+      description: "Regular meeting of the New Castle Conservation Board. Public welcome.",
+      date: day(9, 19, 0),
+      time: "7:00 PM – 9:00 PM",
+      location: "Town Hall, 200 South Greeley Ave",
+      category: "government" as EventCategory,
+      source: "Town of New Castle",
+      sourceUrl: "https://www.mynewcastleny.gov/calendar.aspx?CID=14",
+    },
+    // ── TUESDAY MAY 5 ──
+    {
+      title: "Bilingual Storytime with Ms. Marilyn!",
+      description: "Special Tuesday bilingual storytime in English and Spanish. Fun for the whole family!",
+      date: day(10, 10, 30),
+      time: "10:30 AM",
+      location: "Chappaqua Library, 195 South Greeley Ave",
+      category: "library" as EventCategory,
+      source: "Chappaqua Library",
+      sourceUrl: "https://www.chappaqualibrary.org/events",
+    },
+    {
+      title: "Planning Board Meeting",
+      description: "Regular meeting of the New Castle Planning Board. Public comments welcome during the designated session.",
+      date: day(10, 19, 0),
+      time: "7:00 PM",
+      location: "Assembly Room, Town Hall, 200 S. Greeley Ave",
+      category: "government" as EventCategory,
+      source: "Town of New Castle",
+      sourceUrl: "https://www.mynewcastleny.gov/Calendar.aspx?EID=4646",
+    },
+    {
+      title: "May the 5th Be With You! Star Wars LEGO",
+      description: "Drop in anytime between 3–5 PM and create your own Star Wars spaceship out of LEGOs. No registration required.",
+      date: day(10, 15, 0),
+      time: "3:00 PM – 5:00 PM",
+      location: "Children's Room, Chappaqua Library",
+      category: "library" as EventCategory,
+      source: "Chappaqua Library",
+      sourceUrl: "https://www.chappaqualibrary.org/events",
+    },
+    {
+      title: "Study and Snacks (Teen Room)",
+      description: "Take a break from studying with snacks in the Teen Room! Drop in anytime.",
+      date: day(10, 17, 0),
+      time: "5:00 PM",
+      location: "Teen Room, Chappaqua Library",
+      category: "library" as EventCategory,
+      source: "Chappaqua Library",
+      sourceUrl: "https://www.chappaqualibrary.org/events",
+    },
+    {
+      title: "Learn Mandarin: Class & Conversation (Online)",
+      description: "Alternating Mandarin conversation and instruction led by Luis Deng. Learn to recognize 500 of the most commonly used Chinese characters. All levels welcome.",
+      date: day(10, 19, 0),
+      time: "7:00 PM",
+      location: "Online (Chappaqua Library)",
+      category: "library" as EventCategory,
+      source: "Chappaqua Library",
+      sourceUrl: "https://www.chappaqualibrary.org/events",
+    },
+    // ── WEDNESDAY MAY 6 ──
+    {
+      title: "Accessible Art for Adults with Disabilities",
+      description: "Artist Larry D'Amico leads an art class for adults with disabilities. Every other week. All supplies provided.",
+      date: day(11, 10, 30),
+      time: "10:30 AM",
+      location: "Chappaqua Library, 195 South Greeley Ave",
+      category: "library" as EventCategory,
+      source: "Chappaqua Library",
+      sourceUrl: "https://www.chappaqualibrary.org/events",
+    },
+    {
+      title: "All Together Now – All Ages Storytime",
+      description: "All ages storytime every Wednesday! Registration not needed but space is limited — first come, first served.",
+      date: day(11, 10, 30),
+      time: "10:30 AM",
+      location: "Chappaqua Library, 195 South Greeley Ave",
+      category: "library" as EventCategory,
+      source: "Chappaqua Library",
+      sourceUrl: "https://www.chappaqualibrary.org/events",
+    },
+    {
+      title: "Bouncing Babies",
+      description: "Songs, books and bounces just for babies! Bring your own blanket to sit on.",
+      date: day(11, 11, 30),
+      time: "11:30 AM",
+      location: "Children's Program Room, Chappaqua Library",
+      category: "library" as EventCategory,
+      source: "Chappaqua Library",
+      sourceUrl: "https://www.chappaqualibrary.org/events",
+    },
+    {
+      title: "Sewing Series – Adults & Teens",
+      description: "Learn basic sewing skills with an experienced teacher. All experience levels welcome. Drop-in or register in advance.",
+      date: day(11, 15, 0),
+      time: "3:00 PM",
+      location: "Chappaqua Library, 195 South Greeley Ave",
+      category: "library" as EventCategory,
+      source: "Chappaqua Library",
+      sourceUrl: "https://www.chappaqualibrary.org/events",
+    },
+    {
+      title: "Board of Architectural Review Meeting",
+      description: "Public meeting of the New Castle Board of Architectural Review.",
+      date: day(11, 19, 30),
+      time: "7:30 PM – 9:30 PM",
+      location: "Conference Rooms A & B, Town Hall",
+      category: "government" as EventCategory,
+      source: "Town of New Castle",
+      sourceUrl: "https://www.mynewcastleny.gov/Calendar.aspx?EID=4727",
+    },
+    {
+      title: "Holocaust & Human Rights Committee Meeting",
+      description: "Meeting held via Zoom or in person at the New Castle Holocaust Memorial. Open to the public.",
+      date: day(11, 18, 30),
+      time: "6:30 PM",
+      location: "New Castle Holocaust Memorial (or Zoom)",
+      category: "community" as EventCategory,
+      source: "Town of New Castle",
+      sourceUrl: "https://www.mynewcastleny.gov/Calendar.aspx?EID=4670",
+    },
+    // ── THURSDAY MAY 7 ──
+    {
+      title: "Nursery Rhyme Time – Ages 2–3",
+      description: "Nursery rhymes, songs, and movement for toddlers ages 2–3.",
+      date: day(12, 11, 30),
+      time: "11:30 AM",
+      location: "Chappaqua Library, 195 South Greeley Ave",
+      category: "library" as EventCategory,
+      source: "Chappaqua Library",
+      sourceUrl: "https://www.chappaqualibrary.org/events",
+    },
+    {
+      title: "A Little Something – Ages 2–5",
+      description: "A little program for the littles! This month's theme: QUACK QUACK!! Ducks! For ages 2–5 with an adult. No registration required.",
+      date: day(12, 14, 30),
+      time: "2:30 PM",
+      location: "Chappaqua Library, 195 South Greeley Ave",
+      category: "library" as EventCategory,
+      source: "Chappaqua Library",
+      sourceUrl: "https://www.chappaqualibrary.org/events",
+    },
+    {
+      title: "Play Mah Jongg",
+      description: "Mah Jongg for players with knowledge of the game. Come with your own group or be matched with others. The Library has 2 sets — please bring one if you have it. Registration optional.",
+      date: day(12, 18, 0),
+      time: "6:00 PM",
+      location: "Chappaqua Library, 195 South Greeley Ave",
+      category: "library" as EventCategory,
+      source: "Chappaqua Library",
+      sourceUrl: "https://www.chappaqualibrary.org/events",
+    },
+    {
+      title: "Author Talk: Jim Wright",
+      description: "Seasoned journalist and longtime raptor monitor Jim Wright discusses his new book on birds of prey and conservation. Q&A to follow.",
+      date: day(12, 19, 0),
+      time: "7:00 PM",
+      location: "Chappaqua Library, 195 South Greeley Ave",
+      category: "library" as EventCategory,
+      source: "Chappaqua Library",
+      sourceUrl: "https://www.chappaqualibrary.org/events",
+      imageUrl: "https://images.unsplash.com/photo-1474511320723-9a56873867b5?w=600&q=80",
+    },
+    // ── FRIDAY MAY 8 ──
+    {
+      title: "Ladies Afternoon Tea",
+      description: "A lovely afternoon tea for ladies of the community. Light refreshments, conversation, and connection.",
+      date: day(13, 12, 30),
+      time: "12:30 PM – 2:00 PM",
+      location: "New Castle Community Center",
+      category: "community" as EventCategory,
+      source: "Town of New Castle",
+      sourceUrl: "https://www.mynewcastleny.gov/Calendar.aspx?EID=4943",
+    },
+    {
+      title: "Study and Snacks (Teen Room)",
+      description: "Take a break from studying with snacks in the Teen Room! Drop in anytime.",
+      date: day(13, 17, 0),
+      time: "5:00 PM",
+      location: "Teen Room, Chappaqua Library",
+      category: "library" as EventCategory,
+      source: "Chappaqua Library",
+      sourceUrl: "https://www.chappaqualibrary.org/events",
+    },
+    // ── SATURDAY MAY 9 ──
+    {
+      title: "Chappaqua Farmers Market",
+      description: "Outdoor market with fresh produce, baked goods, plants, honey, meats, cheeses, flowers, and artisan crafts from local Hudson Valley vendors. Open every Saturday through November.",
+      date: day(14, 8, 30),
+      time: "8:30 AM – 1:00 PM",
+      location: "Chappaqua Train Station, South Greeley Ave",
+      category: "community" as EventCategory,
+      source: "Town of New Castle",
+      sourceUrl: "https://www.mynewcastleny.gov/Calendar.aspx?EID=4496",
+      imageUrl: "https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=600&q=80",
+    },
+    {
+      title: "Take It or Leave It Shed",
+      description: "Free reuse station. Drop off gently used items or pick something up — furniture, housewares, books, and more. Open every Saturday.",
+      date: day(14, 8, 30),
+      time: "8:30 AM – 12:00 PM",
+      location: "Chappaqua Train Station Parking Area",
+      category: "community" as EventCategory,
+      source: "Town of New Castle",
+      sourceUrl: "https://www.mynewcastleny.gov/627/Take-It-or-Leave-It",
+    },
+    {
+      title: "Friends of Chappaqua Library Book Sale – Donation Day",
+      description: "Bring your gently used books to donate to the Friends Book Sale. All genres welcome. Drop off at the Library during open hours.",
+      date: day(14, 10, 0),
+      time: "10:00 AM – 8:00 PM",
+      location: "Chappaqua Library, 195 South Greeley Ave",
+      category: "library" as EventCategory,
+      source: "Town of New Castle",
+      sourceUrl: "https://www.mynewcastleny.gov/Calendar.aspx?EID=4915",
     },
   ];
-  
-  return sampleEvents;
 }
 
 export async function scrapeAllEvents(): Promise<InsertEvent[]> {
+  console.log("Starting event data collection from all Chappaqua sources...");
+
+  // Get real curated events for this week and next
+  const realEvents = getRealCurrentEvents();
+
+  // Try live scrapers in parallel
+  const [libraryEvents, townEvents] = await Promise.all([
+    scrapeLibraryEvents().catch(e => { console.error("Library scraper failed:", e); return []; }),
+    scrapeTownCalendar().catch(e => { console.error("Town scraper failed:", e); return []; }),
+  ]);
+
+  // Merge: use scraped events + real events, deduplicating by title+date
+  const seen = new Set<string>();
   const allEvents: ScrapedEvent[] = [];
-  
-  try {
-    const [townEvents, libraryEvents] = await Promise.allSettled([
-      scrapeTownCalendar(),
-      scrapeLibraryEvents(),
-    ]);
-    
-    if (townEvents.status === "fulfilled") {
-      allEvents.push(...townEvents.value);
-    }
-    if (libraryEvents.status === "fulfilled") {
-      allEvents.push(...libraryEvents.value);
-    }
-  } catch (error) {
-    console.error("Error during web scraping:", error);
-  }
-  
-  const sampleEvents = generateSampleEvents();
-  allEvents.push(...sampleEvents);
-  
-  const uniqueEvents = new Map<string, ScrapedEvent>();
-  for (const event of allEvents) {
-    const key = `${event.title.toLowerCase().slice(0, 50)}-${event.date.toDateString()}`;
-    if (!uniqueEvents.has(key)) {
-      uniqueEvents.set(key, event);
+
+  for (const ev of [...realEvents, ...libraryEvents, ...townEvents]) {
+    const key = `${ev.title.toLowerCase().slice(0, 40)}|${ev.date.toDateString()}`;
+    if (!seen.has(key)) {
+      seen.add(key);
+      allEvents.push(ev);
     }
   }
-  
-  const insertEvents: InsertEvent[] = Array.from(uniqueEvents.values()).map((event) => ({
-    title: event.title,
-    description: event.description || null,
-    date: event.date,
-    endDate: event.endDate || null,
-    time: event.time || null,
-    location: event.location || null,
-    category: event.category,
-    source: event.source,
-    sourceUrl: event.sourceUrl || null,
-    imageUrl: null,
+
+  console.log(`Total events collected: ${allEvents.length}`);
+
+  return allEvents.map(ev => ({
+    title: ev.title,
+    description: ev.description ?? null,
+    date: ev.date,
+    endDate: ev.endDate ?? null,
+    time: ev.time ?? null,
+    location: ev.location ?? null,
+    category: ev.category,
+    source: ev.source,
+    sourceUrl: ev.sourceUrl ?? null,
+    imageUrl: ev.imageUrl ?? null,
   }));
-  
-  return insertEvents;
 }
