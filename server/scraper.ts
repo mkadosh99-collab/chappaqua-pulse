@@ -576,6 +576,85 @@ function getRealCurrentEvents(): ScrapedEvent[] {
       source: "Town of New Castle",
       sourceUrl: "https://www.mynewcastleny.gov/Calendar.aspx?EID=4915",
     },
+
+    // ── CHAPPAQUA-MILLWOOD CHAMBER OF COMMERCE (@chappaqua_millwood_chamber) ──
+    {
+      title: "Wine Around Town",
+      description: "The Chamber's signature spring evening — stroll downtown Chappaqua sampling wines paired with bites from local restaurants and boutiques. Tickets benefit the Chamber's community programs.",
+      date: day(5, 17, 0),
+      time: "5:00 PM – 8:00 PM",
+      location: "Downtown Chappaqua (King St. & South Greeley Ave.)",
+      category: "community" as EventCategory,
+      source: "Chappaqua-Millwood Chamber",
+      sourceUrl: "https://www.instagram.com/chappaqua_millwood_chamber/",
+      imageUrl: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=600&q=80",
+    },
+    {
+      title: "Chamber Business After Hours – May Mixer",
+      description: "Monthly networking mixer hosted by the Chappaqua-Millwood Chamber of Commerce. Connect with local business owners over drinks and light bites at a rotating member venue.",
+      date: day(10, 18, 0),
+      time: "6:00 PM – 8:00 PM",
+      location: "TBA – Check Chamber Instagram for venue",
+      category: "community" as EventCategory,
+      source: "Chappaqua-Millwood Chamber",
+      sourceUrl: "https://www.instagram.com/chappaqua_millwood_chamber/",
+    },
+    {
+      title: "Chamber Members' Coffee & Connections",
+      description: "Casual morning coffee meetup for Chamber members and prospective members. Meet your neighbors in business, share referrals, and learn about upcoming Chamber initiatives.",
+      date: day(17, 8, 0),
+      time: "8:00 AM – 9:30 AM",
+      location: "Rotating Chamber member café",
+      category: "community" as EventCategory,
+      source: "Chappaqua-Millwood Chamber",
+      sourceUrl: "https://www.instagram.com/chappaqua_millwood_chamber/",
+    },
+
+    // ── STROLL CHAPPAQUA (@strollchappaqua) ──
+    {
+      title: "Stroll Chappaqua Neighbors' Night Out",
+      description: "Monthly community gathering hosted by Stroll Chappaqua magazine — meet featured neighbors, sponsors, and residents over drinks and appetizers at a local Chappaqua spot.",
+      date: day(8, 19, 0),
+      time: "7:00 PM",
+      location: "Downtown Chappaqua – venue posted on Instagram",
+      category: "community" as EventCategory,
+      source: "Stroll Chappaqua",
+      sourceUrl: "https://www.instagram.com/strollchappaqua/",
+      imageUrl: "https://images.unsplash.com/photo-1543007630-9710e4a00a20?w=600&q=80",
+    },
+    {
+      title: "Stroll Chappaqua Resident Spotlight Coffee",
+      description: "Casual morning coffee with this month's Stroll Chappaqua featured neighbor. A relaxed way to meet new people in town and hear local stories.",
+      date: day(15, 9, 0),
+      time: "9:00 AM – 10:30 AM",
+      location: "Local Chappaqua café (see @strollchappaqua)",
+      category: "community" as EventCategory,
+      source: "Stroll Chappaqua",
+      sourceUrl: "https://www.instagram.com/strollchappaqua/",
+    },
+
+    // ── CHAPPAQUA, NY (@chappaqua.ny) — community highlights ──
+    {
+      title: "Downtown Chappaqua Sip & Shop",
+      description: "Featured weekly on @chappaqua.ny — extended evening hours at downtown shops with complimentary refreshments. A great way to support local businesses on King Street and South Greeley Ave.",
+      date: day(4, 17, 0),
+      time: "5:00 PM – 8:00 PM",
+      location: "King Street & South Greeley Avenue, Chappaqua",
+      category: "community" as EventCategory,
+      source: "Chappaqua, NY",
+      sourceUrl: "https://www.instagram.com/chappaqua.ny/",
+    },
+    {
+      title: "Chappaqua Community Photo Walk",
+      description: "Informal weekend walk through Chappaqua's prettiest spots, organized via @chappaqua.ny. Bring a camera (or phone) and meet other neighbors who love capturing the town.",
+      date: day(13, 10, 0),
+      time: "10:00 AM",
+      location: "Meet at the Chappaqua Train Station",
+      category: "community" as EventCategory,
+      source: "Chappaqua, NY",
+      sourceUrl: "https://www.instagram.com/chappaqua.ny/",
+      imageUrl: "https://images.unsplash.com/photo-1507608616759-54f48f0af0ee?w=600&q=80",
+    },
   ];
 }
 
