@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Chappaqua-Millwood Living Map · Regional v2</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --paper: #FBF7EA;
+    --cream: #F5F1E6;
+    --deep-cream: #EDE5CE;
+    --rule: #D4B576;
+    --rule-soft: #E5D4A1;
+
+    --forest: #2D5016;
+    --pine: #4A7C2C;
+    --moss: #97C459;
+
+    --gold: #B8893B;
+    --gold-soft: #D4B576;
+    --gold-bg: #F5E8C8;
+
+    --ink: #1A1A1A;
+    --gray: #6B6963;
+    --soft: #B4B0A1;
+
+    --cat-food: #C56B17;
+    --cat-food-bg: #FCE9D0;
+    --cat-apparel: #2A5BA0;
+    --cat-apparel-bg: #DEEAFB;
+    --cat-specialty: #6A4FB7;
+    --cat-specialty-bg: #E7E2F9;
+    --cat-home: #5C8B1D;
+    --cat-home-bg: #DEECCB;
+    --cat-service: #5F5E5A;
+    --cat-service-bg: #ECE9DF;
+    --cat-wellness: #A53B66;
+    --cat-wellness-bg: #F7DCE6;
+    --cat-civic: #1F6F88;
+    --cat-civic-bg: #D7E8EE;
+  }
+
+  html, body {
+    height: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, "Inter", system-ui, sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .app {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 16px;
+    min-height: 100vh;
+  }
+
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 8px 4px 18px;
+    border-bottom: 1px solid var(--rule);
+    flex-wrap: wrap;
+  }
+  .brand { display: flex; align-items: center; gap: 14px; }
+  .brand-mark {
+    width: 44px; height: 44px;
+    background: var(--forest); color: var(--paper);
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 600; font-size: 11px; letter-spacing: 1.5px;
+  }
+  .brand-name { font-size: 19px; font-weight: 600; color: var(--forest); letter-spacing: -0.2px; }
+  .brand-tag { font-size: 11.5px; color: var(--gray); margin-top: 3px; letter-spacing: 0.2px; }
+
+  .search-wrap { position: relative; min-width: 240px; flex: 0 0 280px; }
+  #search {
+    width: 100%; padding: 9px 12px;
+    border: 1px solid var(--rule); border-radius: 4px;
+    background: var(--paper); font-size: 13.5px;
+    font-family: inherit; color: var(--ink);
+  }
+  #search:focus { outline: none; border-color: var(--forest); box-shadow: 0 0 0 3px rgba(45, 80, 22, 0.1); }
+
+  .layer-bar {
+    padding: 14px 4px;
+    border-bottom: 1px solid var(--rule-soft);
+    display: flex; flex-wrap: wrap; gap: 16px; align-items: center;
+  }
+  .layer-bar-label {
+    font-size: 10px; font-weight: 600;
+    color: var(--gold); letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-right: -6px;
+  }
+  .layer-toggles { display: flex; gap: 6px; flex-wrap: wrap; }
+  .layer-btn {
+    padding: 6px 12px;
+    border: 1px solid var(--rule); background: var(--paper);
+    color: var(--gray); font-size: 12.5px;
+    font-family: inherit; border-radius: 4px;
+    cursor: pointer; transition: all 0.15s;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .layer-btn:hover { border-color: var(--forest); color: var(--forest); background: var(--paper); }
+  .layer-btn.active { background: var(--forest); color: var(--paper); border-color: var(--forest); }
+  .layer-btn.active:hover { background: var(--pine); }
+  .layer-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+  .main {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 16px;
+    margin-top: 18px;
+    align-items: start;
+  }
+  @media (max-width: 920px) { .main { grid-template-columns: 1fr; } }
+
+  .map-wrap {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+  }
+  #map {
+    width: 100%; height: auto;
+    display: block;
+    background: var(--paper);
+    aspect-ratio: 1000 / 700;
+  }
+
+  .layer.hidden { display: none; }
+  .marker { cursor: pointer; transition: transform 0.12s ease-out; }
+  .marker:hover .marker-shape { stroke-width: 2; }
+  .marker.selected .marker-shape { stroke-width: 2.5; }
+  .marker.era-hidden { display: none; }
+  .marker.search-dim { opacity: 0.18; }
+  .marker.search-match .marker-shape { stroke-width: 2.5; }
+
+  .era-rail {
+    position: absolute;
+    bottom: 12px; left: 12px;
+    width: 280px;
+    background: rgba(251, 247, 234, 0.94);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 10px 14px 11px;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+  .era-label-row {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 4px;
+  }
+  .era-current { font-size: 13px; font-weight: 600; color: var(--forest); }
+  .era-help { font-size: 10.5px; color: var(--gray); font-style: italic; }
+  #era-slider { width: 100%; accent-color: var(--forest); margin: 4px 0 2px; }
+  .era-marks { display: flex; justify-content: space-between; font-size: 9.5px; color: var(--soft); user-select: none; }
+
+  .legend {
+    position: absolute;
+    top: 12px; right: 12px;
+    background: rgba(251, 247, 234, 0.94);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 11px; color: var(--gray);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    max-width: 200px;
+  }
+  .legend-title { font-size: 9.5px; font-weight: 600; color: var(--gold); letter-spacing: 1.2px; margin-bottom: 6px; text-transform: uppercase; }
+  .legend-row { display: flex; align-items: center; gap: 7px; margin: 2px 0; font-size: 11px; }
+  .legend-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; border: 1.5px solid; }
+  .legend-square { width: 9px; height: 9px; flex-shrink: 0; border: 1.5px solid; border-radius: 1px; }
+
+  .detail-panel {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: 18px 20px;
+    min-height: 380px;
+    position: sticky;
+    top: 16px;
+  }
+  .panel-empty { color: var(--gray); font-size: 13px; line-height: 1.7; }
+  .panel-empty p { margin: 7px 0; }
+  .panel-empty .panel-empty-mark {
+    width: 36px; height: 36px;
+    background: var(--gold-bg); color: var(--gold);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 600;
+    margin: 0 auto 10px;
+  }
+  .panel-empty-title { color: var(--forest); font-weight: 600; font-size: 14px; text-align: center; margin-bottom: 6px; }
+
+  .panel-eyebrow {
+    font-size: 9.5px; font-weight: 600;
+    color: var(--gold); letter-spacing: 1.5px;
+    text-transform: uppercase; margin-bottom: 6px;
+  }
+  .panel-title { font-size: 18px; font-weight: 600; color: var(--forest); margin-bottom: 4px; line-height: 1.3; }
+  .panel-tagline { font-size: 12.5px; color: var(--gray); font-style: italic; margin-bottom: 6px; }
+  .panel-address { font-size: 11.5px; color: var(--gray); margin-bottom: 12px; }
+  .panel-divider { border: none; border-top: 1px solid var(--rule-soft); margin: 14px 0; }
+  .panel-body { font-size: 13px; line-height: 1.65; color: var(--ink); }
+
+  .panel-tag {
+    display: inline-block;
+    padding: 3px 9px; border-radius: 3px;
+    font-size: 9.5px; font-weight: 600;
+    letter-spacing: 0.6px; text-transform: uppercase;
+    margin-right: 4px; margin-bottom: 4px;
+  }
+  .tag-greeley { background: var(--gold-bg); color: #7a5a1f; }
+  .tag-quaker { background: #DBE8C9; color: #355010; }
+  .tag-civic { background: #DEEAFB; color: #1F4378; }
+  .tag-nrhp { background: var(--cream); color: var(--forest); border: 1px solid var(--rule); }
+  .tag-sample { background: #FCE9D0; color: #8B4D14; }
+
+  .panel-meta { margin-top: 14px; font-size: 11.5px; color: var(--gray); line-height: 1.65; }
+  .panel-meta-row { display: flex; gap: 10px; margin: 4px 0; }
+  .panel-meta-label { color: var(--gold); font-weight: 600; width: 72px; flex-shrink: 0; font-size: 10.5px; letter-spacing: 0.6px; text-transform: uppercase; }
+  .panel-meta-value { flex: 1; color: var(--ink); }
+
+  .panel-cta {
+    margin-top: 16px;
+    padding: 9px 14px;
+    background: var(--paper); color: var(--forest);
+    border: 1px solid var(--forest);
+    border-radius: 4px;
+    font-size: 12px; font-family: inherit;
+    cursor: pointer; width: 100%; text-align: center;
+    font-weight: 500;
+    transition: all 0.12s;
+  }
+  .panel-cta:hover { background: var(--forest); color: var(--paper); }
+
+  footer {
+    margin-top: 18px;
+    padding: 14px 4px;
+    font-size: 11px; color: var(--gray); line-height: 1.7;
+    border-top: 1px solid var(--rule-soft);
+  }
+  footer strong { color: var(--forest); font-weight: 600; }
+
+  .spec-card {
+    background: var(--cream);
+    border: 1px solid var(--rule-soft);
+    border-radius: 6px;
+    padding: 10px 14px;
+    margin-top: 10px;
+    font-size: 11px;
+    line-height: 1.6;
+  }
+
+  /* Story layer styling */
+  .story-poly { transition: opacity 0.2s; }
+  .story-poly-farm { fill: #B8893B; stroke: #8B6E2E; stroke-width: 1.5; stroke-dasharray: 6 4; opacity: 0.18; }
+  .story-poly-quaker { fill: #4A7C2C; stroke: #2D5016; stroke-width: 1.5; stroke-dasharray: 6 4; opacity: 0.20; }
+  .story-line-railroad { stroke: #2D5016; stroke-width: 3.5; stroke-linecap: round; stroke-dasharray: 1 8; opacity: 0.7; }
+  .story-line-tour { stroke: #B8893B; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; fill: none; opacity: 0.85; }
+  .story-line-tour-spur { stroke: #B8893B; stroke-width: 2.5; stroke-linecap: round; stroke-dasharray: 6 5; fill: none; opacity: 0.7; }
+  .story-label { fill: var(--gray); font-size: 11px; font-style: italic; pointer-events: none; }
+  .story-poly-label-farm { fill: #7a5a1f; font-weight: 600; font-size: 12px; }
+  .story-poly-label-quaker { fill: #355010; font-weight: 600; font-size: 12px; }
+
+  /* Tour stop numbers */
+  .tour-stop-num { fill: var(--gold); font-size: 11px; font-weight: 700; pointer-events: none; }
+  .tour-stop-circle { fill: var(--paper); stroke: var(--gold); stroke-width: 1.5; }
+
+  .map-tooltip {
+    position: absolute;
+    background: var(--ink); color: var(--paper);
+    padding: 6px 11px; border-radius: 4px;
+    font-size: 12px; pointer-events: none;
+    opacity: 0; transition: opacity 0.1s;
+    white-space: nowrap; z-index: 50;
+    transform: translate(-50%, calc(-100% - 10px));
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    line-height: 1.3;
+  }
+  .map-tooltip.visible { opacity: 1; }
+  .map-tooltip-name { font-weight: 600; }
+  .map-tooltip-cat {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-top: 2px;
+    font-style: italic;
+    opacity: 0.95;
+  }
+
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .stat {
+    background: var(--cream);
+    border: 1px solid var(--rule-soft);
+    border-radius: 4px;
+    padding: 8px 10px;
+  }
+  .stat-num { font-size: 18px; font-weight: 600; color: var(--forest); line-height: 1; }
+  .stat-label { font-size: 9.5px; color: var(--gray); margin-top: 3px; letter-spacing: 0.4px; text-transform: uppercase; }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="brand">
+      <div class="brand-mark">CMC</div>
+      <div>
+        <div class="brand-name">The Chappaqua Living Map</div>
+        <div class="brand-tag">Chamber of Commerce · Retail Impact Committee · prototype</div>
+      </div>
+    </div>
+    <div class="search-wrap">
+      <input id="search" placeholder="Search Greeley, retailers, era..." autocomplete="off"/>
+    </div>
+  </header>
+
+  <div class="layer-bar">
+    <span class="layer-bar-label">Layers</span>
+    <div class="layer-toggles" id="layer-toggles">
+      <button class="layer-btn active" data-layer="landmarks"><span class="layer-dot" style="background: var(--gold)"></span>Landmarks</button>
+      <button class="layer-btn active" data-layer="retailers"><span class="layer-dot" style="background: var(--cat-food)"></span>Retailers</button>
+      <button class="layer-btn" data-layer="quaker"><span class="layer-dot" style="background: var(--pine)"></span>Old Chappaqua district</button>
+      <button class="layer-btn" data-layer="farm"><span class="layer-dot" style="background: var(--gold)"></span>Greeley's farm</button>
+      <button class="layer-btn" data-layer="railroad"><span class="layer-dot" style="background: var(--forest)"></span>1846 railroad</button>
+      <button class="layer-btn" data-layer="tour"><span class="layer-dot" style="background: var(--gold)"></span>Walking tour</button>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="map-wrap" id="map-wrap">
+      <svg id="map" viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="#B8893B" stroke-width="1.5" stroke-linecap="round"/>
+          </marker>
+        </defs>
+
+                <g id="basemap">
+          <!-- Saw Mill River corridor (winds N-S through Westchester) -->
+          <path d="M 555 0 Q 562 100 565 230 Q 568 320 562 410 Q 555 510 460 540 Q 350 580 270 605 Q 200 625 160 700"
+                stroke="#A8C8DE" stroke-width="3.5" fill="none" stroke-linecap="round" opacity="0.55"/>
+          <text x="558" y="60" fill="#558AB0" font-size="9.5" font-style="italic" opacity="0.7">Saw Mill River</text>
+
+          <!-- Metro-North Harlem Line (N-S through downtown, terminates at canvas edges) -->
+          <line x1="595" y1="0" x2="595" y2="700" stroke="#5F5E5A" stroke-width="1.8" opacity="0.55"/>
+          <text x="600" y="55" fill="#5F5E5A" font-size="8.5" font-style="italic" opacity="0.55">Metro-North · Harlem Line</text>
+
+          <!-- Major roads: gold tinted strokes -->
+          <!-- Route 120 / King Street: E-W through downtown, extends east toward Quaker Hill -->
+          <path d="M 80 360 Q 350 350 637 348 Q 750 320 843 246" stroke="#D4B576" stroke-width="14" fill="none" stroke-linecap="round" opacity="0.5"/>
+          <!-- N Bedford Rd / Rt 117: downtown to Crossing -->
+          <path d="M 637 348 Q 600 240 549 104" stroke="#D4B576" stroke-width="12" fill="none" stroke-linecap="round" opacity="0.5"/>
+          <!-- Saw Mill River Rd / Rt 9A: downtown south to Millwood -->
+          <path d="M 562 410 Q 480 470 380 530 Q 290 565 250 580" stroke="#D4B576" stroke-width="11" fill="none" stroke-linecap="round" opacity="0.5"/>
+          <!-- Millwood Rd: E-W through Millwood -->
+          <path d="M 165 580 Q 245 575 325 590" stroke="#D4B576" stroke-width="10" fill="none" stroke-linecap="round" opacity="0.5"/>
+          <!-- Quaker Road: NW of downtown to Friends Meeting -->
+          <path d="M 600 270 Q 555 215 520 160" stroke="#D4B576" stroke-width="9" fill="none" stroke-linecap="round" opacity="0.45"/>
+
+          <!-- Cluster region patches (soft tinted backgrounds for orientation) -->
+          <g id="cluster-patches">
+            <rect x="494" y="68" width="110" height="72" rx="9" fill="#F5E8C8" stroke="#D4B576" stroke-width="0.7" opacity="0.55"/>
+            <rect x="557" y="278" width="160" height="140" rx="11" fill="#FBF7EA" stroke="#B8893B" stroke-width="0.9" opacity="0.6"/>
+            <rect x="799" y="223" width="88"  height="46" rx="7" fill="#F5E8C8" stroke="#D4B576" stroke-width="0.7" opacity="0.55"/>
+            <rect x="180" y="534" width="140" height="90" rx="9" fill="#F5E8C8" stroke="#D4B576" stroke-width="0.7" opacity="0.55"/>
+          </g>
+
+          <!-- Cluster labels (above each patch) -->
+          <g id="cluster-labels">
+            <text x="549" y="56" text-anchor="middle" font-size="11.5" font-weight="600" fill="#5C4F1F">CHAPPAQUA CROSSING</text>
+            <text x="549" y="68" text-anchor="middle" font-size="9" font-style="italic" fill="#8A8578">Modern retail · 480 N Bedford</text>
+
+            <text x="637" y="266" text-anchor="middle" font-size="12.5" font-weight="600" fill="#5C4F1F">CHAPPAQUA DOWNTOWN</text>
+            <text x="637" y="278" text-anchor="middle" font-size="9" font-style="italic" fill="#8A8578">Historic core · 1846 depot · 66 retailers</text>
+
+            <text x="843" y="211" text-anchor="middle" font-size="11.5" font-weight="600" fill="#5C4F1F">QUAKER HILL CENTER</text>
+            <text x="843" y="223" text-anchor="middle" font-size="9" font-style="italic" fill="#8A8578">Shopping center · 7 retailers</text>
+
+            <text x="250" y="522" text-anchor="middle" font-size="11.5" font-weight="600" fill="#5C4F1F">MILLWOOD HAMLET</text>
+            <text x="250" y="534" text-anchor="middle" font-size="9" font-style="italic" fill="#8A8578">Saw Mill River corridor · 19 retailers</text>
+          </g>
+
+          <!-- Greeley Park (subtle tint inside downtown) -->
+          <ellipse cx="618" cy="338" rx="22" ry="20" fill="#DEECCB" opacity="0.55"/>
+
+          <!-- Road labels (subtle) -->
+          <text x="195" y="356" fill="#8B6F2A" font-size="10" font-style="italic" opacity="0.7">Route 120 · King St</text>
+          <text x="555" y="240" fill="#8B6F2A" font-size="9.5" font-style="italic" opacity="0.65">N Bedford Rd</text>
+          <text x="445" y="498" fill="#8B6F2A" font-size="9.5" font-style="italic" opacity="0.65">Rt 9A</text>
+          <text x="333" y="582" fill="#8B6F2A" font-size="9" font-style="italic" opacity="0.65">Millwood Rd</text>
+
+          <!-- Compass -->
+          <g transform="translate(940, 78)">
+            <circle r="22" fill="#FBF7EA" stroke="#D4B576" stroke-width="1"/>
+            <path d="M 0 -14 L 4 0 L 0 12 L -4 0 Z" fill="#B8893B"/>
+            <text y="-25" text-anchor="middle" fill="#5F5E5A" font-size="10" font-weight="600">N</text>
+          </g>
+
+          <!-- Scale bar -->
+          <g transform="translate(60, 660)">
+            <line x1="0" y1="0" x2="80" y2="0" stroke="#5F5E5A" stroke-width="1.5"/>
+            <line x1="0" y1="-4" x2="0" y2="4" stroke="#5F5E5A" stroke-width="1.5"/>
+            <line x1="80" y1="-4" x2="80" y2="4" stroke="#5F5E5A" stroke-width="1.5"/>
+            <text x="40" y="18" text-anchor="middle" fill="#5F5E5A" font-size="9.5">approx. 1/2 mile</text>
+            <text x="40" y="32" text-anchor="middle" fill="#8A8578" font-size="8.5" font-style="italic">stylized projection · not to true scale</text>
+          </g>
+        </g>
+
+                <g id="layer-quaker" class="layer hidden">
+          <polygon points="455,80 555,90 555,225 458,215" class="story-poly story-poly-quaker"/>
+          <text x="505" y="148" text-anchor="middle" class="story-poly-label-quaker">Old Chappaqua</text>
+          <text x="505" y="166" text-anchor="middle" class="story-poly-label-quaker">historic district</text>
+        </g>
+
+                <g id="layer-farm" class="layer hidden">
+          <polygon points="620,311 714,313 719,390 618,388" class="story-poly story-poly-farm"/>
+          <text x="637" y="358" text-anchor="middle" class="story-poly-label-farm">Greeley's 78-acre farm</text>
+          <text x="637" y="373" text-anchor="middle" class="story-poly-label-farm" style="font-size: 10px; font-weight: 400; font-style: italic;">1852–1872</text>
+        </g>
+
+                <g id="layer-railroad" class="layer hidden">
+          <line x1="595" y1="0" x2="595" y2="700" class="story-line-railroad"/>
+          <text x="608" y="660" fill="#2D5016" font-size="10" font-style="italic" font-weight="600">1846 · Harlem Line</text>
+        </g>
+
+                <g id="layer-tour" class="layer hidden">
+          <polyline points="668.2,376.6 685.0,389.8 668.2,367.8 643.2,345.8 633.6,336.1 625.0,322.9 701.8,368.7 682.6,345.8 711.4,359.0 668.2,376.6" class="story-line-tour"/>
+          <polyline points="668.2,376.6 594,268 520,160" class="story-line-tour-spur"/>
+          <g id="tour-stops"></g>
+        </g>
+        </g>
+
+        <g id="layer-landmarks" class="layer"></g>
+        <g id="layer-retailers" class="layer"></g>
+      </svg>
+
+      <div class="legend">
+        <div class="legend-title">Legend</div>
+        <div class="legend-row"><span class="legend-square" style="background: var(--gold-bg); border-color: var(--gold)"></span> Greeley Heritage Landmark</div>
+        <div class="legend-row"><span class="legend-square" style="background: #DBE8C9; border-color: var(--pine)"></span> Quaker landmark (1740s)</div>
+        <div class="legend-row"><span class="legend-square" style="background: var(--cat-apparel-bg); border-color: var(--cat-apparel)"></span> Civic landmark</div>
+        <div class="legend-row" style="margin-top: 8px;"><span class="legend-dot" style="background: var(--cat-food-bg); border-color: var(--cat-food)"></span> Food &amp; drink</div>
+        <div class="legend-row"><span class="legend-dot" style="background: var(--cat-apparel-bg); border-color: var(--cat-apparel)"></span> Apparel</div>
+        <div class="legend-row"><span class="legend-dot" style="background: var(--cat-specialty-bg); border-color: var(--cat-specialty)"></span> Specialty</div>
+        <div class="legend-row"><span class="legend-dot" style="background: var(--cat-home-bg); border-color: var(--cat-home)"></span> Home</div>
+        <div class="legend-row"><span class="legend-dot" style="background: var(--cat-service-bg); border-color: var(--cat-service)"></span> Service</div>
+        <div class="legend-row"><span class="legend-dot" style="background: var(--cat-wellness-bg); border-color: var(--cat-wellness)"></span> Wellness</div>
+        <div class="legend-row"><span class="legend-dot" style="background: var(--cat-civic-bg); border-color: var(--cat-civic)"></span> Civic / community</div>
+      </div>
+
+      <div class="era-rail">
+        <div class="era-label-row">
+          <div class="era-current" id="era-current">Today</div>
+          <div class="era-help" id="era-help">The full living map</div>
+        </div>
+        <input type="range" id="era-slider" min="0" max="3" value="3" step="1"/>
+        <div class="era-marks">
+          <span>1740</span><span>1860</span><span>1950</span><span>Today</span>
+        </div>
+      </div>
+
+      <div class="map-tooltip" id="tooltip"></div>
+    </div>
+
+    <aside class="detail-panel" id="panel">
+      <div class="panel-empty" id="panel-empty">
+        <div class="panel-empty-mark">i</div>
+        <div class="panel-empty-title">Click any pin to learn more</div>
+        <p>All four commercial clusters of the Chappaqua-Millwood Chamber on one map: 66 downtown · 14 at Chappaqua Crossing · 7 at Quaker Hill Center · 19 in Millwood · 3 outliers between them.</p>
+        <p>Toggle story layers above for Greeley's farm, the 1846 railroad, the Quaker district, or the Story Walk. Drag the era slider to rewind the map.</p>
+        <div class="stat-row">
+          <div class="stat"><div class="stat-num" id="stat-landmarks">6</div><div class="stat-label">Landmarks</div></div>
+          <div class="stat"><div class="stat-num" id="stat-retailers">109</div><div class="stat-label">Retailers</div></div>
+          <div class="stat"><div class="stat-num" id="stat-stories">4</div><div class="stat-label">Stories</div></div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <footer>
+    <strong>About this prototype.</strong>
+    The map is rendered as inline SVG with no external tile dependencies, so the Chamber owns its visual identity end to end and the file is portable to print, web, and signage. Regional v2: all four commercial clusters of the Chappaqua-Millwood Chamber are projected onto a single canvas — 66 downtown, 14 at Chappaqua Crossing, 7 at Quaker Hill Center, 19 in Millwood, plus 3 outliers (Kittle House, World Cup School, Quaker Hill Tavern). The basemap is a stylized projection — distances and proportions are compressed for readability, not surveyed. Landmark data and story layers are sourced from National Register filings, the New Castle Historical Society, and the Old Chappaqua Historic District boundary.
+    <div class="spec-card">
+      <strong style="color: var(--forest);">For developers:</strong>
+      Replace the <code>DATA</code> object in the script tag with three Supabase queries: <code>places</code> joined to <code>retailers</code> and <code>landmarks</code> for markers, <code>story_layers</code> for the overlays, and <code>tour_stops</code> joined to <code>places</code> for the walking tour line. The render functions and event handlers stay untouched.
+    </div>
+  </footer>
+</div>
+
+<script>
+const ERAS = [
+  { id: 0, year: 1740, label: 'Quaker founding · 1740', help: 'Long Island Quakers settle Shapequaw' },
+  { id: 1, year: 1860, label: 'Greeley era · 1860', help: 'Railroad arrives, the town moves to the depot' },
+  { id: 2, year: 1950, label: 'Modern hamlet · 1950', help: 'Commuter town, downtown bones in place' },
+  { id: 3, year: 2026, label: 'Today', help: 'The full living map' }
+];
+
+const PLACES = [
+  { id: 'depot', name: "Chappaqua Train Depot", kind: 'landmark', lm_kind: 'greeley', x: 668.2, y: 376.6, founded: 1846, address: "Depot Plaza, Chappaqua, NY", from_era: 1, nrhp: true, description: "The 1902 station building, one of four Greeley Heritage Landmarks listed on the National Register. The first depot opened here in 1846 with the New York and Harlem Railroad. The decision to lay tracks a mile south of the Quaker hamlet on Quaker Road is the reason this is the center of Chappaqua and the old hamlet is now a historic district." },
+  { id: 'greeley_house', name: "Horace Greeley House", kind: 'landmark', lm_kind: 'greeley', x: 643.2, y: 345.8, founded: 1854, address: "100 King Street", from_era: 1, nrhp: true, description: "Built 1852 to 1854. Country home of Horace Greeley, founder and editor of the New-York Tribune, from 1864 until 1873. Now the museum and headquarters of the New Castle Historical Society. The phrase Greeley is most remembered for, \"Go West, young man,\" was published in the Tribune in 1865, almost certainly written from this house." },
+  { id: 'st_mary', name: "Church of St. Mary the Virgin", kind: 'landmark', lm_kind: 'greeley', x: 633.6, y: 336.1, founded: 1906, address: "King Street, Chappaqua", from_era: 1, nrhp: true, description: "Built next to Greeley's evergreen grove on land gifted by his daughter Gabrielle and her husband, the Reverend Frank Clendenin. The grove of pines and spruces that Greeley liked to walk through still stands beside the church today. One of the four Greeley Heritage Landmarks." },
+  { id: 'rehoboth', name: "Rehoboth (Greeley's barn)", kind: 'landmark', lm_kind: 'greeley', x: 625.0, y: 322.9, founded: 1857, address: "Greeley Park grounds", from_era: 1, nrhp: true, description: "Greeley's working barn, the heart of his agricultural experiment. Greeley was an evangelist for what he called scientific agriculture and spent twenty-five years championing it in his Tribune column. Now a private residence — visible from Greeley Park." },
+  { id: 'friends_house', name: "Chappaqua Friends Meeting House", kind: 'landmark', lm_kind: 'quaker', x: 520, y: 160, founded: 1753, address: "Quaker Road, Old Chappaqua Historic District", from_era: 0, nrhp: true, description: "The oldest known building in New Castle. Settled by Long Island Quakers around 1740. The 1753 meeting house is still in active use today. Listed on the National Register of Historic Places in 1974 as part of the Old Chappaqua Historic District." },
+  { id: 'library', name: "Chappaqua Library", kind: 'landmark', lm_kind: 'civic', x: 701.8, y: 368.7, founded: 1980, address: "195 South Greeley Avenue", from_era: 3, nrhp: false, description: "A regional architectural landmark and one of the most heavily used public spaces in town. The modern civic anchor — the answer to what civic Chappaqua looks like in the present tense, the same way the Greeley House is what civic Chappaqua looked like in the 1850s." },
+
+  { id: 'r_000', name: "Basso", kind: 'retailer', category: 'food', cluster: 'chappaqua_downtown', x: 689.3, y: 353.7, from_era: 3, address: "11 King Street, Chappaqua NY  10514", owner: "", description: "Located at 11 King Street, Chappaqua NY  10514. Cluster: Chappaqua – Downtown core. Category: Food and drink. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_001', name: "Bobo's Cafe", kind: 'retailer', category: 'food', cluster: 'chappaqua_downtown', x: 673.0, y: 384.5, from_era: 3, address: "1 Station Plaza, Chappaqua NY  10514", owner: "Anthony Bioni", description: "Located at 1 Station Plaza, Chappaqua NY  10514. Owner: Anthony Bioni. Cluster: Chappaqua – Downtown core. Category: Food and drink. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_002', name: "Chappaqua Village Market", kind: 'retailer', category: 'food', cluster: 'chappaqua_downtown', x: 688.8, y: 346.7, from_era: 3, address: "12 King Street, Chappaqua NY  10514", owner: "Vinny Milazzo", description: "Located at 12 King Street, Chappaqua NY  10514. Owner: Vinny Milazzo. Cluster: Chappaqua – Downtown core. Category: Food and drink. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_003', name: "Green and Tonic", kind: 'retailer', category: 'food', cluster: 'chappaqua_downtown', x: 698.0, y: 395.3, from_era: 3, address: "75 S Greeley Ave, Chappaqua NY  10514", owner: "", description: "Located at 75 S Greeley Ave, Chappaqua NY  10514. Cluster: Chappaqua – Downtown core. Category: Food and drink. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_004', name: "Ibiza Kitchen", kind: 'retailer', category: 'food', cluster: 'chappaqua_downtown', x: 658.1, y: 346.7, from_era: 3, address: "76 King Street, Chappaqua NY  10514", owner: "", description: "Located at 76 King Street, Chappaqua NY  10514. Cluster: Chappaqua – Downtown core. Category: Food and drink. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_005', name: "Le Jardin", kind: 'retailer', category: 'food', cluster: 'chappaqua_downtown', x: 649.0, y: 353.7, from_era: 3, address: "95 King Street, Chappaqua NY  10514", owner: "Joe", description: "Located at 95 King Street, Chappaqua NY  10514. Owner: Joe. Cluster: Chappaqua – Downtown core. Category: Food and drink. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_006', name: "Pizza Station", kind: 'retailer', category: 'food', cluster: 'chappaqua_downtown', x: 691.2, y: 402.0, from_era: 3, address: "88 S Greeley, Chappaqua NY 10514", owner: "", description: "Located at 88 S Greeley, Chappaqua NY 10514. Cluster: Chappaqua – Downtown core. Category: Food and drink. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_007', name: "Taco Street", kind: 'retailer', category: 'food', cluster: 'chappaqua_downtown', x: 691.2, y: 401.0, from_era: 3, address: "86 S Greeley Ave, Chappaqua NY 10514", owner: "", description: "Located at 86 S Greeley Ave, Chappaqua NY 10514. Cluster: Chappaqua – Downtown core. Category: Food and drink. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_008', name: "The Little Thai Kitchen", kind: 'retailer', category: 'food', cluster: 'chappaqua_downtown', x: 698.0, y: 372.5, from_era: 3, address: "31 S. Greeley Ave, Chappaqua NY 10514", owner: "914-861-8188", description: "Located at 31 S. Greeley Ave, Chappaqua NY 10514. Owner: 914-861-8188. Cluster: Chappaqua – Downtown core. Category: Food and drink. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_009', name: "Waka Asian Bistro", kind: 'retailer', category: 'food', cluster: 'chappaqua_downtown', x: 656.0, y: 353.7, from_era: 3, address: "95 King Street, Chappaqua NY  10514", owner: "", description: "Located at 95 King Street, Chappaqua NY  10514. Cluster: Chappaqua – Downtown core. Category: Food and drink. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_010', name: "Bentley Jane", kind: 'retailer', category: 'apparel', cluster: 'chappaqua_downtown', x: 705.0, y: 395.3, from_era: 3, address: "75 S Greeley Ave, Chappaqua NY  10514", owner: "", description: "Located at 75 S Greeley Ave, Chappaqua NY  10514. Cluster: Chappaqua – Downtown core. Category: Apparel. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_011', name: "Cosmetic Boutique", kind: 'retailer', category: 'apparel', cluster: 'chappaqua_downtown', x: 698.0, y: 356.9, from_era: 3, address: "1S Greeley Avenue, Chappaqua NY 10514", owner: "", description: "Located at 1S Greeley Avenue, Chappaqua NY 10514. Cluster: Chappaqua – Downtown core. Category: Apparel. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_012', name: "Family Britches", kind: 'retailer', category: 'apparel', cluster: 'chappaqua_downtown', x: 661.0, y: 346.7, from_era: 3, address: "70 King Street, Chappaqua  NY 10514", owner: "Barry & Rick", description: "Located at 70 King Street, Chappaqua  NY 10514. Owner: Barry & Rick. Cluster: Chappaqua – Downtown core. Category: Apparel. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_013', name: "Hip Kid", kind: 'retailer', category: 'apparel', cluster: 'chappaqua_downtown', x: 698.0, y: 396.3, from_era: 3, address: "77 South Greeley Ave, Chappaqua NY  10514", owner: "Trish Kallman", description: "Located at 77 South Greeley Ave, Chappaqua NY  10514. Owner: Trish Kallman. Cluster: Chappaqua – Downtown core. Category: Apparel. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_014', name: "House of 29", kind: 'retailer', category: 'apparel', cluster: 'chappaqua_downtown', x: 698.0, y: 376.6, from_era: 3, address: "39 South Greeley Ave, Chappaqua NY  10514", owner: "Sarah David", description: "Located at 39 South Greeley Ave, Chappaqua NY  10514. Owner: Sarah David. Cluster: Chappaqua – Downtown core. Category: Apparel. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_015', name: "Petticoat Lane", kind: 'retailer', category: 'apparel', cluster: 'chappaqua_downtown', x: 662.9, y: 346.7, from_era: 3, address: "66 King Street, Chappaqua NY  10514", owner: "Phyllis Jacobson", description: "Located at 66 King Street, Chappaqua NY  10514. Owner: Phyllis Jacobson. Cluster: Chappaqua – Downtown core. Category: Apparel. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_016', name: "Royal", kind: 'retailer', category: 'apparel', cluster: 'chappaqua_downtown', x: 691.2, y: 365.7, from_era: 3, address: "18 S Greeley Ave, Chappaqua NY  10514", owner: "Barbara Lerman", description: "Located at 18 S Greeley Ave, Chappaqua NY  10514. Owner: Barbara Lerman. Cluster: Chappaqua – Downtown core. Category: Apparel. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_017', name: "Squires", kind: 'retailer', category: 'apparel', cluster: 'chappaqua_downtown', x: 698.0, y: 377.6, from_era: 3, address: "41 S Greeley Ave, Cxhappaqua NY  10514", owner: "Michael Kushner", description: "Located at 41 S Greeley Ave, Cxhappaqua NY  10514. Owner: Michael Kushner. Cluster: Chappaqua – Downtown core. Category: Apparel. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_018', name: "Susan Lawrence", kind: 'retailer', category: 'apparel', cluster: 'chappaqua_downtown', x: 678.8, y: 337.8, from_era: 3, address: "26 North Greeley Ave, Chappaqua NY  10514", owner: "Mark J Kramer", description: "Located at 26 North Greeley Ave, Chappaqua NY  10514. Owner: Mark J Kramer. Cluster: Chappaqua – Downtown core. Category: Apparel. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_019', name: "Untied", kind: 'retailer', category: 'apparel', cluster: 'chappaqua_downtown', x: 567.4, y: 403.0, from_era: 3, address: "91 Bedford Road, Chappaqua NY  10514", owner: "", description: "Located at 91 Bedford Road, Chappaqua NY  10514. Cluster: Chappaqua – Downtown core. Category: Apparel. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_020', name: "Breeze Gifts", kind: 'retailer', category: 'specialty', cluster: 'chappaqua_downtown', x: 694.1, y: 353.7, from_era: 3, address: "1 King Street, Chappaqua NY  10514", owner: "Susan Maher", description: "Located at 1 King Street, Chappaqua NY  10514. Owner: Susan Maher. Cluster: Chappaqua – Downtown core. Category: Specialty retail. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_021', name: "Chappaqua Framing", kind: 'retailer', category: 'specialty', cluster: 'chappaqua_downtown', x: 698.0, y: 356.9, from_era: 3, address: "One South Greeley Ave, Chappaqua NY  10514", owner: "Gary", description: "Located at One South Greeley Ave, Chappaqua NY  10514. Owner: Gary. Cluster: Chappaqua – Downtown core. Category: Specialty retail. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_022', name: "Chappaqua Wines", kind: 'retailer', category: 'specialty', cluster: 'chappaqua_downtown', x: 663.4, y: 353.7, from_era: 3, address: "65 King Street, Chappaqua NY  10514", owner: "Kirk Spencer", description: "Located at 65 King Street, Chappaqua NY  10514. Owner: Kirk Spencer. Cluster: Chappaqua – Downtown core. Category: Specialty retail. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_023', name: "Desires By Mikolay", kind: 'retailer', category: 'specialty', cluster: 'chappaqua_downtown', x: 668.2, y: 353.7, from_era: 3, address: "55 King Street, Chappaqua NY  10514", owner: "Scott Mikolay", description: "Located at 55 King Street, Chappaqua NY  10514. Owner: Scott Mikolay. Cluster: Chappaqua – Downtown core. Category: Specialty retail. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_024', name: "Frannie's Goodie Shop", kind: 'retailer', category: 'specialty', cluster: 'chappaqua_downtown', x: 700.1, y: 402.0, from_era: 3, address: "75 S Greeley Ave, Chappaqua NY  10514", owner: "Frances Bueti Albanese", description: "Located at 75 S Greeley Ave, Chappaqua NY  10514. Owner: Frances Bueti Albanese. Cluster: Chappaqua – Downtown core. Category: Specialty retail. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_025', name: "Great Stuff", kind: 'retailer', category: 'specialty', cluster: 'chappaqua_downtown', x: 698.0, y: 356.9, from_era: 3, address: "1 South Greeley Ave, Chappaqua NY  10514", owner: "", description: "Located at 1 South Greeley Ave, Chappaqua NY  10514. Cluster: Chappaqua – Downtown core. Category: Specialty retail. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_026', name: "ICD Jewelry", kind: 'retailer', category: 'specialty', cluster: 'chappaqua_downtown', x: 691.2, y: 369.9, from_era: 3, address: "26 South Greeley Ave, Chappaqua NY 10514", owner: "Virginia Shasha", description: "Located at 26 South Greeley Ave, Chappaqua NY 10514. Owner: Virginia Shasha . Cluster: Chappaqua – Downtown core. Category: Specialty retail. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_027', name: "King's Scribe", kind: 'retailer', category: 'specialty', cluster: 'chappaqua_downtown', x: 627.4, y: 346.7, from_era: 3, address: "140 King Street, Chappaqua NY  10514", owner: "Alissa Sampogna", description: "Located at 140 King Street, Chappaqua NY  10514. Owner: Alissa Sampogna. Cluster: Chappaqua – Downtown core. Category: Specialty retail. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_028', name: "Monet Garden Flower Shop", kind: 'retailer', category: 'specialty', cluster: 'chappaqua_downtown', x: 625.5, y: 346.7, from_era: 3, address: "144 King Street, Chappaqua NY 10514", owner: "914-238-0508", description: "Located at 144 King Street, Chappaqua NY 10514. Owner: 914-238-0508. Cluster: Chappaqua – Downtown core. Category: Specialty retail. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_029', name: "Scattered Books", kind: 'retailer', category: 'specialty', cluster: 'chappaqua_downtown', x: 680.7, y: 353.7, from_era: 3, address: "29 King Street, Chappaqua NY  10514", owner: "", description: "Located at 29 King Street, Chappaqua NY  10514. Cluster: Chappaqua – Downtown core. Category: Specialty retail. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_030', name: "Whispering Pines Florist", kind: 'retailer', category: 'specialty', cluster: 'chappaqua_downtown', x: 698.0, y: 399.5, from_era: 3, address: "83 South Greeley Ave, Chappaqua NY  10514", owner: "", description: "Located at 83 South Greeley Ave, Chappaqua NY  10514. Cluster: Chappaqua – Downtown core. Category: Specialty retail. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_031', name: "Alison Friedricks Interiors", kind: 'retailer', category: 'home', cluster: 'chappaqua_downtown', x: 640.4, y: 353.7, from_era: 3, address: "113 King street, Chappaqua NY  10514", owner: "Alison", description: "Located at 113 King street, Chappaqua NY  10514. Owner: Alison. Cluster: Chappaqua – Downtown core. Category: Home. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_032', name: "Casa Tile and Design", kind: 'retailer', category: 'home', cluster: 'chappaqua_downtown', x: 701.1, y: 353.7, from_era: 3, address: "1 King Street, Chappaqua NY  10514", owner: "", description: "Located at 1 King Street, Chappaqua NY  10514. Cluster: Chappaqua – Downtown core. Category: Home. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_033', name: "Chappaqua Paint and Hardware", kind: 'retailer', category: 'home', cluster: 'chappaqua_downtown', x: 698.0, y: 387.0, from_era: 3, address: "59 S Greeley Avenue, Chappaqua NY 10514", owner: "Lou", description: "Located at 59 S Greeley Avenue, Chappaqua NY 10514. Owner: Lou. Cluster: Chappaqua – Downtown core. Category: Home. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_034', name: "AG Salon", kind: 'retailer', category: 'wellness', cluster: 'chappaqua_downtown', x: 691.2, y: 369.9, from_era: 3, address: "26 S Greeley Avenue, Chappaqua NY  10514", owner: "Angie", description: "Located at 26 S Greeley Avenue, Chappaqua NY  10514. Owner: Angie. Cluster: Chappaqua – Downtown core. Category: Health and wellness. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_035', name: "Breathe Pilates", kind: 'retailer', category: 'wellness', cluster: 'chappaqua_downtown', x: 691.2, y: 363.6, from_era: 3, address: "14 South Greeley Ave, Chappaqua NY  10514", owner: "Adina Olan", description: "Located at 14 South Greeley Ave, Chappaqua NY  10514. Owner: Adina Olan. Cluster: Chappaqua – Downtown core. Category: Health and wellness. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_036', name: "Collective by JAB Fit", kind: 'retailer', category: 'wellness', cluster: 'chappaqua_downtown', x: 691.2, y: 361.6, from_era: 3, address: "10 S Greeley Ave, Chappaqua NY  10514", owner: "", description: "Located at 10 S Greeley Ave, Chappaqua NY  10514. Cluster: Chappaqua – Downtown core. Category: Health and wellness. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_037', name: "Diego's Hair Studio", kind: 'retailer', category: 'wellness', cluster: 'chappaqua_downtown', x: 686.4, y: 317.3, from_era: 3, address: "81 N Greeley Ave, Chappaqua NY 10514", owner: "Diego Bueti", description: "Located at 81 N Greeley Ave, Chappaqua NY 10514. Owner: Diego Bueti. Cluster: Chappaqua – Downtown core. Category: Health and wellness. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_038', name: "Emmary Day Spa", kind: 'retailer', category: 'wellness', cluster: 'chappaqua_downtown', x: 691.2, y: 368.8, from_era: 3, address: "24 South Greeley Ave, Chappaqua NY  10514", owner: "", description: "Located at 24 South Greeley Ave, Chappaqua NY  10514. Cluster: Chappaqua – Downtown core. Category: Health and wellness. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_039', name: "Eye Gallery", kind: 'retailer', category: 'wellness', cluster: 'chappaqua_downtown', x: 675.9, y: 353.7, from_era: 3, address: "39 King Street, Chappaqua NY  10514", owner: "", description: "Located at 39 King Street, Chappaqua NY  10514. Cluster: Chappaqua – Downtown core. Category: Health and wellness. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_040', name: "G-Fit", kind: 'retailer', category: 'wellness', cluster: 'chappaqua_downtown', x: 686.4, y: 319.5, from_era: 3, address: "75 N Greeley Ave, Chappaqua NY 10514", owner: "Sam Gomez", description: "Located at 75 N Greeley Ave, Chappaqua NY 10514. Owner: Sam Gomez. Cluster: Chappaqua – Downtown core. Category: Health and wellness. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_041', name: "Greeley Barbershop", kind: 'retailer', category: 'wellness', cluster: 'chappaqua_downtown', x: 685.5, y: 353.7, from_era: 3, address: "19 King Street, Chappaqua NY  10514", owner: "", description: "Located at 19 King Street, Chappaqua NY  10514. Cluster: Chappaqua – Downtown core. Category: Health and wellness. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_042', name: "Mimi's Nail Bar", kind: 'retailer', category: 'wellness', cluster: 'chappaqua_downtown', x: 682.1, y: 346.7, from_era: 3, address: "26 King St, Chappaqua NY  10514", owner: "", description: "Located at 26 King St, Chappaqua NY  10514. Cluster: Chappaqua – Downtown core. Category: Health and wellness. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_043', name: "Santa's Hair Salon", kind: 'retailer', category: 'wellness', cluster: 'chappaqua_downtown', x: 626.4, y: 346.7, from_era: 3, address: "142 King Street, Chappaqua NY 10514", owner: "", description: "Located at 142 King Street, Chappaqua NY 10514. Cluster: Chappaqua – Downtown core. Category: Health and wellness. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_044', name: "Serenety Nail & Spa", kind: 'retailer', category: 'wellness', cluster: 'chappaqua_downtown', x: 685.0, y: 346.7, from_era: 3, address: "20 King Street, Chappaqua NY  10514", owner: "", description: "Located at 20 King Street, Chappaqua NY  10514. Cluster: Chappaqua – Downtown core. Category: Health and wellness. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_045', name: "The Gentlemen's Barbershop", kind: 'retailer', category: 'wellness', cluster: 'chappaqua_downtown', x: 698.0, y: 375.6, from_era: 3, address: "37 S. Greeley Ave, Chappaqua NY  10514", owner: "", description: "Located at 37 S. Greeley Ave, Chappaqua NY  10514. Cluster: Chappaqua – Downtown core. Category: Health and wellness. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_046', name: "AllState", kind: 'retailer', category: 'service', cluster: 'chappaqua_downtown', x: 698.0, y: 387.0, from_era: 3, address: "59 South Greeley Ave, Chappaqua NY  10514", owner: "", description: "Located at 59 South Greeley Ave, Chappaqua NY  10514. Cluster: Chappaqua – Downtown core. Category: Professional service. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_047', name: "Barry L Goldstein, DDS", kind: 'retailer', category: 'service', cluster: 'chappaqua_downtown', x: 678.8, y: 336.3, from_era: 3, address: "30 N Greeley Ave, Chappaqua NY  10514", owner: "Barry L Goldstein", description: "Located at 30 N Greeley Ave, Chappaqua NY  10514. Owner: Barry L Goldstein. Cluster: Chappaqua – Downtown core. Category: Professional service. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_048', name: "Chappaqua Cleaners", kind: 'retailer', category: 'service', cluster: 'chappaqua_downtown', x: 669.2, y: 353.7, from_era: 3, address: "53 King Street, Chappaqua NY 10514", owner: "", description: "Located at 53 King Street, Chappaqua NY 10514. Cluster: Chappaqua – Downtown core. Category: Professional service. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_049', name: "Dr. Sadaf", kind: 'retailer', category: 'service', cluster: 'chappaqua_downtown', x: 691.2, y: 369.9, from_era: 3, address: "26 S Greeley Ave Suite5, Chappaqua  NY 10514", owner: "Sadaf Lodhi", description: "Located at 26 S Greeley Ave Suite5, Chappaqua  NY 10514. Owner: Sadaf Lodhi. Cluster: Chappaqua – Downtown core. Category: Professional service. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_050', name: "Houlihan Lawrence", kind: 'retailer', category: 'service', cluster: 'chappaqua_downtown', x: 698.0, y: 379.7, from_era: 3, address: "45 South Greeley Ave, Chappaqua NY  10514", owner: "", description: "Located at 45 South Greeley Ave, Chappaqua NY  10514. Cluster: Chappaqua – Downtown core. Category: Professional service. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_051', name: "King New Castle Cleaners", kind: 'retailer', category: 'service', cluster: 'chappaqua_downtown', x: 686.9, y: 346.7, from_era: 3, address: "16 King Street, Chappaqua NY  10514", owner: "", description: "Located at 16 King Street, Chappaqua NY  10514. Cluster: Chappaqua – Downtown core. Category: Professional service. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_052', name: "Lipari & Mangiameli Dentistry", kind: 'retailer', category: 'service', cluster: 'chappaqua_downtown', x: 634.6, y: 353.7, from_era: 3, address: "125 King Street, Chappaqua NY 10514", owner: "Richard Lipari", description: "Located at 125 King Street, Chappaqua NY 10514. Owner: Richard Lipari. Cluster: Chappaqua – Downtown core. Category: Professional service. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_053', name: "New Castle Veterinary Hospital", kind: 'retailer', category: 'service', cluster: 'chappaqua_downtown', x: 678.8, y: 336.3, from_era: 3, address: "30 N. Greeley Avenue, Chappaqua NY  10514", owner: "Bradley Emott", description: "Located at 30 N. Greeley Avenue, Chappaqua NY  10514. Owner: Bradley Emott. Cluster: Chappaqua – Downtown core. Category: Professional service. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_054', name: "Psychic Consultation", kind: 'retailer', category: 'service', cluster: 'chappaqua_downtown', x: 633.4, y: 346.7, from_era: 3, address: "142 King Street, Chappaqua NY 10514", owner: "Sandra", description: "Located at 142 King Street, Chappaqua NY 10514. Owner: Sandra. Cluster: Chappaqua – Downtown core. Category: Professional service. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_055', name: "Sotheby's Realty", kind: 'retailer', category: 'service', cluster: 'chappaqua_downtown', x: 682.9, y: 353.7, from_era: 3, address: "39 King Street, Chappaqua NY  10514", owner: "", description: "Located at 39 King Street, Chappaqua NY  10514. Cluster: Chappaqua – Downtown core. Category: Professional service. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_056', name: "That Dashing Dog", kind: 'retailer', category: 'service', cluster: 'chappaqua_downtown', x: 634.4, y: 346.7, from_era: 3, address: "140 King Street, Chappaqua NY  10514", owner: "Caitlyn", description: "Located at 140 King Street, Chappaqua NY  10514. Owner: Caitlyn. Cluster: Chappaqua – Downtown core. Category: Professional service. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_057', name: "William Raveis", kind: 'retailer', category: 'service', cluster: 'chappaqua_downtown', x: 670.4, y: 353.7, from_era: 3, address: "65 King Street, Chappaqua NY  10514", owner: "Ted Holmes", description: "Located at 65 King Street, Chappaqua NY  10514. Owner: Ted Holmes. Cluster: Chappaqua – Downtown core. Category: Professional service. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_058', name: "Amadeus Conservatory", kind: 'retailer', category: 'civic', cluster: 'chappaqua_downtown', x: 598.1, y: 353.7, from_era: 3, address: "201 King Street, Chappaqua NY 10514", owner: "Deborah Molodofsky", description: "Located at 201 King Street, Chappaqua NY 10514. Owner: Deborah Molodofsky. Cluster: Chappaqua – Downtown core. Category: Civic / community. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_059', name: "Chappaqua Farmer's Market", kind: 'retailer', category: 'civic', cluster: 'chappaqua_downtown', x: 706.6, y: 396.4, from_era: 3, address: "Allen Pl, Chappaqua NY  10514", owner: "", description: "Located at Allen Pl, Chappaqua NY  10514. Cluster: Chappaqua – Downtown core. Category: Civic / community. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_060', name: "Fire Department", kind: 'retailer', category: 'civic', cluster: 'chappaqua_downtown', x: 641.8, y: 339.2, from_era: 3, address: "11 Senter St, Chappaqua NY  10514", owner: "", description: "Located at 11 Senter St, Chappaqua NY  10514. Cluster: Chappaqua – Downtown core. Category: Civic / community. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_061', name: "Indipendent Living  Inc", kind: 'retailer', category: 'civic', cluster: 'chappaqua_downtown', x: 646.1, y: 353.7, from_era: 3, address: "101 King Street, Chappaqua NY 10514", owner: "914-855-6190", description: "Located at 101 King Street, Chappaqua NY 10514. Owner: 914-855-6190. Cluster: Chappaqua – Downtown core. Category: Civic / community. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_062', name: "Make Inspires", kind: 'retailer', category: 'civic', cluster: 'chappaqua_downtown', x: 698.0, y: 395.3, from_era: 3, address: "75 South Greeley Ave, Chappaqua NY  10514", owner: "Deidre Dunham", description: "Located at 75 South Greeley Ave, Chappaqua NY  10514. Owner: Deidre Dunham. Cluster: Chappaqua – Downtown core. Category: Civic / community. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_063', name: "Making Headways Children's Workshop", kind: 'retailer', category: 'civic', cluster: 'chappaqua_downtown', x: 639.4, y: 353.7, from_era: 3, address: "115 King Street, Chappaqua NY 10514", owner: "Daniel Lipka", description: "Located at 115 King Street, Chappaqua NY 10514. Owner: Daniel Lipka. Cluster: Chappaqua – Downtown core. Category: Civic / community. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_064', name: "Mathnasium Learning Center", kind: 'retailer', category: 'civic', cluster: 'chappaqua_downtown', x: 698.0, y: 395.3, from_era: 3, address: "75 S. Greeley Ave, Chappaqua NY  10514", owner: "Dan Cherico", description: "Located at 75 S. Greeley Ave, Chappaqua NY  10514. Owner: Dan Cherico. Cluster: Chappaqua – Downtown core. Category: Civic / community. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_065', name: "Music In Chappaqua", kind: 'retailer', category: 'civic', cluster: 'chappaqua_downtown', x: 686.4, y: 293.0, from_era: 3, address: "225 N Greeley Ave, Chappaqua NY  10514", owner: "", description: "Located at 225 N Greeley Ave, Chappaqua NY  10514. Cluster: Chappaqua – Downtown core. Category: Civic / community. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_066', name: "Lange's Little Store and Delicatessen", kind: 'retailer', category: 'food', cluster: 'quaker_hill_center', x: 822.2, y: 240, from_era: 3, address: "382 King Street, Chappaqua NY  10514", owner: "Christa (wife of late Richard)", description: "Located at 382 King Street, Chappaqua NY  10514. Owner: Christa (wife of late Richard). Cluster: Chappaqua – Quaker Hill Center. Category: Food and drink. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_067', name: "Mentors Mediterranean Steakhouse", kind: 'retailer', category: 'food', cluster: 'quaker_hill_center', x: 858.9, y: 252, from_era: 3, address: "415 King Street #224 , Chappaqua NY 10514", owner: "Mentor Berisha", description: "Located at 415 King Street #224 , Chappaqua NY 10514. Owner: Mentor Berisha. Cluster: Chappaqua – Quaker Hill Center. Category: Food and drink. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_068', name: "Old Stone Trattoria", kind: 'retailer', category: 'food', cluster: 'quaker_hill_center', x: 870.0, y: 252, from_era: 3, address: "425 King Street, Chappaqua NY  10514", owner: "", description: "Located at 425 King Street, Chappaqua NY  10514. Cluster: Chappaqua – Quaker Hill Center. Category: Food and drink. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_069', name: "Talbots at Quaker Hill Shopping Center", kind: 'retailer', category: 'apparel', cluster: 'quaker_hill_center', x: 842.2, y: 240, from_era: 3, address: "400 King Street #18, Chappaqua NY 10514", owner: "1-800-438-9443", description: "Located at 400 King Street #18, Chappaqua NY 10514. Owner: 1-800-438-9443. Cluster: Chappaqua – Quaker Hill Center. Category: Apparel. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_070', name: "Hilltop Wine", kind: 'retailer', category: 'specialty', cluster: 'quaker_hill_center', x: 867.8, y: 252, from_era: 3, address: "423 King Street, Chappaqua NY  10514", owner: "Peter", description: "Located at 423 King Street, Chappaqua NY  10514. Owner: Peter. Cluster: Chappaqua – Quaker Hill Center. Category: Specialty retail. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_071', name: "Aura Salon", kind: 'retailer', category: 'wellness', cluster: 'quaker_hill_center', x: 842.2, y: 240, from_era: 3, address: "400 King Street, Chappaqua NY  10514", owner: "", description: "Located at 400 King Street, Chappaqua NY  10514. Cluster: Chappaqua – Quaker Hill Center. Category: Health and wellness. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_072', name: "Wags Groomer", kind: 'retailer', category: 'service', cluster: 'quaker_hill_center', x: 833.3, y: 240, from_era: 3, address: "392 King Street, Chappaqua NY  10514", owner: "", description: "Located at 392 King Street, Chappaqua NY  10514. Cluster: Chappaqua – Quaker Hill Center. Category: Professional service. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_073', name: "Bia American Kitchen and Bar Restaurant", kind: 'retailer', category: 'food', cluster: 'chappaqua_crossing', x: 553.2, y: 104.0, from_era: 3, address: "480 N Bedford Road, Chappaqua NY  10514", owner: "914-855-0123", description: "Located at 480 N Bedford Road, Chappaqua NY  10514. Owner: 914-855-0123. Cluster: Chappaqua – Crossing (480 N Bedford). Category: Food and drink. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_074', name: "Starbucks Coffee at The Crossing", kind: 'retailer', category: 'food', cluster: 'chappaqua_crossing', x: 543.7, y: 108.9, from_era: 3, address: "480 N Bedfor Rd, Chappaqua NY 10514", owner: "Jeffrey Low", description: "Located at 480 N Bedfor Rd, Chappaqua NY 10514. Owner: Jeffrey Low. Cluster: Chappaqua – Crossing (480 N Bedford). Category: Food and drink. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_075', name: "Sweetgreen", kind: 'retailer', category: 'food', cluster: 'chappaqua_crossing', x: 549.8, y: 94.7, from_era: 3, address: "480 N Bedford Rd Suite #D5, Chappaqua NY 10514", owner: "914-692-6300", description: "Located at 480 N Bedford Rd Suite #D5, Chappaqua NY 10514. Owner: 914-692-6300. Cluster: Chappaqua – Crossing (480 N Bedford). Category: Food and drink. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_076', name: "Whole Foods", kind: 'retailer', category: 'food', cluster: 'chappaqua_crossing', x: 555.7, y: 112.7, from_era: 3, address: "20 The Crossing, Chappaqua NY  10514", owner: "", description: "Located at 20 The Crossing, Chappaqua NY  10514. Cluster: Chappaqua – Crossing (480 N Bedford). Category: Food and drink. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_077', name: "J Crew Factory", kind: 'retailer', category: 'apparel', cluster: 'chappaqua_crossing', x: 536.7, y: 101.8, from_era: 3, address: "480 N Bedford Rd, Ste E-1 Space 80, chappaqua NY 10514", owner: "", description: "Located at 480 N Bedford Rd, Ste E-1 Space 80, chappaqua NY 10514. Cluster: Chappaqua – Crossing (480 N Bedford). Category: Apparel. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_078', name: "ROCKS Jewlery and Gifts", kind: 'retailer', category: 'specialty', cluster: 'chappaqua_crossing', x: 560.6, y: 96.6, from_era: 3, address: "480 N Bedford Rd, Chappaqua NY 10514", owner: "Tanya", description: "Located at 480 N Bedford Rd, Chappaqua NY 10514. Owner: Tanya. Cluster: Chappaqua – Crossing (480 N Bedford). Category: Specialty retail. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_079', name: "Calico Corners", kind: 'retailer', category: 'home', cluster: 'chappaqua_crossing', x: 545.1, y: 118.5, from_era: 3, address: "88 The Crossing, Chappaqua NY 10514", owner: "914-666-4486", description: "Located at 88 The Crossing, Chappaqua NY 10514. Owner: 914-666-4486. Cluster: Chappaqua – Crossing (480 N Bedford). Category: Home. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_080', name: "Life Time Athletics", kind: 'retailer', category: 'wellness', cluster: 'chappaqua_crossing', x: 541.6, y: 89.7, from_era: 3, address: "480 N Bedford Road, Chappaqua NY  10514", owner: "914-296-6007", description: "Located at 480 N Bedford Road, Chappaqua NY  10514. Owner: 914-296-6007. Cluster: Chappaqua – Crossing (480 N Bedford). Category: Health and wellness. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_081', name: "Chappaqua Auto Center", kind: 'retailer', category: 'service', cluster: 'chappaqua_crossing', x: 565.1, y: 109.9, from_era: 3, address: "480 N Bedford Road, Chappaqua NY  10514", owner: "", description: "Located at 480 N Bedford Road, Chappaqua NY  10514. Cluster: Chappaqua – Crossing (480 N Bedford). Category: Professional service. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_082', name: "Chase Bank Chappaqua Crossing", kind: 'retailer', category: 'service', cluster: 'chappaqua_crossing', x: 532.2, y: 110.9, from_era: 3, address: "480 N Bedford Rd, Chappaqua NY 10514", owner: "914-218-9107", description: "Located at 480 N Bedford Rd, Chappaqua NY 10514. Owner: 914-218-9107. Cluster: Chappaqua – Crossing (480 N Bedford). Category: Professional service. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_083', name: "Compass Real Estate", kind: 'retailer', category: 'service', cluster: 'chappaqua_crossing', x: 557.1, y: 86.7, from_era: 3, address: "68 70 The Crossing, Chappaqua NY 10514", owner: "", description: "Located at 68 70 The Crossing, Chappaqua NY 10514. Cluster: Chappaqua – Crossing (480 N Bedford). Category: Professional service. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_084', name: "Fidelity Investments", kind: 'retailer', category: 'service', cluster: 'chappaqua_crossing', x: 555.0, y: 123.0, from_era: 3, address: "480 Bedford Road, chappaqua NY 10514", owner: "", description: "Located at 480 Bedford Road, chappaqua NY 10514. Cluster: Chappaqua – Crossing (480 N Bedford). Category: Professional service. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_085', name: "Verizon at Chappaqua Crossing", kind: 'retailer', category: 'service', cluster: 'chappaqua_crossing', x: 531.0, y: 93.6, from_era: 3, address: "480 Bedford Rd, Chappaqua NY 10514", owner: "914-861-3710", description: "Located at 480 Bedford Rd, Chappaqua NY 10514. Owner: 914-861-3710. Cluster: Chappaqua – Crossing (480 N Bedford). Category: Professional service. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_086', name: "Chappaqua Playhouse Performing Arts Center", kind: 'retailer', category: 'civic', cluster: 'chappaqua_crossing', x: 570.1, y: 99.4, from_era: 3, address: "480 N Bedford Rd, Chappaqua NY 10514", owner: "", description: "Located at 480 N Bedford Rd, Chappaqua NY 10514. Cluster: Chappaqua – Crossing (480 N Bedford). Category: Civic / community. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_087', name: "Kittle House", kind: 'retailer', category: 'food', cluster: 'chappaqua_outlier', x: 720, y: 270, from_era: 3, address: "11 Kittle Road, Chappaqua NY 10514", owner: "Krase Family", description: "Located at 11 Kittle Road, Chappaqua NY 10514. Owner: Krase Family. Cluster: Chappaqua – Outlier. Category: Food and drink. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_088', name: "Quaker Hill Tavern", kind: 'retailer', category: 'food', cluster: 'chappaqua_outlier', x: 590, y: 215, from_era: 3, address: "61 N Bedford Road, Chappaqua NY 10514", owner: "", description: "Located at 61 N Bedford Road, Chappaqua NY 10514. Cluster: Chappaqua – Outlier. Category: Food and drink. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_089', name: "World Cup School", kind: 'retailer', category: 'service', cluster: 'chappaqua_outlier', x: 760, y: 380, from_era: 3, address: "170 Joan Corwin Way, Chappaqua NY  10514", owner: "", description: "Located at 170 Joan Corwin Way, Chappaqua NY  10514. Cluster: Chappaqua – Outlier. Category: Professional service. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_090', name: "Pacheco's Deli and Pizza", kind: 'retailer', category: 'food', cluster: 'millwood', x: 207.0, y: 568, from_era: 3, address: "74 Millwood Road, Millwood NY  10546", owner: "Raul", description: "Located at 74 Millwood Road, Millwood NY  10546. Owner: Raul. Cluster: Millwood. Category: Food and drink. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_091', name: "Rocky's Deli", kind: 'retailer', category: 'food', cluster: 'millwood', x: 282, y: 585, from_era: 3, address: "235 Saw Mill River Road, Millwood NY 10546", owner: "", description: "Located at 235 Saw Mill River Road, Millwood NY 10546. Cluster: Millwood. Category: Food and drink. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_092', name: "Spaccarelli By Zuppa", kind: 'retailer', category: 'food', cluster: 'millwood', x: 270, y: 603, from_era: 3, address: "238 Sawmill River Road, Millwood NY  10546", owner: "914-941-0105", description: "Located at 238 Sawmill River Road, Millwood NY  10546. Owner: 914-941-0105. Cluster: Millwood. Category: Food and drink. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_093', name: "Tazza Café and Espresso Bar", kind: 'retailer', category: 'food', cluster: 'millwood', x: 270, y: 555, from_era: 3, address: "230 Saw Mill River Rd #3, Millwood NY 10546", owner: "", description: "Located at 230 Saw Mill River Rd #3, Millwood NY 10546. Cluster: Millwood. Category: Food and drink. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_094', name: "Crank Cycles", kind: 'retailer', category: 'specialty', cluster: 'millwood', x: 270, y: 603, from_era: 3, address: "238 Saw Mill River Road, Millwood NY 10546", owner: "", description: "Located at 238 Saw Mill River Road, Millwood NY 10546. Cluster: Millwood. Category: Specialty retail. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_095', name: "Dodds Wine and Spirits", kind: 'retailer', category: 'specialty', cluster: 'millwood', x: 270, y: 555, from_era: 3, address: "230 Saw Mill River Road, Millwood NY  10546", owner: "Mark", description: "Located at 230 Saw Mill River Road, Millwood NY  10546. Owner: Mark. Cluster: Millwood. Category: Specialty retail. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_096', name: "Drug Mart", kind: 'retailer', category: 'specialty', cluster: 'millwood', x: 270, y: 555, from_era: 3, address: "230 Saw Mill River Rd, Millwood NY  10546", owner: "Richard Glotzer", description: "Located at 230 Saw Mill River Rd, Millwood NY  10546. Owner: Richard Glotzer. Cluster: Millwood. Category: Specialty retail. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_097', name: "Millwood Garden Center", kind: 'retailer', category: 'home', cluster: 'millwood', x: 234.0, y: 576, from_era: 3, address: "83 Millwood Road, Millwood NY  10546", owner: "Mike", description: "Located at 83 Millwood Road, Millwood NY  10546. Owner: Mike. Cluster: Millwood. Category: Home. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_098', name: "Millwood Hardware Center", kind: 'retailer', category: 'home', cluster: 'millwood', x: 289.0, y: 585.0, from_era: 3, address: "235 Saw Mill River Road, Millwood NY 10546", owner: "Mike", description: "Located at 235 Saw Mill River Road, Millwood NY 10546. Owner: Mike. Cluster: Millwood. Category: Home. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_099', name: "Ana's Nails", kind: 'retailer', category: 'wellness', cluster: 'millwood', x: 237.0, y: 568, from_era: 3, address: "84 Millwood Road, Millwood NY  10546", owner: "", description: "Located at 84 Millwood Road, Millwood NY  10546. Cluster: Millwood. Category: Health and wellness. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_100', name: "Isabel Nail Salon", kind: 'retailer', category: 'wellness', cluster: 'millwood', x: 219.0, y: 568, from_era: 3, address: "78 Millwood Rd, Millwood NY 10546", owner: "914-373-2300", description: "Located at 78 Millwood Rd, Millwood NY 10546. Owner: 914-373-2300. Cluster: Millwood. Category: Health and wellness. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_101', name: "Paradise Nail & Spa", kind: 'retailer', category: 'wellness', cluster: 'millwood', x: 277.0, y: 555.0, from_era: 3, address: "230 Saw Mill River Road, Millwood NY  10546", owner: "914-762-1421", description: "Located at 230 Saw Mill River Road, Millwood NY  10546. Owner: 914-762-1421. Cluster: Millwood. Category: Health and wellness. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_102', name: "Relax Body Work", kind: 'retailer', category: 'wellness', cluster: 'millwood', x: 231.0, y: 568, from_era: 3, address: "82 Millwood Rd, Millwood NY 10546", owner: "914-762-3425", description: "Located at 82 Millwood Rd, Millwood NY 10546. Owner: 914-762-3425. Cluster: Millwood. Category: Health and wellness. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_103', name: "Inside Press", kind: 'retailer', category: 'service', cluster: 'millwood', x: 256, y: 587, from_era: 3, address: "Millwood NY 10546", owner: "", description: "Located at Millwood NY 10546. Cluster: Millwood. Category: Professional service. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_104', name: "Millwood Animal Hospital", kind: 'retailer', category: 'service', cluster: 'millwood', x: 282, y: 561, from_era: 3, address: "231 Saw Mill River Road, Millwood NY  10546", owner: "", description: "Located at 231 Saw Mill River Road, Millwood NY  10546. Cluster: Millwood. Category: Professional service. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_105', name: "Millwood Cleaners", kind: 'retailer', category: 'service', cluster: 'millwood', x: 272.2, y: 561.7, from_era: 3, address: "230 Saw Mill River Road, Millwood NY  10546", owner: "Stephen Tobia", description: "Located at 230 Saw Mill River Road, Millwood NY  10546. Owner: Stephen Tobia. Cluster: Millwood. Category: Professional service. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_106', name: "Nextech Systems", kind: 'retailer', category: 'service', cluster: 'millwood', x: 270, y: 603, from_era: 3, address: "238 Saw Mill River Rd, Millwood NY  10546", owner: "Chong Lee", description: "Located at 238 Saw Mill River Rd, Millwood NY  10546. Owner: Chong Lee. Cluster: Millwood. Category: Professional service. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_107', name: "Signarama", kind: 'retailer', category: 'service', cluster: 'millwood', x: 240, y: 615, from_era: 3, address: "5 Schuman Road, Millwood NY  10546", owner: "", description: "Located at 5 Schuman Road, Millwood NY  10546. Cluster: Millwood. Category: Professional service. From the Chappaqua-Millwood Chamber directory." },
+  { id: 'r_108', name: "Millwood Fire Department", kind: 'retailer', category: 'civic', cluster: 'millwood', x: 285.0, y: 568, from_era: 3, address: "100 Millwood Road, Millwood NY  10546", owner: "Greg Santone", description: "Located at 100 Millwood Road, Millwood NY  10546. Owner: Greg Santone. Cluster: Millwood. Category: Civic / community. From the Chappaqua-Millwood Chamber directory." }
+];
+
+const STORY_LAYERS = {
+  farm: { id: 'farm', title: "Greeley's 78-acre farm", subtitle: '1852 to 1872', from_era: 1, eyebrow: 'STORY LAYER · GREELEY ERA',
+    description: "Between 1852 and 1854, Horace Greeley assembled a 78-acre tract of farmland that included most of what is now downtown Chappaqua. He spent twenty-five years championing scientific agriculture in his New-York Tribune column. The boundary you see is the approximate footprint of the farm at its largest — the shop you are clicking on today is, in a real sense, on his pasture." },
+  quaker: { id: 'quaker', title: 'Old Chappaqua Historic District', subtitle: 'Settled around 1740', from_era: 0, eyebrow: 'STORY LAYER · QUAKER FOUNDING',
+    description: "A 0.6-mile stretch of Quaker Road containing twelve historic structures dating to the 1700s and early 1800s. The 1753 Friends Meeting House is the oldest known building in town. When the railroad arrived in 1846 and was placed a mile south of this district, the new station became the town and this district stayed largely undisturbed. Listed on the National Register of Historic Places in 1974." },
+  railroad: { id: 'railroad', title: '1846 Harlem Railroad arrival', subtitle: 'New York and Harlem · still in use', from_era: 1, eyebrow: 'STORY LAYER · GREELEY ERA',
+    description: "The New York and Harlem Railroad reached Chappaqua in 1846. The tracks were laid in the river valley a mile south of the original Quaker hamlet on Quaker Road. The line is still in use today as Metro-North Railroad's Harlem Line. Within a generation the new station, not the old hamlet, was the town." },
+  tour: { id: 'tour', title: 'The Chappaqua Story Walk', subtitle: '11 stops · 75 minutes including audio', from_era: 3, eyebrow: 'STORY LAYER · MODERN',
+    description: "10-stop downtown loop plus an optional 0.6-mile spur to the 1753 Friends Meeting House. Designed by the Retail Impact Committee. Every stop pairs a historical anchor with adjacent retailers — the tour does not interrupt commerce to teach history, it uses history to introduce commerce." }
+};
+
+const TOUR_STOPS = [
+  { num: 1, x: 668.2, y: 376.6 },
+  { num: 2, x: 685.0, y: 389.8 },
+  { num: 3, x: 668.2, y: 367.8 },
+  { num: 4, x: 643.2, y: 345.8 },
+  { num: 5, x: 633.6, y: 336.1 },
+  { num: 6, x: 625.0, y: 322.9 },
+  { num: 7, x: 701.8, y: 368.7 },
+  { num: 8, x: 682.6, y: 345.8 },
+  { num: 9, x: 711.4, y: 359.0 },
+  { num: 10, x: 668.2, y: 376.6 },
+  { num: 11, x: 520, y: 160 }
+];
+
+const CATEGORY_COLORS = {
+  food:      { fill: 'var(--cat-food-bg)',      stroke: 'var(--cat-food)' },
+  apparel:   { fill: 'var(--cat-apparel-bg)',   stroke: 'var(--cat-apparel)' },
+  specialty: { fill: 'var(--cat-specialty-bg)', stroke: 'var(--cat-specialty)' },
+  home:      { fill: 'var(--cat-home-bg)',      stroke: 'var(--cat-home)' },
+  service:   { fill: 'var(--cat-service-bg)',   stroke: 'var(--cat-service)' },
+  wellness:  { fill: 'var(--cat-wellness-bg)',  stroke: 'var(--cat-wellness)' },
+  civic:     { fill: 'var(--cat-civic-bg)',     stroke: 'var(--cat-civic)' }
+};
+
+const LANDMARK_COLORS = {
+  greeley: { fill: 'var(--gold-bg)', stroke: 'var(--gold)' },
+  quaker:  { fill: '#DBE8C9',        stroke: 'var(--pine)' },
+  civic:   { fill: 'var(--cat-apparel-bg)', stroke: 'var(--cat-apparel)' }
+};
+
+const LAYER_STATE = {
+  landmarks: true, retailers: true,
+  quaker: false, farm: false, railroad: false, tour: false
+};
+
+let currentEra = 3;
+let selectedId = null;
+let searchTerm = '';
+
+function svgEl(name, attrs = {}) {
+  const el = document.createElementNS('http://www.w3.org/2000/svg', name);
+  for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v);
+  return el;
+}
+
+function renderTrackTies() {
+  const g = document.getElementById('track-ties');
+  if (!g) return;  // v2 basemap uses a single track line; no tie marks needed at regional scale
+  for (let i = 0; i < 28; i++) {
+    const y = 80 + i * 22;
+    const line = svgEl('line', { x1: 498, y1: y, x2: 512, y2: y, stroke: '#5F5E5A', 'stroke-width': 1.5 });
+    g.appendChild(line);
+  }
+}
+
+function renderTourStops() {
+  const g = document.getElementById('tour-stops');
+  TOUR_STOPS.forEach(stop => {
+    const c = svgEl('circle', { cx: stop.x, cy: stop.y, r: 11, class: 'tour-stop-circle' });
+    const t = svgEl('text', { x: stop.x, y: stop.y + 4, 'text-anchor': 'middle', class: 'tour-stop-num' });
+    t.textContent = stop.num;
+    g.appendChild(c);
+    g.appendChild(t);
+  });
+}
+
+function renderMarkers() {
+  const lmGroup = document.getElementById('layer-landmarks');
+  const rtGroup = document.getElementById('layer-retailers');
+  lmGroup.innerHTML = '';
+  rtGroup.innerHTML = '';
+
+  PLACES.forEach(place => {
+    if (place.kind === 'landmark') {
+      const colors = LANDMARK_COLORS[place.lm_kind] || LANDMARK_COLORS.civic;
+      const g = svgEl('g', { class: 'marker', 'data-id': place.id, 'data-kind': 'landmark' });
+      const r = svgEl('rect', {
+        x: place.x - 8, y: place.y - 8, width: 16, height: 16, rx: 2,
+        class: 'marker-shape',
+        fill: colors.fill, stroke: colors.stroke, 'stroke-width': 1.5
+      });
+      g.appendChild(r);
+      lmGroup.appendChild(g);
+      g.addEventListener('click', () => selectPlace(place.id));
+      g.addEventListener('mouseenter', e => showTooltip(e, place));
+      g.addEventListener('mouseleave', hideTooltip);
+      g.addEventListener('mousemove', moveTooltip);
+    } else if (place.kind === 'retailer') {
+      const colors = CATEGORY_COLORS[place.category];
+      const g = svgEl('g', { class: 'marker', 'data-id': place.id, 'data-kind': 'retailer', 'data-category': place.category });
+      const c = svgEl('circle', {
+        cx: place.x, cy: place.y, r: 6,
+        class: 'marker-shape',
+        fill: colors.fill, stroke: colors.stroke, 'stroke-width': 1.5
+      });
+      g.appendChild(c);
+      rtGroup.appendChild(g);
+      g.addEventListener('click', () => selectPlace(place.id));
+      g.addEventListener('mouseenter', e => showTooltip(e, place));
+      g.addEventListener('mouseleave', hideTooltip);
+      g.addEventListener('mousemove', moveTooltip);
+    }
+  });
+}
+
+function applyEraFilter() {
+  document.querySelectorAll('.marker').forEach(el => {
+    const id = el.getAttribute('data-id');
+    const place = PLACES.find(p => p.id === id);
+    if (!place) return;
+    const visible = currentEra >= place.from_era;
+    el.classList.toggle('era-hidden', !visible);
+  });
+  document.querySelectorAll('.layer.story, [id^="layer-"][id!="layer-landmarks"][id!="layer-retailers"]').forEach(() => {});
+  for (const layerId of ['quaker', 'farm', 'railroad', 'tour']) {
+    const layer = STORY_LAYERS[layerId];
+    const eraOK = currentEra >= layer.from_era;
+    const visible = LAYER_STATE[layerId] && eraOK;
+    const el = document.getElementById('layer-' + layerId);
+    el.classList.toggle('hidden', !visible);
+    const btn = document.querySelector(`.layer-btn[data-layer="${layerId}"]`);
+    btn.disabled = !eraOK;
+    btn.style.opacity = eraOK ? '1' : '0.4';
+    btn.style.cursor = eraOK ? 'pointer' : 'not-allowed';
+  }
+  document.getElementById('layer-landmarks').classList.toggle('hidden', !LAYER_STATE.landmarks);
+  document.getElementById('layer-retailers').classList.toggle('hidden', !LAYER_STATE.retailers);
+  updateStats();
+}
+
+function updateStats() {
+  if (selectedId) return;
+  const visibleLandmarks = PLACES.filter(p => p.kind === 'landmark' && currentEra >= p.from_era);
+  const visibleRetailers = PLACES.filter(p => p.kind === 'retailer' && currentEra >= p.from_era);
+  const visibleStories = Object.values(STORY_LAYERS).filter(s => currentEra >= s.from_era);
+  const lm = document.getElementById('stat-landmarks');
+  const rt = document.getElementById('stat-retailers');
+  const st = document.getElementById('stat-stories');
+  if (lm) lm.textContent = visibleLandmarks.length;
+  if (rt) rt.textContent = visibleRetailers.length;
+  if (st) st.textContent = visibleStories.length;
+}
+
+function setEra(era) {
+  currentEra = parseInt(era);
+  const e = ERAS[currentEra];
+  document.getElementById('era-current').textContent = e.label;
+  document.getElementById('era-help').textContent = e.help;
+  applyEraFilter();
+  applySearch();
+}
+
+function toggleLayer(layerId) {
+  if (layerId === 'landmarks' || layerId === 'retailers') {
+    LAYER_STATE[layerId] = !LAYER_STATE[layerId];
+    document.getElementById('layer-' + layerId).classList.toggle('hidden', !LAYER_STATE[layerId]);
+  } else {
+    if (currentEra < STORY_LAYERS[layerId].from_era) return;
+    LAYER_STATE[layerId] = !LAYER_STATE[layerId];
+    document.getElementById('layer-' + layerId).classList.toggle('hidden', !LAYER_STATE[layerId]);
+  }
+  const btn = document.querySelector(`.layer-btn[data-layer="${layerId}"]`);
+  btn.classList.toggle('active', LAYER_STATE[layerId]);
+}
+
+function selectPlace(id) {
+  document.querySelectorAll('.marker.selected').forEach(el => el.classList.remove('selected'));
+  const el = document.querySelector(`.marker[data-id="${id}"]`);
+  if (el) el.classList.add('selected');
+  selectedId = id;
+  const place = PLACES.find(p => p.id === id);
+  renderPlaceDetail(place);
+}
+
+function selectStory(id) {
+  document.querySelectorAll('.marker.selected').forEach(el => el.classList.remove('selected'));
+  selectedId = 'story-' + id;
+  renderStoryDetail(STORY_LAYERS[id]);
+}
+
+function renderPlaceDetail(place) {
+  const panel = document.getElementById('panel');
+  let tags = '';
+  if (place.kind === 'landmark') {
+    const labelMap = { greeley: 'Greeley Heritage', quaker: 'Quaker founding', civic: 'Civic landmark' };
+    const tagClass = { greeley: 'tag-greeley', quaker: 'tag-quaker', civic: 'tag-civic' }[place.lm_kind];
+    tags += `<span class="panel-tag ${tagClass}">${labelMap[place.lm_kind]}</span>`;
+    if (place.nrhp) tags += `<span class="panel-tag tag-nrhp">National Register</span>`;
+  } else {
+    tags += `<span class="panel-tag tag-sample">Chamber directory</span>`;
+  }
+  const eyebrow = place.kind === 'landmark' ? 'LANDMARK' : `RETAILER · ${place.category.toUpperCase()}`;
+
+  let metaHtml = '';
+  if (place.founded) metaHtml += `<div class="panel-meta-row"><div class="panel-meta-label">Founded</div><div class="panel-meta-value">${place.founded}</div></div>`;
+  if (place.address) metaHtml += `<div class="panel-meta-row"><div class="panel-meta-label">Address</div><div class="panel-meta-value">${place.address}</div></div>`;
+  if (place.owner) metaHtml += `<div class="panel-meta-row"><div class="panel-meta-label">Owner</div><div class="panel-meta-value">${place.owner}</div></div>`;
+  if (place.tagline) metaHtml += `<div class="panel-meta-row"><div class="panel-meta-label">Style</div><div class="panel-meta-value">${place.tagline}</div></div>`;
+
+  const ctaText = place.kind === 'landmark' ? 'See related retailers nearby ↓' : 'See related landmarks nearby ↑';
+
+  panel.innerHTML = `
+    <div class="panel-eyebrow">${eyebrow}</div>
+    <div class="panel-title">${place.name}</div>
+    ${place.tagline && place.kind === 'retailer' ? `<div class="panel-tagline">${place.tagline}</div>` : ''}
+    <div style="margin-bottom: 10px;">${tags}</div>
+    <hr class="panel-divider"/>
+    <div class="panel-body">${place.description}</div>
+    <div class="panel-meta">${metaHtml}</div>
+    <button class="panel-cta" onclick="findRelated('${place.id}')">${ctaText}</button>
+    <button class="panel-cta" style="margin-top: 8px; background: transparent; color: var(--gray); border-color: var(--rule);" onclick="clearSelection()">Close</button>
+  `;
+}
+
+function renderStoryDetail(story) {
+  const panel = document.getElementById('panel');
+  panel.innerHTML = `
+    <div class="panel-eyebrow">${story.eyebrow}</div>
+    <div class="panel-title">${story.title}</div>
+    <div class="panel-tagline">${story.subtitle}</div>
+    <hr class="panel-divider"/>
+    <div class="panel-body">${story.description}</div>
+    <button class="panel-cta" style="margin-top: 16px; background: transparent; color: var(--gray); border-color: var(--rule);" onclick="clearSelection()">Close</button>
+  `;
+}
+
+function findRelated(placeId) {
+  const place = PLACES.find(p => p.id === placeId);
+  if (!place) return;
+  const others = PLACES.filter(p => p.id !== placeId && Math.hypot(p.x - place.x, p.y - place.y) < 80 && currentEra >= p.from_era);
+  others.sort((a, b) => Math.hypot(a.x - place.x, a.y - place.y) - Math.hypot(b.x - place.x, b.y - place.y));
+  const list = others.slice(0, 5);
+  const panel = document.getElementById('panel');
+  panel.innerHTML = `
+    <div class="panel-eyebrow">NEAR ${place.name.toUpperCase()}</div>
+    <div class="panel-title">${list.length ? 'Within a short walk' : 'Nothing else nearby in this era'}</div>
+    <hr class="panel-divider"/>
+    ${list.map(p => `
+      <div style="margin: 10px 0; padding: 10px 12px; background: var(--cream); border: 1px solid var(--rule-soft); border-radius: 4px; cursor: pointer;" onclick="selectPlace('${p.id}')">
+        <div style="font-weight: 600; color: var(--forest); font-size: 13px;">${p.name}</div>
+        <div style="font-size: 11px; color: var(--gray); margin-top: 3px;">${p.kind === 'landmark' ? 'Landmark' : 'Retailer · ' + p.category} · ${Math.round(Math.hypot(p.x - place.x, p.y - place.y))} units away</div>
+      </div>
+    `).join('')}
+    <button class="panel-cta" style="margin-top: 12px;" onclick="selectPlace('${placeId}')">← Back to ${place.name}</button>
+  `;
+}
+
+function clearSelection() {
+  selectedId = null;
+  document.querySelectorAll('.marker.selected').forEach(el => el.classList.remove('selected'));
+  document.getElementById('panel').innerHTML = `
+    <div class="panel-empty">
+      <div class="panel-empty-mark">i</div>
+      <div class="panel-empty-title">Click any pin to learn more</div>
+      <p>Toggle story layers above to see Greeley's farm boundary, the 1846 railroad, the Old Chappaqua historic district, or the Story Walk route overlay.</p>
+      <p>Drag the era slider to rewind the map to 1740, 1860, 1950, or today and watch which layers belong to which century.</p>
+      <div class="stat-row">
+        <div class="stat"><div class="stat-num" id="stat-landmarks">6</div><div class="stat-label">Landmarks</div></div>
+        <div class="stat"><div class="stat-num" id="stat-retailers">109</div><div class="stat-label">Retailers</div></div>
+        <div class="stat"><div class="stat-num" id="stat-stories">4</div><div class="stat-label">Stories</div></div>
+      </div>
+    </div>
+  `;
+  updateStats();
+}
+
+function applySearch() {
+  const term = searchTerm.trim().toLowerCase();
+  document.querySelectorAll('.marker').forEach(el => {
+    el.classList.remove('search-match', 'search-dim');
+  });
+  if (!term) return;
+  document.querySelectorAll('.marker').forEach(el => {
+    const id = el.getAttribute('data-id');
+    const place = PLACES.find(p => p.id === id);
+    if (!place) return;
+    if (el.classList.contains('era-hidden')) return;
+    const haystack = `${place.name} ${place.description} ${place.tagline || ''} ${place.category || ''} ${place.lm_kind || ''}`.toLowerCase();
+    if (haystack.includes(term)) {
+      el.classList.add('search-match');
+    } else {
+      el.classList.add('search-dim');
+    }
+  });
+}
+
+function showTooltip(e, place) {
+  const tip = document.getElementById('tooltip');
+  let label = '';
+  let color = '';
+  if (place.kind === 'landmark') {
+    const labelMap = { greeley: 'Greeley Heritage', quaker: 'Quaker founding', civic: 'Civic landmark' };
+    label = labelMap[place.lm_kind] || 'Landmark';
+    const lmColors = { greeley: '#D4B576', quaker: '#9DBC72', civic: '#7AA8D6' };
+    color = lmColors[place.lm_kind] || '#D4B576';
+  } else if (place.kind === 'retailer' && place.category) {
+    label = place.category;
+    const catBgMap = {
+      food: '#F5C8A0', apparel: '#A4C4F0', specialty: '#C8B0E8',
+      home: '#B6D78F', service: '#D6C8AA', wellness: '#F0B8CC', civic: '#9DD0DE'
+    };
+    color = catBgMap[place.category] || '#FBF7EA';
+  }
+  tip.innerHTML = `<div class="map-tooltip-name">${place.name}</div>${label ? `<div class="map-tooltip-cat" style="color: ${color}">${label}</div>` : ''}`;
+  tip.classList.add('visible');
+  moveTooltip(e);
+}
+function moveTooltip(e) {
+  const tip = document.getElementById('tooltip');
+  const rect = document.getElementById('map-wrap').getBoundingClientRect();
+  tip.style.left = (e.clientX - rect.left) + 'px';
+  tip.style.top = (e.clientY - rect.top) + 'px';
+}
+function hideTooltip() {
+  document.getElementById('tooltip').classList.remove('visible');
+}
+
+function init() {
+  renderTrackTies();
+  renderTourStops();
+  renderMarkers();
+
+  document.getElementById('era-slider').addEventListener('input', e => setEra(e.target.value));
+
+  document.querySelectorAll('.layer-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const layer = btn.getAttribute('data-layer');
+      toggleLayer(layer);
+      if ((layer in STORY_LAYERS) && LAYER_STATE[layer]) {
+        selectStory(layer);
+      }
+    });
+  });
+
+  document.getElementById('search').addEventListener('input', e => {
+    searchTerm = e.target.value;
+    applySearch();
+  });
+
+  applyEraFilter();
+}
+
+init();
+</script>
+</body>
+</html>

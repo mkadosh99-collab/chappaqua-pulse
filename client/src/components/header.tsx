@@ -1,4 +1,4 @@
-import { CalendarDays, MapPin } from "lucide-react";
+import { CalendarDays, MapPin, Map as MapIcon } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
 import heroImage from "@assets/chappaqua_hero.png";
 
@@ -21,7 +21,17 @@ export function Header() {
                 </p>
               </div>
             </div>
-            <ThemeToggle />
+            <div className="flex items-center gap-2">
+              <a
+                href="/living-map.html"
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-md text-sm font-medium text-foreground hover-elevate active-elevate-2 border border-border"
+                data-testid="link-living-map"
+              >
+                <MapIcon className="w-4 h-4" />
+                <span className="hidden sm:inline">Living Map</span>
+              </a>
+              <ThemeToggle />
+            </div>
           </div>
         </div>
       </header>
