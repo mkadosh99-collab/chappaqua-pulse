@@ -2,11 +2,15 @@
 
 ## Overview
 
-**Chappaqua Pulse** - A weekly tracker into what's happening in Chappaqua, NY. A community discovery platform featuring two main sections:
+**Chappaqua Pulse** - A weekly tracker into what's happening in Chappaqua, NY. A community discovery platform featuring three main sections:
 
 1. **Events**: Aggregates and displays weekly events from local organizations including the library, performing arts center, recreation department, schools, and government. Events are scraped from various sources and presented in an information-dense, scannable interface optimized for quick event discovery.
 
 2. **Dining & Specials**: Showcases local Chappaqua restaurants with their weekly specials, holiday menus, happy hours, and brunch offerings. Features 8 real local restaurants with authentic data.
+
+3. **Retailers**: Browseable directory of 109 Chappaqua-Millwood businesses grouped by tenant type (food, apparel, specialty, home, wellness, services, civic). Sourced from the Chappaqua-Millwood Chamber directory via `shared/retailers.json` (extracted from `client/public/living-map.html`). Each entry links to a Google search for the retailer's website and Google Maps directions. Component: `client/src/components/retailers-section.tsx`.
+
+The site uses a Bedford Chamber-inspired visual language: deep navy primary, red CTA accent, two-tier sticky header (utility bar + brand band + nav band) and a full-width hero photo with a centered title overlay.
 
 ## User Preferences
 

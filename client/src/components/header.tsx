@@ -2,9 +2,11 @@ import { CalendarDays, MapPin, Map as MapIcon, Search, Facebook, Instagram } fro
 import { ThemeToggle } from "./theme-toggle";
 import heroImage from "@assets/chappaqua_hero.png";
 
+type TabKey = "events" | "specials" | "retailers";
+
 interface HeaderProps {
-  activeTab?: "events" | "specials";
-  onTabChange?: (tab: "events" | "specials") => void;
+  activeTab?: TabKey;
+  onTabChange?: (tab: TabKey) => void;
 }
 
 export function Header({ activeTab = "events", onTabChange }: HeaderProps) {
@@ -103,6 +105,19 @@ export function Header({ activeTab = "events", onTabChange }: HeaderProps) {
                   data-testid="link-nav-dining"
                 >
                   Dining & Specials
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => onTabChange?.("retailers")}
+                  className={`px-4 md:px-6 py-3 text-sm font-semibold uppercase tracking-wide whitespace-nowrap border-b-4 transition-colors ${
+                    activeTab === "retailers"
+                      ? "border-primary-foreground bg-secondary-foreground/10"
+                      : "border-transparent hover:bg-secondary-foreground/10"
+                  }`}
+                  data-testid="link-nav-retailers"
+                >
+                  Retailers
                 </button>
               </li>
               <li>

@@ -1,0 +1,874 @@
+[
+  {
+    "id": "r_000",
+    "name": "",
+    "category": "food",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_001",
+    "name": "",
+    "category": "food",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_002",
+    "name": "",
+    "category": "food",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_003",
+    "name": "",
+    "category": "food",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_004",
+    "name": "",
+    "category": "food",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_005",
+    "name": "",
+    "category": "food",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_006",
+    "name": "",
+    "category": "food",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_007",
+    "name": "",
+    "category": "food",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_008",
+    "name": "",
+    "category": "food",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_009",
+    "name": "",
+    "category": "food",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_010",
+    "name": "",
+    "category": "apparel",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_011",
+    "name": "",
+    "category": "apparel",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_012",
+    "name": "",
+    "category": "apparel",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_013",
+    "name": "",
+    "category": "apparel",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_014",
+    "name": "",
+    "category": "apparel",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_015",
+    "name": "",
+    "category": "apparel",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_016",
+    "name": "",
+    "category": "apparel",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_017",
+    "name": "",
+    "category": "apparel",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_018",
+    "name": "",
+    "category": "apparel",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_019",
+    "name": "",
+    "category": "apparel",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_020",
+    "name": "",
+    "category": "specialty",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_021",
+    "name": "",
+    "category": "specialty",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_022",
+    "name": "",
+    "category": "specialty",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_023",
+    "name": "",
+    "category": "specialty",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_024",
+    "name": "",
+    "category": "specialty",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_025",
+    "name": "",
+    "category": "specialty",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_026",
+    "name": "",
+    "category": "specialty",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_027",
+    "name": "",
+    "category": "specialty",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_028",
+    "name": "",
+    "category": "specialty",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_029",
+    "name": "",
+    "category": "specialty",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_030",
+    "name": "",
+    "category": "specialty",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_031",
+    "name": "",
+    "category": "home",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_032",
+    "name": "",
+    "category": "home",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_033",
+    "name": "",
+    "category": "home",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_034",
+    "name": "",
+    "category": "wellness",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_035",
+    "name": "",
+    "category": "wellness",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_036",
+    "name": "",
+    "category": "wellness",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_037",
+    "name": "",
+    "category": "wellness",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_038",
+    "name": "",
+    "category": "wellness",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_039",
+    "name": "",
+    "category": "wellness",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_040",
+    "name": "",
+    "category": "wellness",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_041",
+    "name": "",
+    "category": "wellness",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_042",
+    "name": "",
+    "category": "wellness",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_043",
+    "name": "",
+    "category": "wellness",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_044",
+    "name": "",
+    "category": "wellness",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_045",
+    "name": "",
+    "category": "wellness",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_046",
+    "name": "",
+    "category": "service",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_047",
+    "name": "",
+    "category": "service",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_048",
+    "name": "",
+    "category": "service",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_049",
+    "name": "",
+    "category": "service",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_050",
+    "name": "",
+    "category": "service",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_051",
+    "name": "",
+    "category": "service",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_052",
+    "name": "",
+    "category": "service",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_053",
+    "name": "",
+    "category": "service",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_054",
+    "name": "",
+    "category": "service",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_055",
+    "name": "",
+    "category": "service",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_056",
+    "name": "",
+    "category": "service",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_057",
+    "name": "",
+    "category": "service",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_058",
+    "name": "",
+    "category": "civic",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_059",
+    "name": "",
+    "category": "civic",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_060",
+    "name": "",
+    "category": "civic",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_061",
+    "name": "",
+    "category": "civic",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_062",
+    "name": "",
+    "category": "civic",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_063",
+    "name": "",
+    "category": "civic",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_064",
+    "name": "",
+    "category": "civic",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_065",
+    "name": "",
+    "category": "civic",
+    "cluster": "chappaqua_downtown",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_066",
+    "name": "",
+    "category": "food",
+    "cluster": "quaker_hill_center",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_067",
+    "name": "",
+    "category": "food",
+    "cluster": "quaker_hill_center",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_068",
+    "name": "",
+    "category": "food",
+    "cluster": "quaker_hill_center",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_069",
+    "name": "",
+    "category": "apparel",
+    "cluster": "quaker_hill_center",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_070",
+    "name": "",
+    "category": "specialty",
+    "cluster": "quaker_hill_center",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_071",
+    "name": "",
+    "category": "wellness",
+    "cluster": "quaker_hill_center",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_072",
+    "name": "",
+    "category": "service",
+    "cluster": "quaker_hill_center",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_073",
+    "name": "",
+    "category": "food",
+    "cluster": "chappaqua_crossing",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_074",
+    "name": "",
+    "category": "food",
+    "cluster": "chappaqua_crossing",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_075",
+    "name": "",
+    "category": "food",
+    "cluster": "chappaqua_crossing",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_076",
+    "name": "",
+    "category": "food",
+    "cluster": "chappaqua_crossing",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_077",
+    "name": "",
+    "category": "apparel",
+    "cluster": "chappaqua_crossing",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_078",
+    "name": "",
+    "category": "specialty",
+    "cluster": "chappaqua_crossing",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_079",
+    "name": "",
+    "category": "home",
+    "cluster": "chappaqua_crossing",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_080",
+    "name": "",
+    "category": "wellness",
+    "cluster": "chappaqua_crossing",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_081",
+    "name": "",
+    "category": "service",
+    "cluster": "chappaqua_crossing",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_082",
+    "name": "",
+    "category": "service",
+    "cluster": "chappaqua_crossing",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_083",
+    "name": "",
+    "category": "service",
+    "cluster": "chappaqua_crossing",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_084",
+    "name": "",
+    "category": "service",
+    "cluster": "chappaqua_crossing",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_085",
+    "name": "",
+    "category": "service",
+    "cluster": "chappaqua_crossing",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_086",
+    "name": "",
+    "category": "civic",
+    "cluster": "chappaqua_crossing",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_087",
+    "name": "",
+    "category": "food",
+    "cluster": "chappaqua_outlier",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_088",
+    "name": "",
+    "category": "food",
+    "cluster": "chappaqua_outlier",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_089",
+    "name": "",
+    "category": "service",
+    "cluster": "chappaqua_outlier",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_090",
+    "name": "",
+    "category": "food",
+    "cluster": "millwood",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_091",
+    "name": "",
+    "category": "food",
+    "cluster": "millwood",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_092",
+    "name": "",
+    "category": "food",
+    "cluster": "millwood",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_093",
+    "name": "",
+    "category": "food",
+    "cluster": "millwood",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_094",
+    "name": "",
+    "category": "specialty",
+    "cluster": "millwood",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_095",
+    "name": "",
+    "category": "specialty",
+    "cluster": "millwood",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_096",
+    "name": "",
+    "category": "specialty",
+    "cluster": "millwood",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_097",
+    "name": "",
+    "category": "home",
+    "cluster": "millwood",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_098",
+    "name": "",
+    "category": "home",
+    "cluster": "millwood",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_099",
+    "name": "",
+    "category": "wellness",
+    "cluster": "millwood",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_100",
+    "name": "",
+    "category": "wellness",
+    "cluster": "millwood",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_101",
+    "name": "",
+    "category": "wellness",
+    "cluster": "millwood",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_102",
+    "name": "",
+    "category": "wellness",
+    "cluster": "millwood",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_103",
+    "name": "",
+    "category": "service",
+    "cluster": "millwood",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_104",
+    "name": "",
+    "category": "service",
+    "cluster": "millwood",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_105",
+    "name": "",
+    "category": "service",
+    "cluster": "millwood",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_106",
+    "name": "",
+    "category": "service",
+    "cluster": "millwood",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_107",
+    "name": "",
+    "category": "service",
+    "cluster": "millwood",
+    "address": "",
+    "owner": ""
+  },
+  {
+    "id": "r_108",
+    "name": "",
+    "category": "civic",
+    "cluster": "millwood",
+    "address": "",
+    "owner": ""
+  }
+]

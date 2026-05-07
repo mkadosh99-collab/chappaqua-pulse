@@ -10,6 +10,7 @@ import { EmptyState } from "@/components/empty-state";
 import { ErrorState } from "@/components/error-state";
 import { Footer } from "@/components/footer";
 import { CalendarDays, UtensilsCrossed, Map as MapIcon, Megaphone, Users, Store } from "lucide-react";
+import { RetailersSection } from "@/components/retailers-section";
 import { RestaurantCard } from "@/components/restaurant-card";
 import { SpecialCard } from "@/components/special-card";
 import { SpecialsFilter } from "@/components/specials-filter";
@@ -39,7 +40,7 @@ interface SpecialsResponse {
   lastUpdated: string;
 }
 
-type TabType = "events" | "specials";
+type TabType = "events" | "specials" | "retailers";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<TabType>("events");
@@ -188,6 +189,10 @@ export default function Home() {
             <UtensilsCrossed className="w-7 h-7" />
             <span className="text-xs md:text-sm font-semibold uppercase tracking-wide">Dine Local</span>
           </button>
+          <button onClick={() => handleTabChange("retailers")} className="group flex flex-col items-center justify-center gap-2 py-6 px-3 bg-secondary text-secondary-foreground hover:bg-secondary/85 transition-colors text-center" data-testid="tile-shop-local">
+            <Store className="w-7 h-7" />
+            <span className="text-xs md:text-sm font-semibold uppercase tracking-wide">Shop Local</span>
+          </button>
           <a href="/living-map.html" className="group flex flex-col items-center justify-center gap-2 py-6 px-3 bg-secondary text-secondary-foreground hover:bg-secondary/85 transition-colors text-center" data-testid="tile-explore-map">
             <MapIcon className="w-7 h-7" />
             <span className="text-xs md:text-sm font-semibold uppercase tracking-wide">Explore the Map</span>
@@ -249,6 +254,8 @@ export default function Home() {
               )}
             </>
           )}
+
+          {activeTab === "retailers" && <RetailersSection />}
 
           {activeTab === "specials" && (
             <>
