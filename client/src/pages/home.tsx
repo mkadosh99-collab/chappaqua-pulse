@@ -9,7 +9,7 @@ import { EventGridSkeleton } from "@/components/event-skeleton";
 import { EmptyState } from "@/components/empty-state";
 import { ErrorState } from "@/components/error-state";
 import { Footer } from "@/components/footer";
-import { NavTabs } from "@/components/nav-tabs";
+import { CalendarDays, UtensilsCrossed, Map as MapIcon, Megaphone, Users, Store } from "lucide-react";
 import { RestaurantCard } from "@/components/restaurant-card";
 import { SpecialCard } from "@/components/special-card";
 import { SpecialsFilter } from "@/components/specials-filter";
@@ -165,13 +165,50 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <Header />
-      
+      <Header activeTab={activeTab} onTabChange={handleTabChange} />
+
+      {/* Chamber-style benefits / discover tiles */}
+      <section className="bg-card border-b border-border">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 py-10 md:py-14 text-center">
+          <h3 className="text-2xl md:text-3xl font-semibold text-primary tracking-tight">
+            Everything around town, in one place.
+          </h3>
+          <p className="mt-3 text-base md:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+            We know how easy it is to miss what's happening in Chappaqua. From the Library and town meetings to brunch
+            specials, the farmers market, and the next show at CPAC — Chappaqua Pulse pulls it all together so
+            you can show up, support local, and feel connected.
+          </p>
+        </div>
+        <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 border-t border-border">
+          <button onClick={() => handleTabChange("events")} className="group flex flex-col items-center justify-center gap-2 py-6 px-3 bg-secondary text-secondary-foreground hover:bg-secondary/85 transition-colors text-center" data-testid="tile-discover-events">
+            <CalendarDays className="w-7 h-7" />
+            <span className="text-xs md:text-sm font-semibold uppercase tracking-wide">Discover Events</span>
+          </button>
+          <button onClick={() => handleTabChange("specials")} className="group flex flex-col items-center justify-center gap-2 py-6 px-3 bg-primary text-primary-foreground hover:bg-primary/90 transition-colors text-center" data-testid="tile-dine-local">
+            <UtensilsCrossed className="w-7 h-7" />
+            <span className="text-xs md:text-sm font-semibold uppercase tracking-wide">Dine Local</span>
+          </button>
+          <a href="/living-map.html" className="group flex flex-col items-center justify-center gap-2 py-6 px-3 bg-secondary text-secondary-foreground hover:bg-secondary/85 transition-colors text-center" data-testid="tile-explore-map">
+            <MapIcon className="w-7 h-7" />
+            <span className="text-xs md:text-sm font-semibold uppercase tracking-wide">Explore the Map</span>
+          </a>
+          <a href="mailto:hello@chappaquadaily.com?subject=Submit%20an%20Event" className="group flex flex-col items-center justify-center gap-2 py-6 px-3 bg-primary text-primary-foreground hover:bg-primary/90 transition-colors text-center" data-testid="tile-promote-event">
+            <Megaphone className="w-7 h-7" />
+            <span className="text-xs md:text-sm font-semibold uppercase tracking-wide">Promote an Event</span>
+          </a>
+          <a href="https://www.instagram.com/chappaqua_millwood_chamber/" target="_blank" rel="noopener noreferrer" className="group flex flex-col items-center justify-center gap-2 py-6 px-3 bg-secondary text-secondary-foreground hover:bg-secondary/85 transition-colors text-center" data-testid="tile-connect-chamber">
+            <Users className="w-7 h-7" />
+            <span className="text-xs md:text-sm font-semibold uppercase tracking-wide">Chamber & Community</span>
+          </a>
+          <a href="mailto:hello@chappaquadaily.com?subject=Submit%20an%20Event" className="group flex flex-col items-center justify-center gap-2 py-6 px-3 bg-primary text-primary-foreground hover:bg-primary/90 transition-colors text-center" data-testid="tile-list-business">
+            <Store className="w-7 h-7" />
+            <span className="text-xs md:text-sm font-semibold uppercase tracking-wide">List Your Business</span>
+          </a>
+        </div>
+      </section>
+
       <main className="flex-1">
-        <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
-          <div className="py-6">
-            <NavTabs activeTab={activeTab} onTabChange={handleTabChange} />
-          </div>
+        <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 pt-8">
 
           {activeTab === "events" && (
             <>
