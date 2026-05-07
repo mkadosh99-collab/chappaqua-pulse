@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ExternalLink, MapPin, Store, UtensilsCrossed, Shirt, Sparkles, Home, Wrench, Building2 } from "lucide-react";
 import retailersData from "@shared/retailers.json";
 
@@ -45,6 +45,11 @@ function mapsUrlFor(address: string) {
 export function RetailersSection() {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
+  useEffect(() => {
+    const el = document.getElementById("retailers");
+    if (el) el.scrollIntoView({ behavior: "auto", block: "start" });
+  }, []);
+
   const grouped = useMemo(() => {
     const map: Record<string, Retailer[]> = {};
     for (const r of RETAILERS) {
@@ -61,7 +66,7 @@ export function RetailersSection() {
   const visibleCategories = activeCategory ? [activeCategory] : categories;
 
   return (
-    <div className="py-8" data-testid="section-retailers">
+    <div id="retailers" className="py-8 scroll-mt-24" data-testid="section-retailers">
       <div className="mb-6">
         <h2 className="text-2xl font-semibold tracking-tight mb-2">Local Retailers</h2>
         <p className="text-muted-foreground">

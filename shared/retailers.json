@@ -1,874 +1,874 @@
 [
   {
     "id": "r_000",
-    "name": "",
+    "name": "Basso",
     "category": "food",
     "cluster": "chappaqua_downtown",
-    "address": "",
+    "address": "11 King Street, Chappaqua NY  10514",
     "owner": ""
   },
   {
     "id": "r_001",
-    "name": "",
+    "name": "Bobo's Cafe",
     "category": "food",
     "cluster": "chappaqua_downtown",
-    "address": "",
-    "owner": ""
+    "address": "1 Station Plaza, Chappaqua NY  10514",
+    "owner": "Anthony Bioni"
   },
   {
     "id": "r_002",
-    "name": "",
+    "name": "Chappaqua Village Market",
     "category": "food",
     "cluster": "chappaqua_downtown",
-    "address": "",
-    "owner": ""
+    "address": "12 King Street, Chappaqua NY  10514",
+    "owner": "Vinny Milazzo"
   },
   {
     "id": "r_003",
-    "name": "",
+    "name": "Green and Tonic",
     "category": "food",
     "cluster": "chappaqua_downtown",
-    "address": "",
+    "address": "75 S Greeley Ave, Chappaqua NY  10514",
     "owner": ""
   },
   {
     "id": "r_004",
-    "name": "",
+    "name": "Ibiza Kitchen",
     "category": "food",
     "cluster": "chappaqua_downtown",
-    "address": "",
+    "address": "76 King Street, Chappaqua NY  10514",
     "owner": ""
   },
   {
     "id": "r_005",
-    "name": "",
+    "name": "Le Jardin",
     "category": "food",
     "cluster": "chappaqua_downtown",
-    "address": "",
-    "owner": ""
+    "address": "95 King Street, Chappaqua NY  10514",
+    "owner": "Joe"
   },
   {
     "id": "r_006",
-    "name": "",
+    "name": "Pizza Station",
     "category": "food",
     "cluster": "chappaqua_downtown",
-    "address": "",
+    "address": "88 S Greeley, Chappaqua NY 10514",
     "owner": ""
   },
   {
     "id": "r_007",
-    "name": "",
+    "name": "Taco Street",
     "category": "food",
     "cluster": "chappaqua_downtown",
-    "address": "",
+    "address": "86 S Greeley Ave, Chappaqua NY 10514",
     "owner": ""
   },
   {
     "id": "r_008",
-    "name": "",
+    "name": "The Little Thai Kitchen",
     "category": "food",
     "cluster": "chappaqua_downtown",
-    "address": "",
-    "owner": ""
+    "address": "31 S. Greeley Ave, Chappaqua NY 10514",
+    "owner": "914-861-8188"
   },
   {
     "id": "r_009",
-    "name": "",
+    "name": "Waka Asian Bistro",
     "category": "food",
     "cluster": "chappaqua_downtown",
-    "address": "",
+    "address": "95 King Street, Chappaqua NY  10514",
     "owner": ""
   },
   {
     "id": "r_010",
-    "name": "",
+    "name": "Bentley Jane",
     "category": "apparel",
     "cluster": "chappaqua_downtown",
-    "address": "",
+    "address": "75 S Greeley Ave, Chappaqua NY  10514",
     "owner": ""
   },
   {
     "id": "r_011",
-    "name": "",
+    "name": "Cosmetic Boutique",
     "category": "apparel",
     "cluster": "chappaqua_downtown",
-    "address": "",
+    "address": "1S Greeley Avenue, Chappaqua NY 10514",
     "owner": ""
   },
   {
     "id": "r_012",
-    "name": "",
+    "name": "Family Britches",
     "category": "apparel",
     "cluster": "chappaqua_downtown",
-    "address": "",
-    "owner": ""
+    "address": "70 King Street, Chappaqua  NY 10514",
+    "owner": "Barry & Rick"
   },
   {
     "id": "r_013",
-    "name": "",
+    "name": "Hip Kid",
     "category": "apparel",
     "cluster": "chappaqua_downtown",
-    "address": "",
-    "owner": ""
+    "address": "77 South Greeley Ave, Chappaqua NY  10514",
+    "owner": "Trish Kallman"
   },
   {
     "id": "r_014",
-    "name": "",
+    "name": "House of 29",
     "category": "apparel",
     "cluster": "chappaqua_downtown",
-    "address": "",
-    "owner": ""
+    "address": "39 South Greeley Ave, Chappaqua NY  10514",
+    "owner": "Sarah David"
   },
   {
     "id": "r_015",
-    "name": "",
+    "name": "Petticoat Lane",
     "category": "apparel",
     "cluster": "chappaqua_downtown",
-    "address": "",
-    "owner": ""
+    "address": "66 King Street, Chappaqua NY  10514",
+    "owner": "Phyllis Jacobson"
   },
   {
     "id": "r_016",
-    "name": "",
+    "name": "Royal",
     "category": "apparel",
     "cluster": "chappaqua_downtown",
-    "address": "",
-    "owner": ""
+    "address": "18 S Greeley Ave, Chappaqua NY  10514",
+    "owner": "Barbara Lerman"
   },
   {
     "id": "r_017",
-    "name": "",
+    "name": "Squires",
     "category": "apparel",
     "cluster": "chappaqua_downtown",
-    "address": "",
-    "owner": ""
+    "address": "41 S Greeley Ave, Cxhappaqua NY  10514",
+    "owner": "Michael Kushner"
   },
   {
     "id": "r_018",
-    "name": "",
+    "name": "Susan Lawrence",
     "category": "apparel",
     "cluster": "chappaqua_downtown",
-    "address": "",
-    "owner": ""
+    "address": "26 North Greeley Ave, Chappaqua NY  10514",
+    "owner": "Mark J Kramer"
   },
   {
     "id": "r_019",
-    "name": "",
+    "name": "Untied",
     "category": "apparel",
     "cluster": "chappaqua_downtown",
-    "address": "",
+    "address": "91 Bedford Road, Chappaqua NY  10514",
     "owner": ""
   },
   {
     "id": "r_020",
-    "name": "",
+    "name": "Breeze Gifts",
     "category": "specialty",
     "cluster": "chappaqua_downtown",
-    "address": "",
-    "owner": ""
+    "address": "1 King Street, Chappaqua NY  10514",
+    "owner": "Susan Maher"
   },
   {
     "id": "r_021",
-    "name": "",
+    "name": "Chappaqua Framing",
     "category": "specialty",
     "cluster": "chappaqua_downtown",
-    "address": "",
-    "owner": ""
+    "address": "One South Greeley Ave, Chappaqua NY  10514",
+    "owner": "Gary"
   },
   {
     "id": "r_022",
-    "name": "",
+    "name": "Chappaqua Wines",
     "category": "specialty",
     "cluster": "chappaqua_downtown",
-    "address": "",
-    "owner": ""
+    "address": "65 King Street, Chappaqua NY  10514",
+    "owner": "Kirk Spencer"
   },
   {
     "id": "r_023",
-    "name": "",
+    "name": "Desires By Mikolay",
     "category": "specialty",
     "cluster": "chappaqua_downtown",
-    "address": "",
-    "owner": ""
+    "address": "55 King Street, Chappaqua NY  10514",
+    "owner": "Scott Mikolay"
   },
   {
     "id": "r_024",
-    "name": "",
+    "name": "Frannie's Goodie Shop",
     "category": "specialty",
     "cluster": "chappaqua_downtown",
-    "address": "",
-    "owner": ""
+    "address": "75 S Greeley Ave, Chappaqua NY  10514",
+    "owner": "Frances Bueti Albanese"
   },
   {
     "id": "r_025",
-    "name": "",
+    "name": "Great Stuff",
     "category": "specialty",
     "cluster": "chappaqua_downtown",
-    "address": "",
+    "address": "1 South Greeley Ave, Chappaqua NY  10514",
     "owner": ""
   },
   {
     "id": "r_026",
-    "name": "",
+    "name": "ICD Jewelry",
     "category": "specialty",
     "cluster": "chappaqua_downtown",
-    "address": "",
-    "owner": ""
+    "address": "26 South Greeley Ave, Chappaqua NY 10514",
+    "owner": "Virginia Shasha"
   },
   {
     "id": "r_027",
-    "name": "",
+    "name": "King's Scribe",
     "category": "specialty",
     "cluster": "chappaqua_downtown",
-    "address": "",
-    "owner": ""
+    "address": "140 King Street, Chappaqua NY  10514",
+    "owner": "Alissa Sampogna"
   },
   {
     "id": "r_028",
-    "name": "",
+    "name": "Monet Garden Flower Shop",
     "category": "specialty",
     "cluster": "chappaqua_downtown",
-    "address": "",
-    "owner": ""
+    "address": "144 King Street, Chappaqua NY 10514",
+    "owner": "914-238-0508"
   },
   {
     "id": "r_029",
-    "name": "",
+    "name": "Scattered Books",
     "category": "specialty",
     "cluster": "chappaqua_downtown",
-    "address": "",
+    "address": "29 King Street, Chappaqua NY  10514",
     "owner": ""
   },
   {
     "id": "r_030",
-    "name": "",
+    "name": "Whispering Pines Florist",
     "category": "specialty",
     "cluster": "chappaqua_downtown",
-    "address": "",
+    "address": "83 South Greeley Ave, Chappaqua NY  10514",
     "owner": ""
   },
   {
     "id": "r_031",
-    "name": "",
+    "name": "Alison Friedricks Interiors",
     "category": "home",
     "cluster": "chappaqua_downtown",
-    "address": "",
-    "owner": ""
+    "address": "113 King street, Chappaqua NY  10514",
+    "owner": "Alison"
   },
   {
     "id": "r_032",
-    "name": "",
+    "name": "Casa Tile and Design",
     "category": "home",
     "cluster": "chappaqua_downtown",
-    "address": "",
+    "address": "1 King Street, Chappaqua NY  10514",
     "owner": ""
   },
   {
     "id": "r_033",
-    "name": "",
+    "name": "Chappaqua Paint and Hardware",
     "category": "home",
     "cluster": "chappaqua_downtown",
-    "address": "",
-    "owner": ""
+    "address": "59 S Greeley Avenue, Chappaqua NY 10514",
+    "owner": "Lou"
   },
   {
     "id": "r_034",
-    "name": "",
+    "name": "AG Salon",
     "category": "wellness",
     "cluster": "chappaqua_downtown",
-    "address": "",
-    "owner": ""
+    "address": "26 S Greeley Avenue, Chappaqua NY  10514",
+    "owner": "Angie"
   },
   {
     "id": "r_035",
-    "name": "",
+    "name": "Breathe Pilates",
     "category": "wellness",
     "cluster": "chappaqua_downtown",
-    "address": "",
-    "owner": ""
+    "address": "14 South Greeley Ave, Chappaqua NY  10514",
+    "owner": "Adina Olan"
   },
   {
     "id": "r_036",
-    "name": "",
+    "name": "Collective by JAB Fit",
     "category": "wellness",
     "cluster": "chappaqua_downtown",
-    "address": "",
+    "address": "10 S Greeley Ave, Chappaqua NY  10514",
     "owner": ""
   },
   {
     "id": "r_037",
-    "name": "",
+    "name": "Diego's Hair Studio",
     "category": "wellness",
     "cluster": "chappaqua_downtown",
-    "address": "",
-    "owner": ""
+    "address": "81 N Greeley Ave, Chappaqua NY 10514",
+    "owner": "Diego Bueti"
   },
   {
     "id": "r_038",
-    "name": "",
+    "name": "Emmary Day Spa",
     "category": "wellness",
     "cluster": "chappaqua_downtown",
-    "address": "",
+    "address": "24 South Greeley Ave, Chappaqua NY  10514",
     "owner": ""
   },
   {
     "id": "r_039",
-    "name": "",
+    "name": "Eye Gallery",
     "category": "wellness",
     "cluster": "chappaqua_downtown",
-    "address": "",
+    "address": "39 King Street, Chappaqua NY  10514",
     "owner": ""
   },
   {
     "id": "r_040",
-    "name": "",
+    "name": "G-Fit",
     "category": "wellness",
     "cluster": "chappaqua_downtown",
-    "address": "",
-    "owner": ""
+    "address": "75 N Greeley Ave, Chappaqua NY 10514",
+    "owner": "Sam Gomez"
   },
   {
     "id": "r_041",
-    "name": "",
+    "name": "Greeley Barbershop",
     "category": "wellness",
     "cluster": "chappaqua_downtown",
-    "address": "",
+    "address": "19 King Street, Chappaqua NY  10514",
     "owner": ""
   },
   {
     "id": "r_042",
-    "name": "",
+    "name": "Mimi's Nail Bar",
     "category": "wellness",
     "cluster": "chappaqua_downtown",
-    "address": "",
+    "address": "26 King St, Chappaqua NY  10514",
     "owner": ""
   },
   {
     "id": "r_043",
-    "name": "",
+    "name": "Santa's Hair Salon",
     "category": "wellness",
     "cluster": "chappaqua_downtown",
-    "address": "",
+    "address": "142 King Street, Chappaqua NY 10514",
     "owner": ""
   },
   {
     "id": "r_044",
-    "name": "",
+    "name": "Serenety Nail & Spa",
     "category": "wellness",
     "cluster": "chappaqua_downtown",
-    "address": "",
+    "address": "20 King Street, Chappaqua NY  10514",
     "owner": ""
   },
   {
     "id": "r_045",
-    "name": "",
+    "name": "The Gentlemen's Barbershop",
     "category": "wellness",
     "cluster": "chappaqua_downtown",
-    "address": "",
+    "address": "37 S. Greeley Ave, Chappaqua NY  10514",
     "owner": ""
   },
   {
     "id": "r_046",
-    "name": "",
+    "name": "AllState",
     "category": "service",
     "cluster": "chappaqua_downtown",
-    "address": "",
+    "address": "59 South Greeley Ave, Chappaqua NY  10514",
     "owner": ""
   },
   {
     "id": "r_047",
-    "name": "",
+    "name": "Barry L Goldstein, DDS",
     "category": "service",
     "cluster": "chappaqua_downtown",
-    "address": "",
-    "owner": ""
+    "address": "30 N Greeley Ave, Chappaqua NY  10514",
+    "owner": "Barry L Goldstein"
   },
   {
     "id": "r_048",
-    "name": "",
+    "name": "Chappaqua Cleaners",
     "category": "service",
     "cluster": "chappaqua_downtown",
-    "address": "",
+    "address": "53 King Street, Chappaqua NY 10514",
     "owner": ""
   },
   {
     "id": "r_049",
-    "name": "",
+    "name": "Dr. Sadaf",
     "category": "service",
     "cluster": "chappaqua_downtown",
-    "address": "",
-    "owner": ""
+    "address": "26 S Greeley Ave Suite5, Chappaqua  NY 10514",
+    "owner": "Sadaf Lodhi"
   },
   {
     "id": "r_050",
-    "name": "",
+    "name": "Houlihan Lawrence",
     "category": "service",
     "cluster": "chappaqua_downtown",
-    "address": "",
+    "address": "45 South Greeley Ave, Chappaqua NY  10514",
     "owner": ""
   },
   {
     "id": "r_051",
-    "name": "",
+    "name": "King New Castle Cleaners",
     "category": "service",
     "cluster": "chappaqua_downtown",
-    "address": "",
+    "address": "16 King Street, Chappaqua NY  10514",
     "owner": ""
   },
   {
     "id": "r_052",
-    "name": "",
+    "name": "Lipari & Mangiameli Dentistry",
     "category": "service",
     "cluster": "chappaqua_downtown",
-    "address": "",
-    "owner": ""
+    "address": "125 King Street, Chappaqua NY 10514",
+    "owner": "Richard Lipari"
   },
   {
     "id": "r_053",
-    "name": "",
+    "name": "New Castle Veterinary Hospital",
     "category": "service",
     "cluster": "chappaqua_downtown",
-    "address": "",
-    "owner": ""
+    "address": "30 N. Greeley Avenue, Chappaqua NY  10514",
+    "owner": "Bradley Emott"
   },
   {
     "id": "r_054",
-    "name": "",
+    "name": "Psychic Consultation",
     "category": "service",
     "cluster": "chappaqua_downtown",
-    "address": "",
-    "owner": ""
+    "address": "142 King Street, Chappaqua NY 10514",
+    "owner": "Sandra"
   },
   {
     "id": "r_055",
-    "name": "",
+    "name": "Sotheby's Realty",
     "category": "service",
     "cluster": "chappaqua_downtown",
-    "address": "",
+    "address": "39 King Street, Chappaqua NY  10514",
     "owner": ""
   },
   {
     "id": "r_056",
-    "name": "",
+    "name": "That Dashing Dog",
     "category": "service",
     "cluster": "chappaqua_downtown",
-    "address": "",
-    "owner": ""
+    "address": "140 King Street, Chappaqua NY  10514",
+    "owner": "Caitlyn"
   },
   {
     "id": "r_057",
-    "name": "",
+    "name": "William Raveis",
     "category": "service",
     "cluster": "chappaqua_downtown",
-    "address": "",
-    "owner": ""
+    "address": "65 King Street, Chappaqua NY  10514",
+    "owner": "Ted Holmes"
   },
   {
     "id": "r_058",
-    "name": "",
+    "name": "Amadeus Conservatory",
     "category": "civic",
     "cluster": "chappaqua_downtown",
-    "address": "",
-    "owner": ""
+    "address": "201 King Street, Chappaqua NY 10514",
+    "owner": "Deborah Molodofsky"
   },
   {
     "id": "r_059",
-    "name": "",
+    "name": "Chappaqua Farmer's Market",
     "category": "civic",
     "cluster": "chappaqua_downtown",
-    "address": "",
+    "address": "Allen Pl, Chappaqua NY  10514",
     "owner": ""
   },
   {
     "id": "r_060",
-    "name": "",
+    "name": "Fire Department",
     "category": "civic",
     "cluster": "chappaqua_downtown",
-    "address": "",
+    "address": "11 Senter St, Chappaqua NY  10514",
     "owner": ""
   },
   {
     "id": "r_061",
-    "name": "",
+    "name": "Indipendent Living  Inc",
     "category": "civic",
     "cluster": "chappaqua_downtown",
-    "address": "",
-    "owner": ""
+    "address": "101 King Street, Chappaqua NY 10514",
+    "owner": "914-855-6190"
   },
   {
     "id": "r_062",
-    "name": "",
+    "name": "Make Inspires",
     "category": "civic",
     "cluster": "chappaqua_downtown",
-    "address": "",
-    "owner": ""
+    "address": "75 South Greeley Ave, Chappaqua NY  10514",
+    "owner": "Deidre Dunham"
   },
   {
     "id": "r_063",
-    "name": "",
+    "name": "Making Headways Children's Workshop",
     "category": "civic",
     "cluster": "chappaqua_downtown",
-    "address": "",
-    "owner": ""
+    "address": "115 King Street, Chappaqua NY 10514",
+    "owner": "Daniel Lipka"
   },
   {
     "id": "r_064",
-    "name": "",
+    "name": "Mathnasium Learning Center",
     "category": "civic",
     "cluster": "chappaqua_downtown",
-    "address": "",
-    "owner": ""
+    "address": "75 S. Greeley Ave, Chappaqua NY  10514",
+    "owner": "Dan Cherico"
   },
   {
     "id": "r_065",
-    "name": "",
+    "name": "Music In Chappaqua",
     "category": "civic",
     "cluster": "chappaqua_downtown",
-    "address": "",
+    "address": "225 N Greeley Ave, Chappaqua NY  10514",
     "owner": ""
   },
   {
     "id": "r_066",
-    "name": "",
+    "name": "Lange's Little Store and Delicatessen",
     "category": "food",
     "cluster": "quaker_hill_center",
-    "address": "",
-    "owner": ""
+    "address": "382 King Street, Chappaqua NY  10514",
+    "owner": "Christa (wife of late Richard)"
   },
   {
     "id": "r_067",
-    "name": "",
+    "name": "Mentors Mediterranean Steakhouse",
     "category": "food",
     "cluster": "quaker_hill_center",
-    "address": "",
-    "owner": ""
+    "address": "415 King Street #224 , Chappaqua NY 10514",
+    "owner": "Mentor Berisha"
   },
   {
     "id": "r_068",
-    "name": "",
+    "name": "Old Stone Trattoria",
     "category": "food",
     "cluster": "quaker_hill_center",
-    "address": "",
+    "address": "425 King Street, Chappaqua NY  10514",
     "owner": ""
   },
   {
     "id": "r_069",
-    "name": "",
+    "name": "Talbots at Quaker Hill Shopping Center",
     "category": "apparel",
     "cluster": "quaker_hill_center",
-    "address": "",
-    "owner": ""
+    "address": "400 King Street #18, Chappaqua NY 10514",
+    "owner": "1-800-438-9443"
   },
   {
     "id": "r_070",
-    "name": "",
+    "name": "Hilltop Wine",
     "category": "specialty",
     "cluster": "quaker_hill_center",
-    "address": "",
-    "owner": ""
+    "address": "423 King Street, Chappaqua NY  10514",
+    "owner": "Peter"
   },
   {
     "id": "r_071",
-    "name": "",
+    "name": "Aura Salon",
     "category": "wellness",
     "cluster": "quaker_hill_center",
-    "address": "",
+    "address": "400 King Street, Chappaqua NY  10514",
     "owner": ""
   },
   {
     "id": "r_072",
-    "name": "",
+    "name": "Wags Groomer",
     "category": "service",
     "cluster": "quaker_hill_center",
-    "address": "",
+    "address": "392 King Street, Chappaqua NY  10514",
     "owner": ""
   },
   {
     "id": "r_073",
-    "name": "",
+    "name": "Bia American Kitchen and Bar Restaurant",
     "category": "food",
     "cluster": "chappaqua_crossing",
-    "address": "",
-    "owner": ""
+    "address": "480 N Bedford Road, Chappaqua NY  10514",
+    "owner": "914-855-0123"
   },
   {
     "id": "r_074",
-    "name": "",
+    "name": "Starbucks Coffee at The Crossing",
     "category": "food",
     "cluster": "chappaqua_crossing",
-    "address": "",
-    "owner": ""
+    "address": "480 N Bedfor Rd, Chappaqua NY 10514",
+    "owner": "Jeffrey Low"
   },
   {
     "id": "r_075",
-    "name": "",
+    "name": "Sweetgreen",
     "category": "food",
     "cluster": "chappaqua_crossing",
-    "address": "",
-    "owner": ""
+    "address": "480 N Bedford Rd Suite #D5, Chappaqua NY 10514",
+    "owner": "914-692-6300"
   },
   {
     "id": "r_076",
-    "name": "",
+    "name": "Whole Foods",
     "category": "food",
     "cluster": "chappaqua_crossing",
-    "address": "",
+    "address": "20 The Crossing, Chappaqua NY  10514",
     "owner": ""
   },
   {
     "id": "r_077",
-    "name": "",
+    "name": "J Crew Factory",
     "category": "apparel",
     "cluster": "chappaqua_crossing",
-    "address": "",
+    "address": "480 N Bedford Rd, Ste E-1 Space 80, chappaqua NY 10514",
     "owner": ""
   },
   {
     "id": "r_078",
-    "name": "",
+    "name": "ROCKS Jewlery and Gifts",
     "category": "specialty",
     "cluster": "chappaqua_crossing",
-    "address": "",
-    "owner": ""
+    "address": "480 N Bedford Rd, Chappaqua NY 10514",
+    "owner": "Tanya"
   },
   {
     "id": "r_079",
-    "name": "",
+    "name": "Calico Corners",
     "category": "home",
     "cluster": "chappaqua_crossing",
-    "address": "",
-    "owner": ""
+    "address": "88 The Crossing, Chappaqua NY 10514",
+    "owner": "914-666-4486"
   },
   {
     "id": "r_080",
-    "name": "",
+    "name": "Life Time Athletics",
     "category": "wellness",
     "cluster": "chappaqua_crossing",
-    "address": "",
-    "owner": ""
+    "address": "480 N Bedford Road, Chappaqua NY  10514",
+    "owner": "914-296-6007"
   },
   {
     "id": "r_081",
-    "name": "",
+    "name": "Chappaqua Auto Center",
     "category": "service",
     "cluster": "chappaqua_crossing",
-    "address": "",
+    "address": "480 N Bedford Road, Chappaqua NY  10514",
     "owner": ""
   },
   {
     "id": "r_082",
-    "name": "",
+    "name": "Chase Bank Chappaqua Crossing",
     "category": "service",
     "cluster": "chappaqua_crossing",
-    "address": "",
-    "owner": ""
+    "address": "480 N Bedford Rd, Chappaqua NY 10514",
+    "owner": "914-218-9107"
   },
   {
     "id": "r_083",
-    "name": "",
+    "name": "Compass Real Estate",
     "category": "service",
     "cluster": "chappaqua_crossing",
-    "address": "",
+    "address": "68 70 The Crossing, Chappaqua NY 10514",
     "owner": ""
   },
   {
     "id": "r_084",
-    "name": "",
+    "name": "Fidelity Investments",
     "category": "service",
     "cluster": "chappaqua_crossing",
-    "address": "",
+    "address": "480 Bedford Road, chappaqua NY 10514",
     "owner": ""
   },
   {
     "id": "r_085",
-    "name": "",
+    "name": "Verizon at Chappaqua Crossing",
     "category": "service",
     "cluster": "chappaqua_crossing",
-    "address": "",
-    "owner": ""
+    "address": "480 Bedford Rd, Chappaqua NY 10514",
+    "owner": "914-861-3710"
   },
   {
     "id": "r_086",
-    "name": "",
+    "name": "Chappaqua Playhouse Performing Arts Center",
     "category": "civic",
     "cluster": "chappaqua_crossing",
-    "address": "",
+    "address": "480 N Bedford Rd, Chappaqua NY 10514",
     "owner": ""
   },
   {
     "id": "r_087",
-    "name": "",
+    "name": "Kittle House",
     "category": "food",
     "cluster": "chappaqua_outlier",
-    "address": "",
-    "owner": ""
+    "address": "11 Kittle Road, Chappaqua NY 10514",
+    "owner": "Krase Family"
   },
   {
     "id": "r_088",
-    "name": "",
+    "name": "Quaker Hill Tavern",
     "category": "food",
     "cluster": "chappaqua_outlier",
-    "address": "",
+    "address": "61 N Bedford Road, Chappaqua NY 10514",
     "owner": ""
   },
   {
     "id": "r_089",
-    "name": "",
+    "name": "World Cup School",
     "category": "service",
     "cluster": "chappaqua_outlier",
-    "address": "",
+    "address": "170 Joan Corwin Way, Chappaqua NY  10514",
     "owner": ""
   },
   {
     "id": "r_090",
-    "name": "",
+    "name": "Pacheco's Deli and Pizza",
     "category": "food",
     "cluster": "millwood",
-    "address": "",
-    "owner": ""
+    "address": "74 Millwood Road, Millwood NY  10546",
+    "owner": "Raul"
   },
   {
     "id": "r_091",
-    "name": "",
+    "name": "Rocky's Deli",
     "category": "food",
     "cluster": "millwood",
-    "address": "",
+    "address": "235 Saw Mill River Road, Millwood NY 10546",
     "owner": ""
   },
   {
     "id": "r_092",
-    "name": "",
+    "name": "Spaccarelli By Zuppa",
     "category": "food",
     "cluster": "millwood",
-    "address": "",
-    "owner": ""
+    "address": "238 Sawmill River Road, Millwood NY  10546",
+    "owner": "914-941-0105"
   },
   {
     "id": "r_093",
-    "name": "",
+    "name": "Tazza Café and Espresso Bar",
     "category": "food",
     "cluster": "millwood",
-    "address": "",
+    "address": "230 Saw Mill River Rd #3, Millwood NY 10546",
     "owner": ""
   },
   {
     "id": "r_094",
-    "name": "",
+    "name": "Crank Cycles",
     "category": "specialty",
     "cluster": "millwood",
-    "address": "",
+    "address": "238 Saw Mill River Road, Millwood NY 10546",
     "owner": ""
   },
   {
     "id": "r_095",
-    "name": "",
+    "name": "Dodds Wine and Spirits",
     "category": "specialty",
     "cluster": "millwood",
-    "address": "",
-    "owner": ""
+    "address": "230 Saw Mill River Road, Millwood NY  10546",
+    "owner": "Mark"
   },
   {
     "id": "r_096",
-    "name": "",
+    "name": "Drug Mart",
     "category": "specialty",
     "cluster": "millwood",
-    "address": "",
-    "owner": ""
+    "address": "230 Saw Mill River Rd, Millwood NY  10546",
+    "owner": "Richard Glotzer"
   },
   {
     "id": "r_097",
-    "name": "",
+    "name": "Millwood Garden Center",
     "category": "home",
     "cluster": "millwood",
-    "address": "",
-    "owner": ""
+    "address": "83 Millwood Road, Millwood NY  10546",
+    "owner": "Mike"
   },
   {
     "id": "r_098",
-    "name": "",
+    "name": "Millwood Hardware Center",
     "category": "home",
     "cluster": "millwood",
-    "address": "",
-    "owner": ""
+    "address": "235 Saw Mill River Road, Millwood NY 10546",
+    "owner": "Mike"
   },
   {
     "id": "r_099",
-    "name": "",
+    "name": "Ana's Nails",
     "category": "wellness",
     "cluster": "millwood",
-    "address": "",
+    "address": "84 Millwood Road, Millwood NY  10546",
     "owner": ""
   },
   {
     "id": "r_100",
-    "name": "",
+    "name": "Isabel Nail Salon",
     "category": "wellness",
     "cluster": "millwood",
-    "address": "",
-    "owner": ""
+    "address": "78 Millwood Rd, Millwood NY 10546",
+    "owner": "914-373-2300"
   },
   {
     "id": "r_101",
-    "name": "",
+    "name": "Paradise Nail & Spa",
     "category": "wellness",
     "cluster": "millwood",
-    "address": "",
-    "owner": ""
+    "address": "230 Saw Mill River Road, Millwood NY  10546",
+    "owner": "914-762-1421"
   },
   {
     "id": "r_102",
-    "name": "",
+    "name": "Relax Body Work",
     "category": "wellness",
     "cluster": "millwood",
-    "address": "",
-    "owner": ""
+    "address": "82 Millwood Rd, Millwood NY 10546",
+    "owner": "914-762-3425"
   },
   {
     "id": "r_103",
-    "name": "",
+    "name": "Inside Press",
     "category": "service",
     "cluster": "millwood",
-    "address": "",
+    "address": "Millwood NY 10546",
     "owner": ""
   },
   {
     "id": "r_104",
-    "name": "",
+    "name": "Millwood Animal Hospital",
     "category": "service",
     "cluster": "millwood",
-    "address": "",
+    "address": "231 Saw Mill River Road, Millwood NY  10546",
     "owner": ""
   },
   {
     "id": "r_105",
-    "name": "",
+    "name": "Millwood Cleaners",
     "category": "service",
     "cluster": "millwood",
-    "address": "",
-    "owner": ""
+    "address": "230 Saw Mill River Road, Millwood NY  10546",
+    "owner": "Stephen Tobia"
   },
   {
     "id": "r_106",
-    "name": "",
+    "name": "Nextech Systems",
     "category": "service",
     "cluster": "millwood",
-    "address": "",
-    "owner": ""
+    "address": "238 Saw Mill River Rd, Millwood NY  10546",
+    "owner": "Chong Lee"
   },
   {
     "id": "r_107",
-    "name": "",
+    "name": "Signarama",
     "category": "service",
     "cluster": "millwood",
-    "address": "",
+    "address": "5 Schuman Road, Millwood NY  10546",
     "owner": ""
   },
   {
     "id": "r_108",
-    "name": "",
+    "name": "Millwood Fire Department",
     "category": "civic",
     "cluster": "millwood",
-    "address": "",
-    "owner": ""
+    "address": "100 Millwood Road, Millwood NY  10546",
+    "owner": "Greg Santone"
   }
 ]

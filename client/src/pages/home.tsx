@@ -42,8 +42,14 @@ interface SpecialsResponse {
 
 type TabType = "events" | "specials" | "retailers";
 
+function initialTabFromUrl(): TabType {
+  if (typeof window === "undefined") return "events";
+  const t = new URLSearchParams(window.location.search).get("tab");
+  return t === "specials" || t === "retailers" ? t : "events";
+}
+
 export default function Home() {
-  const [activeTab, setActiveTab] = useState<TabType>("events");
+  const [activeTab, setActiveTab] = useState<TabType>(initialTabFromUrl);
   const [selectedCategory, setSelectedCategory] = useState<EventCategory | null>(null);
   const [selectedSpecialType, setSelectedSpecialType] = useState<SpecialType | null>(null);
   const [weekStart, setWeekStart] = useState(() => 
