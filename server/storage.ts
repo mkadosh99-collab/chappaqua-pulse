@@ -7,8 +7,14 @@ import {
   type Special,
   type InsertSpecial,
   type RestaurantWithSpecials,
-  type SpecialType
+  type SpecialType,
+  type BusinessSubmission,
+  type InsertBusinessSubmission,
+  type SubmissionStatus,
+  businessSubmissions,
 } from "@shared/schema";
+import { db } from "./db";
+import { eq, desc } from "drizzle-orm";
 import { randomUUID } from "crypto";
 
 export interface IStorage {
@@ -36,6 +42,11 @@ export interface IStorage {
   clearSpecials(): Promise<void>;
   
   getRestaurantsWithSpecials(): Promise<RestaurantWithSpecials[]>;
+
+  createBusinessSubmission(submission: InsertBusinessSubmission): Promise<BusinessSubmission>;
+  getBusinessSubmissions(status?: SubmissionStatus): Promise<BusinessSubmission[]>;
+  getApprovedBusinessSubmissions(): Promise<BusinessSubmission[]>;
+  updateBusinessSubmissionStatus(id: string, status: SubmissionStatus): Promise<BusinessSubmission | undefined>;
 }
 
 export class MemStorage implements IStorage {
@@ -209,6 +220,50 @@ export class MemStorage implements IStorage {
     }
     
     return result;
+  }
+
+  async createBusinessSubmission(submission: InsertBusinessSubmission): Promise<BusinessSubmission> {
+    const normalized = {
+      ...submission,
+      cluster: submission.cluster?.trim() || null,
+      owner: submission.owner?.trim() || null,
+      description: submission.description?.trim() || null,
+      website: submission.website?.trim() || null,
+      contactName: submission.contactName?.trim() || null,
+      contactEmail: submission.contactEmail?.trim() || null,
+    };
+    const [created] = await db.insert(businessSubmissions).values(normalized).returning();
+    return created;
+  }
+
+  async getBusinessSubmissions(status?: SubmissionStatus): Promise<BusinessSubmission[]> {
+    if (status) {
+      return db
+        .select()
+        .from(businessSubmissions)
+        .where(eq(businessSubmissions.status, status))
+        .orderBy(desc(businessSubmissions.createdAt));
+    }
+    return db
+      .select()
+      .from(businessSubmissions)
+      .orderBy(desc(businessSubmissions.createdAt));
+  }
+
+  async getApprovedBusinessSubmissions(): Promise<BusinessSubmission[]> {
+    return this.getBusinessSubmissions("approved");
+  }
+
+  async updateBusinessSubmissionStatus(
+    id: string,
+    status: SubmissionStatus,
+  ): Promise<BusinessSubmission | undefined> {
+    const [updated] = await db
+      .update(businessSubmissions)
+      .set({ status })
+      .where(eq(businessSubmissions.id, id))
+      .returning();
+    return updated;
   }
 }
 

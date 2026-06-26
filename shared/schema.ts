@@ -123,3 +123,75 @@ export type Special = typeof specials.$inferSelect;
 export interface RestaurantWithSpecials extends Restaurant {
   specials: Special[];
 }
+
+export const retailerCategories = [
+  "food",
+  "apparel",
+  "specialty",
+  "home",
+  "wellness",
+  "service",
+  "civic",
+] as const;
+
+export type RetailerCategory = (typeof retailerCategories)[number];
+
+export const submissionStatuses = ["pending", "approved", "rejected"] as const;
+export type SubmissionStatus = (typeof submissionStatuses)[number];
+
+export const businessSubmissions = pgTable("business_submissions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull(),
+  category: text("category").notNull().$type<RetailerCategory>(),
+  cluster: text("cluster"),
+  address: text("address").notNull(),
+  owner: text("owner"),
+  description: text("description"),
+  website: text("website"),
+  contactName: text("contact_name"),
+  contactEmail: text("contact_email"),
+  status: text("status").notNull().default("pending").$type<SubmissionStatus>(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+export const insertBusinessSubmissionSchema = createInsertSchema(businessSubmissions)
+  .omit({
+    id: true,
+    status: true,
+    createdAt: true,
+  })
+  .extend({
+    name: z.string().trim().min(2, "Business name is required"),
+    category: z.enum(retailerCategories, {
+      errorMap: () => ({ message: "Please choose a category" }),
+    }),
+    address: z.string().trim().min(5, "Street address is required"),
+    cluster: z.string().trim().optional(),
+    owner: z.string().trim().optional(),
+    description: z.string().trim().max(500, "Please keep it under 500 characters").optional(),
+    website: z
+      .string()
+      .trim()
+      .url("Please enter a valid URL (including https://)")
+      .optional()
+      .or(z.literal("")),
+    contactName: z.string().trim().optional(),
+    contactEmail: z
+      .string()
+      .trim()
+      .email("Please enter a valid email")
+      .optional()
+      .or(z.literal("")),
+  });
+
+export type InsertBusinessSubmission = z.infer<typeof insertBusinessSubmissionSchema>;
+export type BusinessSubmission = typeof businessSubmissions.$inferSelect;
+
+export type DirectoryBusiness = {
+  id: string;
+  name: string;
+  category: string;
+  cluster: string;
+  address: string;
+  owner: string;
+};

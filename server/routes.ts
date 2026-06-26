@@ -1,9 +1,41 @@
-import type { Express } from "express";
+import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
+import { timingSafeEqual } from "crypto";
 import { storage } from "./storage";
 import { scrapeAllEvents } from "./scraper";
 import { getChappaquaRestaurants, getRestaurantSpecials } from "./restaurant-data";
 import { startOfWeek, endOfWeek, parseISO } from "date-fns";
+import {
+  insertBusinessSubmissionSchema,
+  submissionStatuses,
+  type SubmissionStatus,
+  type DirectoryBusiness,
+} from "@shared/schema";
+import retailersData from "@shared/retailers.json";
+
+function isAdminConfigured(): boolean {
+  return typeof process.env.ADMIN_PASSWORD === "string" && process.env.ADMIN_PASSWORD.length > 0;
+}
+
+function checkAdminPassword(provided: string): boolean {
+  const expected = process.env.ADMIN_PASSWORD;
+  if (!expected) return false;
+  const a = Buffer.from(provided);
+  const b = Buffer.from(expected);
+  if (a.length !== b.length) return false;
+  return timingSafeEqual(a, b);
+}
+
+function requireAdmin(req: Request, res: Response, next: NextFunction) {
+  if (!isAdminConfigured()) {
+    return res.status(503).json({ error: "Admin access is not configured yet." });
+  }
+  const header = req.header("x-admin-password") || "";
+  if (!checkAdminPassword(header)) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+  next();
+}
 
 let isInitialized = false;
 let initializationPromise: Promise<void> | null = null;
@@ -225,6 +257,106 @@ export async function registerRoutes(
       initialized: isInitialized,
       lastUpdated: storage.getLastUpdated()?.toISOString() || null,
     });
+  });
+
+  // Public directory: base retailers + approved submissions, merged.
+  app.get("/api/businesses", async (req, res) => {
+    try {
+      const approved = await storage.getApprovedBusinessSubmissions();
+      const approvedBusinesses: DirectoryBusiness[] = approved.map((s) => ({
+        id: s.id,
+        name: s.name,
+        category: s.category,
+        cluster: s.cluster || "",
+        address: s.address,
+        owner: s.owner || "",
+      }));
+
+      res.json({
+        businesses: [...(retailersData as DirectoryBusiness[]), ...approvedBusinesses],
+      });
+    } catch (error) {
+      console.error("Error fetching businesses:", error);
+      res.status(500).json({
+        error: "Failed to fetch businesses",
+        message: error instanceof Error ? error.message : "Unknown error",
+      });
+    }
+  });
+
+  // Public submission endpoint.
+  app.post("/api/business-submissions", async (req, res) => {
+    try {
+      const parsed = insertBusinessSubmissionSchema.safeParse(req.body);
+      if (!parsed.success) {
+        return res.status(400).json({
+          error: "Invalid submission",
+          details: parsed.error.flatten().fieldErrors,
+        });
+      }
+
+      const submission = await storage.createBusinessSubmission(parsed.data);
+      res.status(201).json({ submission });
+    } catch (error) {
+      console.error("Error creating business submission:", error);
+      res.status(500).json({
+        error: "Failed to submit business",
+        message: error instanceof Error ? error.message : "Unknown error",
+      });
+    }
+  });
+
+  // Admin: verify password.
+  app.post("/api/admin/login", (req, res) => {
+    if (!isAdminConfigured()) {
+      return res.status(503).json({ error: "Admin access is not configured yet." });
+    }
+    const password = typeof req.body?.password === "string" ? req.body.password : "";
+    if (!checkAdminPassword(password)) {
+      return res.status(401).json({ error: "Incorrect password." });
+    }
+    res.json({ ok: true });
+  });
+
+  // Admin: list submissions (defaults to pending).
+  app.get("/api/admin/submissions", requireAdmin, async (req, res) => {
+    try {
+      const statusParam = req.query.status as string | undefined;
+      const status =
+        statusParam && submissionStatuses.includes(statusParam as SubmissionStatus)
+          ? (statusParam as SubmissionStatus)
+          : "pending";
+      const submissions = await storage.getBusinessSubmissions(status);
+      res.json({ submissions });
+    } catch (error) {
+      console.error("Error fetching submissions:", error);
+      res.status(500).json({
+        error: "Failed to fetch submissions",
+        message: error instanceof Error ? error.message : "Unknown error",
+      });
+    }
+  });
+
+  // Admin: approve or reject a submission.
+  app.patch("/api/admin/submissions/:id", requireAdmin, async (req, res) => {
+    try {
+      const action = req.body?.action;
+      if (action !== "approve" && action !== "reject") {
+        return res.status(400).json({ error: "Action must be 'approve' or 'reject'." });
+      }
+      const status: SubmissionStatus = action === "approve" ? "approved" : "rejected";
+      const updated = await storage.updateBusinessSubmissionStatus(req.params.id, status);
+      if (!updated) {
+        return res.status(404).json({ error: "Submission not found." });
+      }
+      res.json({ submission: updated });
+    } catch (error) {
+      console.error("Error updating submission:", error);
+      res.status(500).json({
+        error: "Failed to update submission",
+        message: error instanceof Error ? error.message : "Unknown error",
+      });
+    }
   });
 
   return httpServer;

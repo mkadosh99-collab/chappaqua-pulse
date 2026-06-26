@@ -1,17 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { ExternalLink, MapPin, Store, UtensilsCrossed, Shirt, Sparkles, Home, Wrench, Building2 } from "lucide-react";
-import retailersData from "@shared/retailers.json";
+import type { DirectoryBusiness } from "@shared/schema";
+import { SubmitBusinessDialog } from "./submit-business-dialog";
 
-type Retailer = {
-  id: string;
-  name: string;
-  category: string;
-  cluster: string;
-  address: string;
-  owner: string;
-};
-
-const RETAILERS = retailersData as Retailer[];
+type Retailer = DirectoryBusiness;
 
 const CATEGORY_META: Record<string, { label: string; icon: typeof Store; blurb: string }> = {
   food: { label: "Food & Drink", icon: UtensilsCrossed, blurb: "Restaurants, cafes, bakeries, and grocers." },
@@ -50,9 +43,15 @@ export function RetailersSection() {
     if (el) el.scrollIntoView({ behavior: "auto", block: "start" });
   }, []);
 
+  const { data, isLoading } = useQuery<{ businesses: Retailer[] }>({
+    queryKey: ["/api/businesses"],
+  });
+
+  const retailers = data?.businesses ?? [];
+
   const grouped = useMemo(() => {
     const map: Record<string, Retailer[]> = {};
-    for (const r of RETAILERS) {
+    for (const r of retailers) {
       if (!map[r.category]) map[r.category] = [];
       map[r.category].push(r);
     }
@@ -60,19 +59,28 @@ export function RetailersSection() {
       map[k].sort((a, b) => a.name.localeCompare(b.name));
     }
     return map;
-  }, []);
+  }, [retailers]);
 
   const categories = CATEGORY_ORDER.filter((c) => grouped[c]?.length);
   const visibleCategories = activeCategory ? [activeCategory] : categories;
 
   return (
     <div id="retailers" className="py-8 scroll-mt-24" data-testid="section-retailers">
-      <div className="mb-6">
-        <h2 className="text-2xl font-semibold tracking-tight mb-2">Local Retailers</h2>
-        <p className="text-muted-foreground">
-          Browse Chappaqua and Millwood businesses by tenant type. Source: Chappaqua-Millwood Chamber directory.
-        </p>
+      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <h2 className="text-2xl font-semibold tracking-tight mb-2">Local Retailers</h2>
+          <p className="text-muted-foreground">
+            Browse Chappaqua and Millwood businesses by tenant type. Source: Chappaqua-Millwood Chamber directory.
+          </p>
+        </div>
+        <SubmitBusinessDialog />
       </div>
+
+      {isLoading && (
+        <p className="text-muted-foreground" data-testid="text-retailers-loading">
+          Loading businesses…
+        </p>
+      )}
 
       {/* Category filter chips */}
       <div className="flex flex-wrap gap-2 mb-6">
@@ -87,7 +95,7 @@ export function RetailersSection() {
         >
           <Store className="w-4 h-4" />
           All
-          <span className="opacity-70">({RETAILERS.length})</span>
+          <span className="opacity-70">({retailers.length})</span>
         </button>
         {categories.map((cat) => {
           const meta = CATEGORY_META[cat];
