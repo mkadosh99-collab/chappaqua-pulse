@@ -209,6 +209,125 @@ async function scrapeTownCalendar(): Promise<ScrapedEvent[]> {
   return events;
 }
 
+// Live scraper for the New Castle Recreation & Parks schedule.
+// The department posts its events on the town CivicPlus calendar under the
+// "Recreation & Parks", "Senior Programs" and "Dance" categories. We walk the
+// monthly calendar grid for the season ahead and pull those categories out.
+async function scrapeRecreationEvents(): Promise<ScrapedEvent[]> {
+  const REC_PAGE = "https://www.mynewcastleny.gov/158/Recreation-Parks";
+  const REC_CATEGORY = /recreation|parks|senior|dance/i;
+
+  // Months to scan: current month plus the next 8 (covers the season ahead).
+  const today = new Date();
+  const months = Array.from({ length: 9 }, (_, i) => {
+    const d = new Date(today.getFullYear(), today.getMonth() + i, 1);
+    return { month: d.getMonth() + 1, year: d.getFullYear() };
+  });
+
+  const perMonth = await Promise.all(
+    months.map(async ({ month, year }) => {
+      const out: ScrapedEvent[] = [];
+      try {
+        const url = `https://www.mynewcastleny.gov/Calendar.aspx?month=${month}&year=${year}&calType=0`;
+        const html = await fetchWithTimeout(url);
+        const $ = cheerio.load(html);
+
+        // Each event is rendered as two adjacent nodes in document order: a
+        // visible popover (div[id^="parentdiv<EID>_..."] carrying category +
+        // time + location) immediately followed by a hidden schema.org Event
+        // block carrying the reliable startDate. We walk both selectors in
+        // document order and pair each Event block with the popover that
+        // precedes it. This keeps each occurrence's metadata correct even when
+        // multiple events share the same title within a month.
+        const seen = new Set<string>();
+        let pending: { category: string; time: string; location: string; eid: string } | null = null;
+
+        $('div[id^="parentdiv"], [itemtype="http://schema.org/Event"]').each((_, el) => {
+          const $el = $(el);
+          const id = $el.attr("id") || "";
+
+          if (id.startsWith("parentdiv")) {
+            const category = $el
+              .find(".visuallyHidden")
+              .first()
+              .text()
+              .replace(/^Category:\s*/i, "")
+              .trim();
+            let time = "";
+            let location = "";
+            $el.find("dt").each((_, dt) => {
+              const label = $(dt).text().trim().toLowerCase();
+              const dd = $(dt).next("dd").text().replace(/[\u2009\u00a0]/g, " ").trim();
+              if (label.startsWith("when")) time = dd;
+              else if (label.startsWith("location")) location = dd;
+            });
+            const eid = (id.match(/parentdiv(\d+)/) || [])[1] || "";
+            pending = { category, time, location, eid };
+            return;
+          }
+
+          // schema.org Event block: pair with the popover seen just before it.
+          const m = pending;
+          pending = null;
+          if (!m || !REC_CATEGORY.test(m.category)) return;
+
+          const title = $el.find('[itemprop="name"]').first().text().trim();
+          if (!title) return;
+
+          const sd = $el.find('[itemprop="startDate"]').first();
+          const sdStr = sd.attr("content") || sd.text().trim();
+          if (!sdStr) return;
+          const date = parseDateTime(sdStr);
+          if (!date) return;
+
+          const dedupeKey = `${title}|${date.toDateString()}`;
+          if (seen.has(dedupeKey)) return;
+          seen.add(dedupeKey);
+
+          const category: EventCategory = /dance/i.test(m.category)
+            ? "performing-arts"
+            : "recreation";
+
+          const microLocation = $el
+            .find('[itemprop="location"] [itemprop="name"]')
+            .first()
+            .text()
+            .trim();
+
+          out.push({
+            title: title.slice(0, 200),
+            date,
+            time: m.time || format(date, "h:mm a"),
+            location: m.location || microLocation || "New Castle Recreation",
+            category,
+            source: "New Castle Recreation",
+            sourceUrl: m.eid
+              ? `https://www.mynewcastleny.gov/Calendar.aspx?EID=${m.eid}`
+              : REC_PAGE,
+          });
+        });
+      } catch (error) {
+        console.error(`Recreation scraper failed for ${month}/${year}:`, error);
+      }
+      return out;
+    })
+  );
+
+  // Flatten and de-duplicate across months (adjacent month grids overlap on
+  // the leading/trailing days).
+  const events: ScrapedEvent[] = [];
+  const globalSeen = new Set<string>();
+  for (const ev of perMonth.flat()) {
+    const key = `${ev.title}|${ev.date.toDateString()}`;
+    if (globalSeen.has(key)) continue;
+    globalSeen.add(key);
+    events.push(ev);
+  }
+
+  console.log(`Recreation scraper found ${events.length} events`);
+  return events;
+}
+
 // Real Chappaqua events for this weekend and next week (sourced May 2, 2026)
 function getRealCurrentEvents(): ScrapedEvent[] {
   const today = new Date();
@@ -899,144 +1018,25 @@ function getRealCurrentEvents(): ScrapedEvent[] {
   ];
 }
 
-// Chappaqua / New Castle Parks & Recreation calendar — fixed-date events
-// for the 2026 season. Source: New Castle Recreation (provided directly,
-// the department does not publish a machine-readable calendar feed).
-function getParksAndRecEvents(): ScrapedEvent[] {
-  const REC_URL = "https://www.mynewcastleny.gov/158/Recreation-Parks";
-  const recField = "Recreation Field, Senter Street, Chappaqua";
-  const chappac = "Chappaqua Performing Arts Center (ChappPAC), 480 Bedford Road";
-
-  const concert = (month: number, d: number, band: string): ScrapedEvent => ({
-    title: `Summer Concert: ${band}`,
-    description:
-      `Free outdoor summer concert at Recreation Field. ${band} performs starting at 7:30 PM. ` +
-      `The Captain Lawrence beer truck and an ice cream truck will be on site. Bring a blanket or chairs.`,
-    date: new Date(2026, month, d, 19, 30),
-    time: "7:30 PM",
-    location: recField,
-    category: "recreation",
-    source: "New Castle Recreation",
-    sourceUrl: REC_URL,
-  });
-
-  return [
-    {
-      title: "Senior BBQ",
-      description:
-        "Annual barbecue for Chappaqua residents ages 60+. Lunch, music, and community at the Community Center. Registration through New Castle Recreation recommended.",
-      date: new Date(2026, 4, 22, 12, 0),
-      time: "12:00 PM – 2:00 PM",
-      location: "New Castle Community Center",
-      category: "recreation",
-      source: "New Castle Recreation",
-      sourceUrl: REC_URL,
-    },
-    {
-      title: "Outdoor Movie Night: The Sandlot",
-      description:
-        "Family movie night at Recreation Field featuring a screening of The Sandlot. Includes the FDR band, the Captain Lawrence beer truck, and inflatables for kids. Bring blankets and chairs.",
-      date: new Date(2026, 5, 6, 19, 30),
-      time: "Evening (at dusk)",
-      location: recField,
-      category: "recreation",
-      source: "New Castle Recreation",
-      sourceUrl: REC_URL,
-    },
-    {
-      title: "Dance Recital",
-      description:
-        "New Castle Recreation dance program year-end recital. Come cheer on local dancers of all ages.",
-      date: new Date(2026, 5, 7, 14, 0),
-      time: "2:00 PM",
-      location: chappac,
-      category: "performing-arts",
-      source: "New Castle Recreation",
-      sourceUrl: REC_URL,
-    },
-    {
-      title: "Summer Fest",
-      description:
-        "Middle School end-of-year celebration at Recreation Field with pizza, a DJ, and a foam party. A Chappaqua rite of passage to kick off the summer.",
-      date: new Date(2026, 5, 26, 11, 15),
-      time: "11:15 AM",
-      location: recField,
-      category: "recreation",
-      source: "New Castle Recreation",
-      sourceUrl: REC_URL,
-    },
-    concert(6, 8, "National Express"),  // July 8
-    concert(6, 15, "FDR"),              // July 15
-    concert(6, 22, "Station Agents"),   // July 22
-    concert(6, 29, "Joy Ride"),         // July 29
-    concert(7, 5, "Tramps Like Us"),    // August 5
-    {
-      title: "9/11 Memorial Ceremony",
-      description:
-        "Annual ceremony honoring those lost on September 11th. Held at Gedney Park.",
-      date: new Date(2026, 8, 11, 18, 0),
-      time: "Evening",
-      location: "Gedney Park, Route 133, Chappaqua",
-      category: "community",
-      source: "New Castle Recreation",
-      sourceUrl: REC_URL,
-    },
-    {
-      title: "Community Day",
-      description:
-        "Townwide celebration at the Train Station Circle with local vendors, food, music, and family activities. One of New Castle's signature community gatherings.",
-      date: new Date(2026, 8, 19, 11, 0),
-      time: "All day",
-      location: "Train Station Circle, Chappaqua",
-      category: "community",
-      source: "New Castle Recreation",
-      sourceUrl: REC_URL,
-    },
-    {
-      title: "Ragamuffin Parade",
-      description:
-        "Beloved fall costume parade for kids through town. Rain date: November 1st.",
-      date: new Date(2026, 9, 25, 10, 0),
-      time: "Morning (rain date Nov 1)",
-      location: "Downtown Chappaqua",
-      category: "community",
-      source: "New Castle Recreation",
-      sourceUrl: REC_URL,
-    },
-    {
-      title: "Nutcracker Recital",
-      description:
-        "New Castle Recreation's holiday Nutcracker dance recital. A festive Chappaqua tradition.",
-      date: new Date(2026, 11, 6, 14, 0),
-      time: "2:00 PM",
-      location: chappac,
-      category: "performing-arts",
-      source: "New Castle Recreation",
-      sourceUrl: REC_URL,
-    },
-  ];
-}
-
 export async function scrapeAllEvents(): Promise<InsertEvent[]> {
   console.log("Starting event data collection from all Chappaqua sources...");
 
   // Get real curated events for this week and next
   const realEvents = getRealCurrentEvents();
 
-  // Parks & Recreation seasonal calendar (fixed dates)
-  const parksRecEvents = getParksAndRecEvents();
-
   // Try live scrapers in parallel
-  const [libraryEvents, townEvents] = await Promise.all([
+  const [libraryEvents, townEvents, recreationEvents] = await Promise.all([
     scrapeLibraryEvents().catch(e => { console.error("Library scraper failed:", e); return []; }),
     scrapeTownCalendar().catch(e => { console.error("Town scraper failed:", e); return []; }),
+    scrapeRecreationEvents().catch(e => { console.error("Recreation scraper failed:", e); return []; }),
   ]);
 
-  // Merge: use scraped events + real events, deduplicating by title+date
+  // Merge: use scraped events + real events, deduplicating by title+date.
+  // Recreation events come first so the live Parks & Rec schedule wins on dedupe.
   const seen = new Set<string>();
   const allEvents: ScrapedEvent[] = [];
 
-  for (const ev of [...realEvents, ...parksRecEvents, ...libraryEvents, ...townEvents]) {
+  for (const ev of [...recreationEvents, ...realEvents, ...libraryEvents, ...townEvents]) {
     const key = `${ev.title.toLowerCase().slice(0, 40)}|${ev.date.toDateString()}`;
     if (!seen.has(key)) {
       seen.add(key);

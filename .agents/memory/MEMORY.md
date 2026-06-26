@@ -1,1 +1,2 @@
 - [Event date system](event-date-system.md) — curated events use a week-relative day() helper; fixed-date events must use absolute new Date(); /api/events supports from+to range.
+- [Recreation & Parks scraper](recreation-scraper.md) — scrape CivicPlus monthly grid; take dates from schema.org startDate microdata, never the parentdiv `_N` id suffix.
