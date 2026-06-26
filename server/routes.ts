@@ -91,24 +91,39 @@ export async function registerRoutes(
       await initializeData();
       
       const weekStartParam = req.query.weekStart as string | undefined;
+      const fromParam = req.query.from as string | undefined;
+      const toParam = req.query.to as string | undefined;
       
       let weekStart: Date;
       let weekEnd: Date;
       
-      if (weekStartParam) {
-        try {
-          weekStart = parseISO(weekStartParam);
-          if (isNaN(weekStart.getTime())) {
-            weekStart = startOfWeek(new Date(), { weekStartsOn: 0 });
-          }
-        } catch {
+      // Arbitrary date range (used by the month calendar view)
+      if (fromParam && toParam) {
+        const from = parseISO(fromParam);
+        const to = parseISO(toParam);
+        if (!isNaN(from.getTime()) && !isNaN(to.getTime())) {
+          // Guard against a reversed range
+          weekStart = from <= to ? from : to;
+          weekEnd = from <= to ? to : from;
+        } else {
           weekStart = startOfWeek(new Date(), { weekStartsOn: 0 });
+          weekEnd = endOfWeek(weekStart, { weekStartsOn: 0 });
         }
       } else {
-        weekStart = startOfWeek(new Date(), { weekStartsOn: 0 });
+        if (weekStartParam) {
+          try {
+            weekStart = parseISO(weekStartParam);
+            if (isNaN(weekStart.getTime())) {
+              weekStart = startOfWeek(new Date(), { weekStartsOn: 0 });
+            }
+          } catch {
+            weekStart = startOfWeek(new Date(), { weekStartsOn: 0 });
+          }
+        } else {
+          weekStart = startOfWeek(new Date(), { weekStartsOn: 0 });
+        }
+        weekEnd = endOfWeek(weekStart, { weekStartsOn: 0 });
       }
-      
-      weekEnd = endOfWeek(weekStart, { weekStartsOn: 0 });
       
       const events = await storage.getEventsByWeek(weekStart, weekEnd);
       const lastUpdated = storage.getLastUpdated();

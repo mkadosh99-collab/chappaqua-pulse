@@ -903,7 +903,7 @@ function getRealCurrentEvents(): ScrapedEvent[] {
 // for the 2026 season. Source: New Castle Recreation (provided directly,
 // the department does not publish a machine-readable calendar feed).
 function getParksAndRecEvents(): ScrapedEvent[] {
-  const REC_URL = "https://www.mynewcastleny.gov/recreation";
+  const REC_URL = "https://www.mynewcastleny.gov/158/Recreation-Parks";
   const recField = "Recreation Field, Senter Street, Chappaqua";
   const chappac = "Chappaqua Performing Arts Center (ChappPAC), 480 Bedford Road";
 

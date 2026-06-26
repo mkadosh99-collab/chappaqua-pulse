@@ -1,0 +1,1 @@
+- [Event date system](event-date-system.md) — curated events use a week-relative day() helper; fixed-date events must use absolute new Date(); /api/events supports from+to range.

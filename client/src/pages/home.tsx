@@ -1,9 +1,10 @@
 import { useState, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { startOfWeek } from "date-fns";
+import { startOfWeek, startOfMonth, endOfMonth, endOfWeek } from "date-fns";
 import { Header } from "@/components/header";
 import { CategoryFilter } from "@/components/category-filter";
 import { WeekSelector } from "@/components/week-selector";
+import { MonthCalendar } from "@/components/month-calendar";
 import { EventGrid } from "@/components/event-grid";
 import { EventGridSkeleton } from "@/components/event-skeleton";
 import { EmptyState } from "@/components/empty-state";
@@ -48,13 +49,17 @@ function initialTabFromUrl(): TabType {
   return t === "specials" || t === "retailers" ? t : "events";
 }
 
+type EventsView = "week" | "month";
+
 export default function Home() {
   const [activeTab, setActiveTab] = useState<TabType>(initialTabFromUrl);
+  const [eventsView, setEventsView] = useState<EventsView>("week");
   const [selectedCategory, setSelectedCategory] = useState<EventCategory | null>(null);
   const [selectedSpecialType, setSelectedSpecialType] = useState<SpecialType | null>(null);
   const [weekStart, setWeekStart] = useState(() => 
     startOfWeek(new Date(), { weekStartsOn: 0 })
   );
+  const [month, setMonth] = useState(() => startOfMonth(new Date()));
 
   const { data: eventsData, isLoading: eventsLoading, error: eventsError, refetch: refetchEvents } = useQuery<EventsResponse>({
     queryKey: ['/api/events', weekStart.toISOString()],
@@ -65,7 +70,27 @@ export default function Home() {
       }
       return response.json();
     },
-    enabled: activeTab === "events",
+    enabled: activeTab === "events" && eventsView === "week",
+  });
+
+  const monthRange = useMemo(() => {
+    const from = startOfWeek(startOfMonth(month), { weekStartsOn: 0 });
+    const to = endOfWeek(endOfMonth(month), { weekStartsOn: 0 });
+    return { from, to };
+  }, [month]);
+
+  const { data: monthData, isLoading: monthLoading, error: monthError, refetch: refetchMonth } = useQuery<EventsResponse>({
+    queryKey: ['/api/events', 'month', monthRange.from.toISOString(), monthRange.to.toISOString()],
+    queryFn: async () => {
+      const response = await fetch(
+        `/api/events?from=${monthRange.from.toISOString()}&to=${monthRange.to.toISOString()}`
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch events");
+      }
+      return response.json();
+    },
+    enabled: activeTab === "events" && eventsView === "month",
   });
 
   const { data: restaurantsData, isLoading: restaurantsLoading, error: restaurantsError, refetch: refetchRestaurants } = useQuery<RestaurantsResponse>({
@@ -155,6 +180,12 @@ export default function Home() {
     setSelectedCategory(null);
   };
 
+  const handleSelectDay = (day: Date) => {
+    setWeekStart(startOfWeek(day, { weekStartsOn: 0 }));
+    setSelectedCategory(null);
+    setEventsView("week");
+  };
+
   const handleClearFilters = () => {
     setSelectedCategory(null);
     setSelectedSpecialType(null);
@@ -167,7 +198,7 @@ export default function Home() {
   };
 
   const lastUpdated = activeTab === "events" 
-    ? eventsData?.lastUpdated 
+    ? (eventsView === "month" ? monthData?.lastUpdated : eventsData?.lastUpdated)
     : specialsData?.lastUpdated || restaurantsData?.lastUpdated;
 
   return (
@@ -223,40 +254,102 @@ export default function Home() {
 
           {activeTab === "events" && (
             <>
-              <WeekSelector 
-                currentWeekStart={weekStart}
-                onWeekChange={handleWeekChange}
-                eventCount={filteredEvents.length}
-              />
-
-              <div className="mb-6">
-                <CategoryFilter
-                  selectedCategory={selectedCategory}
-                  onCategoryChange={handleCategoryChange}
-                  categoryCounts={categoryCounts}
-                />
+              <div className="flex justify-end pt-2">
+                <div className="inline-flex rounded-md border border-border p-0.5 bg-muted/50" role="tablist" aria-label="Event view">
+                  <button
+                    type="button"
+                    onClick={() => setEventsView("week")}
+                    className={`px-3 py-1.5 text-sm font-medium rounded-[5px] transition-colors ${
+                      eventsView === "week"
+                        ? "bg-card text-foreground shadow-sm"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                    data-testid="button-view-week"
+                  >
+                    Week
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setEventsView("month")}
+                    className={`px-3 py-1.5 text-sm font-medium rounded-[5px] transition-colors ${
+                      eventsView === "month"
+                        ? "bg-card text-foreground shadow-sm"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                    data-testid="button-view-month"
+                  >
+                    Month
+                  </button>
+                </div>
               </div>
 
-              {eventsLoading && <EventGridSkeleton count={6} />}
+              {eventsView === "week" && (
+                <>
+                  <WeekSelector 
+                    currentWeekStart={weekStart}
+                    onWeekChange={handleWeekChange}
+                    eventCount={filteredEvents.length}
+                  />
 
-              {eventsError && (
-                <ErrorState onRetry={() => refetchEvents()} />
+                  <div className="mb-6">
+                    <CategoryFilter
+                      selectedCategory={selectedCategory}
+                      onCategoryChange={handleCategoryChange}
+                      categoryCounts={categoryCounts}
+                    />
+                  </div>
+
+                  {eventsLoading && <EventGridSkeleton count={6} />}
+
+                  {eventsError && (
+                    <ErrorState onRetry={() => refetchEvents()} />
+                  )}
+
+                  {!eventsLoading && !eventsError && filteredEvents.length === 0 && (
+                    <EmptyState 
+                      title={selectedCategory ? `No ${selectedCategory.replace('-', ' ')} events` : "No events this week"}
+                      description={
+                        selectedCategory 
+                          ? "Try selecting a different category or browsing another week."
+                          : "There are no events scheduled for this week. Try browsing other weeks."
+                      }
+                      onReset={selectedCategory ? handleClearFilters : undefined}
+                    />
+                  )}
+
+                  {!eventsLoading && !eventsError && filteredEvents.length > 0 && (
+                    <EventGrid events={filteredEvents} groupByDay={true} />
+                  )}
+                </>
               )}
 
-              {!eventsLoading && !eventsError && filteredEvents.length === 0 && (
-                <EmptyState 
-                  title={selectedCategory ? `No ${selectedCategory.replace('-', ' ')} events` : "No events this week"}
-                  description={
-                    selectedCategory 
-                      ? "Try selecting a different category or browsing another week."
-                      : "There are no events scheduled for this week. Try browsing other weeks."
-                  }
-                  onReset={selectedCategory ? handleClearFilters : undefined}
-                />
-              )}
+              {eventsView === "month" && (
+                <>
+                  {monthError && (
+                    <div className="pt-6">
+                      <ErrorState onRetry={() => refetchMonth()} />
+                    </div>
+                  )}
 
-              {!eventsLoading && !eventsError && filteredEvents.length > 0 && (
-                <EventGrid events={filteredEvents} groupByDay={true} />
+                  {!monthError && (
+                    <>
+                      <MonthCalendar
+                        month={month}
+                        events={monthData?.events ?? []}
+                        onMonthChange={setMonth}
+                        onSelectDay={handleSelectDay}
+                      />
+                      {monthLoading && (
+                        <p className="text-sm text-muted-foreground text-center pb-4" data-testid="text-month-loading">
+                          Loading events…
+                        </p>
+                      )}
+                      <p className="text-sm text-muted-foreground text-center pb-2">
+                        Tap any highlighted day to see that week's events.
+                      </p>
+                    </>
+                  )}
+                </>
               )}
             </>
           )}
