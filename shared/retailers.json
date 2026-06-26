@@ -870,5 +870,13 @@
     "cluster": "millwood",
     "address": "100 Millwood Road, Millwood NY  10546",
     "owner": "Greg Santone"
+  },
+  {
+    "id": "r_109",
+    "name": "King Street Creatives",
+    "category": "service",
+    "cluster": "chappaqua_downtown",
+    "address": "100 King Street, Chappaqua NY  10514",
+    "owner": ""
   }
 ]
