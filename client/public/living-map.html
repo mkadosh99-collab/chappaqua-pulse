@@ -752,7 +752,6 @@ function applyEraFilter() {
     const visible = currentEra >= place.from_era;
     el.classList.toggle('era-hidden', !visible);
   });
-  document.querySelectorAll('.layer.story, [id^="layer-"][id!="layer-landmarks"][id!="layer-retailers"]').forEach(() => {});
   for (const layerId of ['quaker', 'farm', 'railroad', 'tour']) {
     const layer = STORY_LAYERS[layerId];
     const eraOK = currentEra >= layer.from_era;
