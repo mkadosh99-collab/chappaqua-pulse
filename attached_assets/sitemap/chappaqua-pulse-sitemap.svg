@@ -1,0 +1,204 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1720" height="1240" viewBox="0 0 1720 1240" font-family="Inter, 'DejaVu Sans', Arial, sans-serif">
+<defs>
+  <linearGradient id="hdr" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#14264f"/>
+    <stop offset="1" stop-color="#0d1a38"/>
+  </linearGradient>
+  <linearGradient id="root" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#243a6e"/>
+    <stop offset="1" stop-color="#14264f"/>
+  </linearGradient>
+  <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+    <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#1c2540" flood-opacity="0.16"/>
+  </filter>
+</defs>
+<rect x="0" y="0" width="1720" height="1240" rx="0" ry="0" fill="#f0f3f9"/>
+<rect x="0" y="0" width="1720" height="118" rx="0" ry="0" fill="url(#hdr)"/>
+<rect x="0" y="118" width="1720" height="5" rx="0" ry="0" fill="#c0202f"/>
+<text x="48" y="52" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="34" font-weight="700" fill="#ffffff" text-anchor="start" letter-spacing="0">Chappaqua Pulse</text>
+<text x="50" y="86" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="17" font-weight="400" fill="#c7d2ea" text-anchor="start" letter-spacing="0">Site Map — pages, sections &amp; navigation paths</text>
+<text x="1672" y="52" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="18" font-weight="600" fill="#c7d2ea" text-anchor="end" letter-spacing="0">chappaquapulse</text>
+<text x="1672" y="82" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="14" font-weight="400" fill="#9fb0d0" text-anchor="end" letter-spacing="0">Weekly community discovery · Chappaqua, NY</text>
+<rect x="48" y="140" width="16" height="16" rx="4" ry="4" fill="#14264f" stroke="#14264f" stroke-width="1.5"/>
+<text x="72" y="153" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="13" font-weight="500" fill="#3a4664" text-anchor="start" letter-spacing="0">Page / route</text>
+<rect x="197.2" y="140" width="16" height="16" rx="4" ry="4" fill="#ffffff" stroke="#cdd6e8" stroke-width="1.5"/>
+<text x="221.2" y="153" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="13" font-weight="500" fill="#3a4664" text-anchor="start" letter-spacing="0">Tab / view</text>
+<rect x="331.2" y="140" width="16" height="16" rx="4" ry="4" fill="#eef2fa" stroke="#eef2fa" stroke-width="1.5"/>
+<text x="355.2" y="153" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="13" font-weight="500" fill="#3a4664" text-anchor="start" letter-spacing="0">Section</text>
+<rect x="442.4" y="140" width="16" height="16" rx="4" ry="4" fill="#c0202f" stroke="#c0202f" stroke-width="1.5"/>
+<text x="466.4" y="153" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="13" font-weight="500" fill="#3a4664" text-anchor="start" letter-spacing="0">External link</text>
+<rect x="710" y="178" width="300" height="58" rx="12" ry="12" fill="url(#root)" stroke="#0d1a38" stroke-width="1.5" filter="url(#soft)"/>
+<text x="860" y="205" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="20" font-weight="700" fill="#fff" text-anchor="middle" letter-spacing="0">Chappaqua Pulse</text>
+<text x="860" y="224" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="12.5" font-weight="400" fill="#b9c6e2" text-anchor="middle" letter-spacing="0">React SPA · Wouter routing</text>
+<polyline points="860,236 860,268" fill="none" stroke="#9fb0d0" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="421,268 1555,268" fill="none" stroke="#9fb0d0" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="421,268 421,302" fill="none" stroke="#9fb0d0" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="975,268 975,302" fill="none" stroke="#9fb0d0" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="1265,268 1265,302" fill="none" stroke="#9fb0d0" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="1555,268 1555,302" fill="none" stroke="#9fb0d0" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="311" y="302" width="220" height="56" rx="10" ry="10" fill="#14264f" stroke="#0d1a38" stroke-width="1.5" filter="url(#soft)"/>
+<text x="421" y="327" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="17.5" font-weight="700" fill="#fff" text-anchor="middle" letter-spacing="0">Home</text>
+<text x="421" y="346" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="12.5" font-weight="400" fill="#c2cee8" text-anchor="middle" letter-spacing="0">/</text>
+<rect x="860" y="302" width="230" height="56" rx="10" ry="10" fill="#14264f" stroke="#0d1a38" stroke-width="1.5" filter="url(#soft)"/>
+<text x="975" y="327" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="17.5" font-weight="700" fill="#fff" text-anchor="middle" letter-spacing="0">Admin</text>
+<text x="975" y="346" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="12.5" font-weight="400" fill="#c2cee8" text-anchor="middle" letter-spacing="0">/admin</text>
+<rect x="1150" y="302" width="230" height="56" rx="10" ry="10" fill="#14264f" stroke="#0d1a38" stroke-width="1.5" filter="url(#soft)"/>
+<text x="1265" y="327" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="17.5" font-weight="700" fill="#fff" text-anchor="middle" letter-spacing="0">Not Found</text>
+<text x="1265" y="346" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="12.5" font-weight="400" fill="#c2cee8" text-anchor="middle" letter-spacing="0">404 fallback</text>
+<rect x="1440" y="302" width="230" height="56" rx="10" ry="10" fill="#c0202f" stroke="#0d1a38" stroke-width="1.5" filter="url(#soft)"/>
+<text x="1555" y="327" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="17.5" font-weight="700" fill="#fff" text-anchor="middle" letter-spacing="0">External Links</text>
+<text x="1555" y="346" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="12.5" font-weight="400" fill="#c2cee8" text-anchor="middle" letter-spacing="0">off-site &amp; utility</text>
+<polyline points="421,358 421,388" fill="none" stroke="#9fb0d0" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="130,388 712,388" fill="none" stroke="#9fb0d0" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="130,388 130,418" fill="none" stroke="#9fb0d0" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="324,388 324,418" fill="none" stroke="#9fb0d0" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="518,388 518,418" fill="none" stroke="#9fb0d0" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="712,388 712,418" fill="none" stroke="#9fb0d0" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="42" y="418" width="176" height="46" rx="8" ry="8" fill="#ffffff" stroke="#14264f" stroke-width="2" filter="url(#soft)"/>
+<rect x="42" y="418" width="6" height="46" rx="8" ry="8" fill="#243a6e"/>
+<text x="130" y="439" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="14.5" font-weight="700" fill="#14264f" text-anchor="middle" letter-spacing="0">Global</text>
+<text x="130" y="456" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="11" font-weight="400" fill="#5a6684" text-anchor="middle" letter-spacing="0.5">PERSISTENT SHELL</text>
+<rect x="236" y="418" width="176" height="46" rx="8" ry="8" fill="#ffffff" stroke="#14264f" stroke-width="2" filter="url(#soft)"/>
+<rect x="236" y="418" width="6" height="46" rx="8" ry="8" fill="#c0202f"/>
+<text x="324" y="439" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="14.5" font-weight="700" fill="#14264f" text-anchor="middle" letter-spacing="0">Events</text>
+<text x="324" y="456" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="11" font-weight="400" fill="#5a6684" text-anchor="middle" letter-spacing="0.5">TAB</text>
+<rect x="430" y="418" width="176" height="46" rx="8" ry="8" fill="#ffffff" stroke="#14264f" stroke-width="2" filter="url(#soft)"/>
+<rect x="430" y="418" width="6" height="46" rx="8" ry="8" fill="#c0202f"/>
+<text x="518" y="439" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="14.5" font-weight="700" fill="#14264f" text-anchor="middle" letter-spacing="0">Dining &amp; Specials</text>
+<text x="518" y="456" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="11" font-weight="400" fill="#5a6684" text-anchor="middle" letter-spacing="0.5">TAB</text>
+<rect x="624" y="418" width="176" height="46" rx="8" ry="8" fill="#ffffff" stroke="#14264f" stroke-width="2" filter="url(#soft)"/>
+<rect x="624" y="418" width="6" height="46" rx="8" ry="8" fill="#c0202f"/>
+<text x="712" y="439" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="14.5" font-weight="700" fill="#14264f" text-anchor="middle" letter-spacing="0">Retailers</text>
+<text x="712" y="456" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="11" font-weight="400" fill="#5a6684" text-anchor="middle" letter-spacing="0.5">TAB</text>
+<rect x="41" y="488" width="178" height="60" rx="7" ry="7" fill="#eef2fa" stroke="#cdd6e8" stroke-width="1.25"/>
+<rect x="41" y="488" width="5" height="60" rx="7" ry="7" fill="#243a6e"/>
+<text x="56" y="512" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="13" font-weight="650" fill="#1c2540" text-anchor="start" letter-spacing="0">Header</text>
+<text x="56" y="531" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="10.3" font-weight="400" fill="#5a6684" text-anchor="start" letter-spacing="0">nav · search · social · CTA</text>
+<rect x="41" y="562" width="178" height="60" rx="7" ry="7" fill="#eef2fa" stroke="#cdd6e8" stroke-width="1.25"/>
+<rect x="41" y="562" width="5" height="60" rx="7" ry="7" fill="#243a6e"/>
+<text x="56" y="586" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="13" font-weight="650" fill="#1c2540" text-anchor="start" letter-spacing="0">Hero</text>
+<text x="56" y="605" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="10.3" font-weight="400" fill="#5a6684" text-anchor="start" letter-spacing="0">title + quick-action tiles</text>
+<rect x="41" y="636" width="178" height="60" rx="7" ry="7" fill="#eef2fa" stroke="#cdd6e8" stroke-width="1.25"/>
+<rect x="41" y="636" width="5" height="60" rx="7" ry="7" fill="#243a6e"/>
+<text x="56" y="660" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="13" font-weight="650" fill="#1c2540" text-anchor="start" letter-spacing="0">Footer</text>
+<text x="56" y="679" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="10.3" font-weight="400" fill="#5a6684" text-anchor="start" letter-spacing="0">last-updated timestamp</text>
+<polyline points="130,474 130,482" fill="none" stroke="#9fb0d0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="25,482 25,666" fill="none" stroke="#9fb0d0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="130,482 25,482" fill="none" stroke="#9fb0d0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="25,518 41,518" fill="none" stroke="#9fb0d0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="25,592 41,592" fill="none" stroke="#9fb0d0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="25,666 41,666" fill="none" stroke="#9fb0d0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="235" y="488" width="178" height="60" rx="7" ry="7" fill="#eef2fa" stroke="#cdd6e8" stroke-width="1.25"/>
+<rect x="235" y="488" width="5" height="60" rx="7" ry="7" fill="#c0202f"/>
+<text x="250" y="512" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="13" font-weight="650" fill="#1c2540" text-anchor="start" letter-spacing="0">Week / Month view</text>
+<text x="250" y="531" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="10.3" font-weight="400" fill="#5a6684" text-anchor="start" letter-spacing="0">week &amp; month toggle</text>
+<rect x="235" y="562" width="178" height="60" rx="7" ry="7" fill="#eef2fa" stroke="#cdd6e8" stroke-width="1.25"/>
+<rect x="235" y="562" width="5" height="60" rx="7" ry="7" fill="#c0202f"/>
+<text x="250" y="586" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="13" font-weight="650" fill="#1c2540" text-anchor="start" letter-spacing="0">Category filter</text>
+<text x="250" y="605" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="10.3" font-weight="400" fill="#5a6684" text-anchor="start" letter-spacing="0">6 event categories</text>
+<rect x="235" y="636" width="178" height="60" rx="7" ry="7" fill="#eef2fa" stroke="#cdd6e8" stroke-width="1.25"/>
+<rect x="235" y="636" width="5" height="60" rx="7" ry="7" fill="#c0202f"/>
+<text x="250" y="660" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="13" font-weight="650" fill="#1c2540" text-anchor="start" letter-spacing="0">Event grid</text>
+<text x="250" y="679" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="10.3" font-weight="400" fill="#5a6684" text-anchor="start" letter-spacing="0">event cards</text>
+<polyline points="324,474 324,482" fill="none" stroke="#9fb0d0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="219,482 219,666" fill="none" stroke="#9fb0d0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="324,482 219,482" fill="none" stroke="#9fb0d0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="219,518 235,518" fill="none" stroke="#9fb0d0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="219,592 235,592" fill="none" stroke="#9fb0d0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="219,666 235,666" fill="none" stroke="#9fb0d0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="429" y="488" width="178" height="60" rx="7" ry="7" fill="#eef2fa" stroke="#cdd6e8" stroke-width="1.25"/>
+<rect x="429" y="488" width="5" height="60" rx="7" ry="7" fill="#c0202f"/>
+<text x="444" y="512" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="13" font-weight="650" fill="#1c2540" text-anchor="start" letter-spacing="0">Specials filter</text>
+<text x="444" y="531" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="10.3" font-weight="400" fill="#5a6684" text-anchor="start" letter-spacing="0">weekly · happy hr · brunch</text>
+<rect x="429" y="562" width="178" height="60" rx="7" ry="7" fill="#eef2fa" stroke="#cdd6e8" stroke-width="1.25"/>
+<rect x="429" y="562" width="5" height="60" rx="7" ry="7" fill="#c0202f"/>
+<text x="444" y="586" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="13" font-weight="650" fill="#1c2540" text-anchor="start" letter-spacing="0">Specials grid</text>
+<text x="444" y="605" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="10.3" font-weight="400" fill="#5a6684" text-anchor="start" letter-spacing="0">current specials</text>
+<rect x="429" y="636" width="178" height="60" rx="7" ry="7" fill="#eef2fa" stroke="#cdd6e8" stroke-width="1.25"/>
+<rect x="429" y="636" width="5" height="60" rx="7" ry="7" fill="#c0202f"/>
+<text x="444" y="660" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="13" font-weight="650" fill="#1c2540" text-anchor="start" letter-spacing="0">Restaurant grid</text>
+<text x="444" y="679" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="10.3" font-weight="400" fill="#5a6684" text-anchor="start" letter-spacing="0">8 local restaurants</text>
+<polyline points="518,474 518,482" fill="none" stroke="#9fb0d0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="413,482 413,666" fill="none" stroke="#9fb0d0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="518,482 413,482" fill="none" stroke="#9fb0d0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="413,518 429,518" fill="none" stroke="#9fb0d0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="413,592 429,592" fill="none" stroke="#9fb0d0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="413,666 429,666" fill="none" stroke="#9fb0d0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="623" y="488" width="178" height="60" rx="7" ry="7" fill="#eef2fa" stroke="#cdd6e8" stroke-width="1.25"/>
+<rect x="623" y="488" width="5" height="60" rx="7" ry="7" fill="#c0202f"/>
+<text x="638" y="512" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="13" font-weight="650" fill="#1c2540" text-anchor="start" letter-spacing="0">Retailers section</text>
+<text x="638" y="531" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="10.3" font-weight="400" fill="#5a6684" text-anchor="start" letter-spacing="0">109 businesses by type</text>
+<polyline points="712,474 712,482" fill="none" stroke="#9fb0d0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="607,482 607,518" fill="none" stroke="#9fb0d0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="712,482 607,482" fill="none" stroke="#9fb0d0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="607,518 623,518" fill="none" stroke="#9fb0d0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="886" y="418" width="178" height="60" rx="7" ry="7" fill="#f6f8fc" stroke="#cdd6e8" stroke-width="1.25"/>
+<rect x="886" y="418" width="5" height="60" rx="7" ry="7" fill="#243a6e"/>
+<text x="901" y="442" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="13" font-weight="650" fill="#1c2540" text-anchor="start" letter-spacing="0">Login</text>
+<text x="901" y="461" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="10.3" font-weight="400" fill="#5a6684" text-anchor="start" letter-spacing="0">password gate</text>
+<rect x="886" y="492" width="178" height="60" rx="7" ry="7" fill="#f6f8fc" stroke="#cdd6e8" stroke-width="1.25"/>
+<rect x="886" y="492" width="5" height="60" rx="7" ry="7" fill="#243a6e"/>
+<text x="901" y="516" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="13" font-weight="650" fill="#1c2540" text-anchor="start" letter-spacing="0">Dashboard</text>
+<text x="901" y="535" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="10.3" font-weight="400" fill="#5a6684" text-anchor="start" letter-spacing="0">business submission cards</text>
+<rect x="886" y="566" width="178" height="60" rx="7" ry="7" fill="#f6f8fc" stroke="#cdd6e8" stroke-width="1.25"/>
+<rect x="886" y="566" width="5" height="60" rx="7" ry="7" fill="#c0202f"/>
+<text x="901" y="590" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="13" font-weight="650" fill="#1c2540" text-anchor="start" letter-spacing="0">Approve / reject actions</text>
+<text x="901" y="609" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="10.3" font-weight="400" fill="#5a6684" text-anchor="start" letter-spacing="0">moderate submissions</text>
+<polyline points="975,404 975,412" fill="none" stroke="#9fb0d0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="870,412 870,596" fill="none" stroke="#9fb0d0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="975,412 870,412" fill="none" stroke="#9fb0d0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="870,448 886,448" fill="none" stroke="#9fb0d0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="870,522 886,522" fill="none" stroke="#9fb0d0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="870,596 886,596" fill="none" stroke="#9fb0d0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="1176" y="418" width="178" height="60" rx="7" ry="7" fill="#f6f8fc" stroke="#cdd6e8" stroke-width="1.25"/>
+<rect x="1176" y="418" width="5" height="60" rx="7" ry="7" fill="#243a6e"/>
+<text x="1191" y="442" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="13" font-weight="650" fill="#1c2540" text-anchor="start" letter-spacing="0">404 Page</text>
+<text x="1191" y="461" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="10.3" font-weight="400" fill="#5a6684" text-anchor="start" letter-spacing="0">shown for unknown routes</text>
+<polyline points="1265,404 1265,412" fill="none" stroke="#9fb0d0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="1160,412 1160,448" fill="none" stroke="#9fb0d0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="1265,412 1160,412" fill="none" stroke="#9fb0d0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="1160,448 1176,448" fill="none" stroke="#9fb0d0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="1466" y="418" width="178" height="60" rx="7" ry="7" fill="#fbeced" stroke="#cdd6e8" stroke-width="1.25"/>
+<rect x="1466" y="418" width="5" height="60" rx="7" ry="7" fill="#c0202f"/>
+<text x="1481" y="442" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="13" font-weight="650" fill="#1c2540" text-anchor="start" letter-spacing="0">Living Map</text>
+<text x="1481" y="461" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="10.3" font-weight="400" fill="#5a6684" text-anchor="start" letter-spacing="0">/living-map.html</text>
+<rect x="1466" y="492" width="178" height="60" rx="7" ry="7" fill="#fbeced" stroke="#cdd6e8" stroke-width="1.25"/>
+<rect x="1466" y="492" width="5" height="60" rx="7" ry="7" fill="#c0202f"/>
+<text x="1481" y="516" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="13" font-weight="650" fill="#1c2540" text-anchor="start" letter-spacing="0">Submit an Event</text>
+<text x="1481" y="535" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="10.3" font-weight="400" fill="#5a6684" text-anchor="start" letter-spacing="0">mailto link</text>
+<rect x="1466" y="566" width="178" height="60" rx="7" ry="7" fill="#fbeced" stroke="#cdd6e8" stroke-width="1.25"/>
+<rect x="1466" y="566" width="5" height="60" rx="7" ry="7" fill="#c0202f"/>
+<text x="1481" y="590" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="13" font-weight="650" fill="#1c2540" text-anchor="start" letter-spacing="0">Instagram</text>
+<text x="1481" y="609" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="10.3" font-weight="400" fill="#5a6684" text-anchor="start" letter-spacing="0">Chamber social</text>
+<rect x="1466" y="640" width="178" height="60" rx="7" ry="7" fill="#fbeced" stroke="#cdd6e8" stroke-width="1.25"/>
+<rect x="1466" y="640" width="5" height="60" rx="7" ry="7" fill="#c0202f"/>
+<text x="1481" y="664" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="13" font-weight="650" fill="#1c2540" text-anchor="start" letter-spacing="0">Facebook</text>
+<text x="1481" y="683" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="10.3" font-weight="400" fill="#5a6684" text-anchor="start" letter-spacing="0">community social</text>
+<polyline points="1555,404 1555,412" fill="none" stroke="#9fb0d0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="1450,412 1450,670" fill="none" stroke="#9fb0d0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="1555,412 1450,412" fill="none" stroke="#9fb0d0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="1450,448 1466,448" fill="none" stroke="#9fb0d0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="1450,522 1466,522" fill="none" stroke="#9fb0d0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="1450,596 1466,596" fill="none" stroke="#9fb0d0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<polyline points="1450,670 1466,670" fill="none" stroke="#9fb0d0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="40" y="1108" width="1640" height="96" rx="12" ry="12" fill="#14264f" stroke="#0d1a38" stroke-width="1.5" filter="url(#soft)"/>
+<text x="64" y="1142" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="15" font-weight="700" fill="#fff" text-anchor="start" letter-spacing="0">API endpoints (Express backend)</text>
+<text x="64" y="1163" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="12.5" font-weight="400" fill="#aebbd8" text-anchor="start" letter-spacing="0">In-memory storage · scraped events · restaurant data · business directory</text>
+<circle cx="68" cy="1180" r="3" fill="#c0202f"/>
+<text x="78" y="1184" font-family="'DejaVu Sans Mono', 'Fira Code', monospace" font-size="12.5" font-weight="400" fill="#dfe6f4" text-anchor="start" letter-spacing="0">GET /api/events</text>
+<circle cx="466" cy="1180" r="3" fill="#c0202f"/>
+<text x="476" y="1184" font-family="'DejaVu Sans Mono', 'Fira Code', monospace" font-size="12.5" font-weight="400" fill="#dfe6f4" text-anchor="start" letter-spacing="0">GET /api/restaurants</text>
+<circle cx="864" cy="1180" r="3" fill="#c0202f"/>
+<text x="874" y="1184" font-family="'DejaVu Sans Mono', 'Fira Code', monospace" font-size="12.5" font-weight="400" fill="#dfe6f4" text-anchor="start" letter-spacing="0">GET /api/specials</text>
+<circle cx="1262" cy="1180" r="3" fill="#c0202f"/>
+<text x="1272" y="1184" font-family="'DejaVu Sans Mono', 'Fira Code', monospace" font-size="12.5" font-weight="400" fill="#dfe6f4" text-anchor="start" letter-spacing="0">GET /api/businesses</text>
+<circle cx="68" cy="1200" r="3" fill="#c0202f"/>
+<text x="78" y="1204" font-family="'DejaVu Sans Mono', 'Fira Code', monospace" font-size="12.5" font-weight="400" fill="#dfe6f4" text-anchor="start" letter-spacing="0">POST /api/business-submissions</text>
+<circle cx="466" cy="1200" r="3" fill="#c0202f"/>
+<text x="476" y="1204" font-family="'DejaVu Sans Mono', 'Fira Code', monospace" font-size="12.5" font-weight="400" fill="#dfe6f4" text-anchor="start" letter-spacing="0">POST /api/admin/login</text>
+<circle cx="864" cy="1200" r="3" fill="#c0202f"/>
+<text x="874" y="1204" font-family="'DejaVu Sans Mono', 'Fira Code', monospace" font-size="12.5" font-weight="400" fill="#dfe6f4" text-anchor="start" letter-spacing="0">GET /api/admin/submissions</text>
+<circle cx="1262" cy="1200" r="3" fill="#c0202f"/>
+<text x="1272" y="1204" font-family="'DejaVu Sans Mono', 'Fira Code', monospace" font-size="12.5" font-weight="400" fill="#dfe6f4" text-anchor="start" letter-spacing="0">PATCH /api/admin/submissions/:id</text>
+<text x="1656" y="1224" font-family="Inter, 'DejaVu Sans', Arial, sans-serif" font-size="11.5" font-weight="400" fill="#8a97b5" text-anchor="end" letter-spacing="0">Generated diagram · not part of the running app</text>
+</svg>

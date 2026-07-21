@@ -1,0 +1,14 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "f58bFkA2MkpZzIRArfyby"
+uri = "file://attached_assets/sitemap/chappaqua-pulse-sitemap.png"
+type = "image"
+title = "Chappaqua Pulse — Site Map (PNG)"
+
+[[outputs]]
+id = "nsiPjojiKAlslFYxreDSX"
+uri = "file://attached_assets/sitemap/chappaqua-pulse-sitemap.svg"
+type = "image"
+title = "Chappaqua Pulse — Site Map (editable SVG)"
