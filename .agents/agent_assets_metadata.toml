@@ -12,3 +12,10 @@ id = "nsiPjojiKAlslFYxreDSX"
 uri = "file://attached_assets/sitemap/chappaqua-pulse-sitemap.svg"
 type = "image"
 title = "Chappaqua Pulse — Site Map (editable SVG)"
+
+[[outputs]]
+id = "BotgYUG4E7OrSKec9j_Ob"
+uri = "file://exports/chappaqua-pulse-code.txt"
+type = "text"
+title = "Chappaqua Pulse — Full Source Code"
+description = "All source code (frontend, backend, shared, configs, and the Living Map page) bundled into one text file, ready to paste into Claude or Gemini."
