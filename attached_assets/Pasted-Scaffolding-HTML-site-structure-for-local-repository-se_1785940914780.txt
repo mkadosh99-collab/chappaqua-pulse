@@ -1,0 +1,25 @@
+Scaffolding HTML site structure for local repository setup
+Scaffolding HTML site structure for local repository setup
+Cloning prompted for credentials — the repo is private (or not created yet), so I can't read or push to it from here. What I can do is hand you the exact contents to drop in, including a CLAUDE.md so that when you run claude in that directory it inherits every decision from this conversation instead of starting cold.
+
+
+Ran 2 commands, created a file, read a file
+Ran 2 commands, created a file, read a file
+Four files for the repo root — CLAUDE.md, index.html, README.md, plus a .gitignore (just .DS_Store, node_modules/, .env, .vscode/).
+
+bash
+cd chappaqua-pulse
+# drop the three files in, then:
+git add -A
+git commit -m "Initial site: brand system, week strip, living town map"
+git push
+claude
+Why CLAUDE.md matters more than the HTML here. Claude Code starts every session cold. Without it, the first thing it'll do is see 749 lines of hand-written CSS and SVG and "helpfully" refactor it into React, swap Outfit for Inter, and drop a stock-photo hero on top — because those are the defaults. The file locks in the things that are actually decisions:
+
+Exact hex tokens, with a note that category colors are load-bearing — they match the printed brochure legend 1:1, so a resident can hold the paper map next to their phone and see the same colors. That's a constraint no one would infer from the code.
+The four choices worth defending (no photo hero, one event module not two, --field orange reserved for the map, script face used sparingly) written down as choices, with reasons.
+A hard warning that the business listings are invented. That's the highest-risk item in the repo — an agent left alone with a half-empty directory will cheerfully generate forty more fake Chappaqua restaurants, and some of them will sound real enough to publish.
+A prioritized next-up list, so claude has somewhere to start other than "improve the code."
+Two things I couldn't verify: the repo prompted for credentials, so I don't know if it's private-and-empty or doesn't exist yet. If git clone fails for you too, create it on GitHub first. And if the repo already has a README or a different structure, reconcile before committing rather than letting these overwrite.
+
+One caution on step 2 of the next-up list — pulling the data out to data/*.json is the right call for handing editing to a non-developer, but it breaks opening index.html by double-click. Don't do it until the real directory data exists and someone other than you needs to edit it.
