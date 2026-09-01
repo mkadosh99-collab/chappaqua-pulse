@@ -67,7 +67,7 @@ export function Header({ activeTab = "events", onTabChange }: HeaderProps) {
             <div className="flex items-center gap-2">
               <a
                 href="mailto:hello@chappaquadaily.com?subject=Submit%20an%20Event"
-                className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-md text-sm font-semibold uppercase tracking-wide bg-destructive text-destructive-foreground hover:bg-destructive/90 transition-colors"
+                className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-md text-sm font-semibold uppercase tracking-wide bg-orange-600 text-white hover:bg-orange-700 dark:bg-orange-500 dark:hover:bg-orange-600 transition-colors"
                 data-testid="link-submit-cta"
               >
                 Submit an Event
