@@ -1,6 +1,6 @@
 import { CalendarDays, MapPin, Map as MapIcon, Search, Facebook, Instagram } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
-import heroImage from "@assets/chappaqua_hero.png";
+import heroImage from "@assets/chappaqua_station_hero.jpg";
 
 type TabKey = "events" | "specials" | "retailers";
 
