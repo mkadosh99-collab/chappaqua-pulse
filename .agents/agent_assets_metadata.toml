@@ -6,12 +6,14 @@ id = "f58bFkA2MkpZzIRArfyby"
 uri = "file://attached_assets/sitemap/chappaqua-pulse-sitemap.png"
 type = "image"
 title = "Chappaqua Pulse — Site Map (PNG)"
+logical_id = "5cc0626c-037a-408a-91fe-b9fc5d639543"
 
 [[outputs]]
 id = "nsiPjojiKAlslFYxreDSX"
 uri = "file://attached_assets/sitemap/chappaqua-pulse-sitemap.svg"
 type = "image"
 title = "Chappaqua Pulse — Site Map (editable SVG)"
+logical_id = "3b258a42-14a6-4c2e-ab97-ecdf3a44f7dd"
 
 [[outputs]]
 id = "BotgYUG4E7OrSKec9j_Ob"
@@ -19,3 +21,18 @@ uri = "file://exports/chappaqua-pulse-code.txt"
 type = "text"
 title = "Chappaqua Pulse — Full Source Code"
 description = "All source code (frontend, backend, shared, configs, and the Living Map page) bundled into one text file, ready to paste into Claude or Gemini."
+logical_id = "8890a1e7-9a56-4da3-a195-ed7fbdfccf19"
+
+[[outputs]]
+id = "KWejU8a6JfY4BcHDqF1J5"
+uri = "file://exports/chappaqua-pulse-opportunity-brief.pdf"
+type = "pdf"
+title = "Chappaqua Pulse — Opportunity Brief"
+description = "A polished one-page PDF summarizing the northern Westchester chamber comparison, six product gaps, and recommended rollout."
+logical_id = "31b65f7d-40a2-437a-81ac-52d07b5e6944"
+content_hash = "sha256:f9171490f9856d75f8fb79bba6cd9a7a39eb865fc7e9f8204d7566c45eb14fa1"
+size = 207523
+mtime_ms = 1789399730530
+storage_uri = "gcs://replit-rams-assets-picard/rams/assets/repl:0a2445ce-6f97-4b3c-89f8-2eea0c5065d4/31b65f7d-40a2-437a-81ac-52d07b5e6944/6f01fafe-f0bf-4413-8e3d-96dedd21acf1"
+storage_version_token = "1789399746878833"
+content_type = "application/pdf"
