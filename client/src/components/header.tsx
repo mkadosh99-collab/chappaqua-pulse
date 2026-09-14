@@ -132,27 +132,31 @@ export function Header({ activeTab = "events", onTabChange }: HeaderProps) {
         </nav>
       </header>
 
-       <div className="relative w-full h-[23rem] md:h-[31rem] overflow-hidden" data-testid="hero-banner">
+      {activeTab === "events" && (
+       <div className="relative w-full min-h-[34rem] md:min-h-[38rem] overflow-hidden" data-testid="hero-banner">
         <img
           src={heroImage}
-          alt="Downtown Chappaqua, New York"
-          className="w-full h-full object-cover"
+           alt="Chappaqua train station in autumn"
+           className="absolute inset-0 w-full h-full object-cover"
         />
-         <div className="absolute inset-0 bg-gradient-to-r from-primary/90 via-primary/55 to-primary/10" />
-         <div className="absolute inset-0 flex flex-col items-start justify-end pb-10 md:pb-16 max-w-7xl mx-auto px-5 md:px-8">
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/72 to-primary/20" />
+          <div className="relative min-h-[34rem] md:min-h-[38rem] flex flex-col items-start justify-end py-12 md:py-16 max-w-7xl mx-auto px-5 md:px-8">
            <p className="font-utility text-[10px] uppercase tracking-[.2em] text-secondary mb-3">Chappaqua, New York</p>
-           <h2 className="max-w-3xl text-4xl md:text-6xl lg:text-7xl font-bold text-primary-foreground tracking-tight leading-[.95]" data-testid="text-hero-title">
-             The good stuff,<br />close to home.
+            <h2 className="max-w-4xl text-3xl md:text-5xl lg:text-6xl font-bold text-primary-foreground tracking-tight leading-[1.02]" data-testid="text-hero-title">
+              Your place to find it all.
           </h2>
-           <p className="mt-5 text-base md:text-lg text-primary-foreground/90 max-w-xl">
-            Everything happening around town — events, dining, and the places that make our community.
+            <p className="mt-5 text-base md:text-xl text-primary-foreground/95 max-w-3xl leading-relaxed">
+              We know how easy it is to miss what&apos;s happening in Chappaqua. From Town events and restaurant specials
+              to new retailer openings and what&apos;s happening around town on any given day, this is your place to find
+              it all—and be part of our thriving community.
           </p>
            <div className="mt-6 flex items-center gap-1.5 text-primary-foreground/85 text-sm">
             <MapPin className="w-4 h-4" />
             <span className="font-medium uppercase tracking-widest text-xs">Chappaqua · Millwood · New Castle</span>
           </div>
         </div>
-      </div>
+       </div>
+      )}
     </>
   );
 }

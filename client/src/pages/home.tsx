@@ -10,7 +10,6 @@ import { EventGridSkeleton } from "@/components/event-skeleton";
 import { EmptyState } from "@/components/empty-state";
 import { ErrorState } from "@/components/error-state";
 import { Footer } from "@/components/footer";
-import { CalendarDays, UtensilsCrossed, Map as MapIcon, Megaphone, Users, Store } from "lucide-react";
 import { RetailersSection } from "@/components/retailers-section";
 import { RestaurantCard } from "@/components/restaurant-card";
 import { SpecialCard } from "@/components/special-card";
@@ -205,56 +204,8 @@ export default function Home() {
     <div className="min-h-screen bg-background flex flex-col">
       <Header activeTab={activeTab} onTabChange={handleTabChange} />
 
-      <section className="relative z-10 -mt-1 bg-card border-b border-border">
-        <div className="max-w-7xl mx-auto px-5 md:px-8 py-10 md:py-14">
-          <div className="grid lg:grid-cols-[.8fr_1.2fr] gap-5 lg:gap-16 items-start">
-            <p className="font-utility text-[10px] font-medium uppercase tracking-[.17em] text-secondary">In the neighborhood</p>
-            <div>
-          <h3 className="font-editorial text-3xl md:text-5xl font-bold text-primary tracking-tight leading-[1.03]">
-            Your town, with better timing.
-          </h3>
-          <p className="mt-4 text-base md:text-lg text-muted-foreground max-w-3xl leading-relaxed">
-            We know how easy it is to miss what's happening in Chappaqua. From the Library and town meetings to brunch
-            specials, the farmers market, and the next show at CPAC — Chappaqua Pulse pulls it all together so
-            you can show up, support local, and feel connected.
-          </p>
-            </div>
-          </div>
-        </div>
-        <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 border-l border-t border-border">
-          <button onClick={() => handleTabChange("events")} className="group flex min-h-28 flex-col items-start justify-between gap-2 py-5 px-4 border-r border-b border-border bg-background hover:bg-accent transition-colors text-left" data-testid="tile-discover-events">
-            <CalendarDays className="w-7 h-7" />
-            <span className="text-xs font-bold uppercase tracking-wide">Discover Events</span>
-          </button>
-          <button onClick={() => handleTabChange("specials")} className="group flex min-h-28 flex-col items-start justify-between gap-2 py-5 px-4 border-r border-b border-border bg-secondary text-secondary-foreground hover:brightness-95 transition-colors text-left" data-testid="tile-dine-local">
-            <UtensilsCrossed className="w-7 h-7" />
-            <span className="text-xs font-bold uppercase tracking-wide">Dine Local</span>
-          </button>
-          <button onClick={() => handleTabChange("retailers")} className="group flex min-h-28 flex-col items-start justify-between gap-2 py-5 px-4 border-r border-b border-border bg-background hover:bg-accent transition-colors text-left" data-testid="tile-shop-local">
-            <Store className="w-7 h-7" />
-            <span className="text-xs font-bold uppercase tracking-wide">Shop Local</span>
-          </button>
-          <a href="/living-map.html" className="group flex min-h-28 flex-col items-start justify-between gap-2 py-5 px-4 border-r border-b border-border bg-primary text-primary-foreground hover:brightness-110 transition-colors text-left" data-testid="tile-explore-map">
-            <MapIcon className="w-7 h-7" />
-            <span className="text-xs font-bold uppercase tracking-wide">Explore the Map</span>
-          </a>
-          <a href="mailto:hello@chappaquadaily.com?subject=Submit%20an%20Event" className="group flex min-h-28 flex-col items-start justify-between gap-2 py-5 px-4 border-r border-b border-border bg-background hover:bg-accent transition-colors text-left" data-testid="tile-promote-event">
-            <Megaphone className="w-7 h-7" />
-            <span className="text-xs font-bold uppercase tracking-wide">Promote an Event</span>
-          </a>
-          <a href="https://www.instagram.com/chappaqua_millwood_chamber/" target="_blank" rel="noopener noreferrer" className="group flex min-h-28 flex-col items-start justify-between gap-2 py-5 px-4 border-r border-b border-border bg-background hover:bg-accent transition-colors text-left" data-testid="tile-connect-chamber">
-            <Users className="w-7 h-7" />
-            <span className="text-xs font-bold uppercase tracking-wide">Community</span>
-          </a>
-          <a href="mailto:hello@chappaquadaily.com?subject=Submit%20an%20Event" className="group flex min-h-28 flex-col items-start justify-between gap-2 py-5 px-4 border-r border-b border-border bg-background hover:bg-accent transition-colors text-left" data-testid="tile-list-business">
-            <Store className="w-7 h-7" />
-            <span className="text-xs font-bold uppercase tracking-wide">List a Business</span>
-          </a>
-        </div>
-      </section>
-
       <main className="flex-1">
-        <div className="max-w-7xl mx-auto px-5 md:px-8 pt-10 md:pt-14">
+        <div className="max-w-7xl mx-auto px-5 md:px-8 pt-8 md:pt-10">
 
           {activeTab === "events" && (
             <>
