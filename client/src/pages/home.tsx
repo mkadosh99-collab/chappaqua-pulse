@@ -205,63 +205,71 @@ export default function Home() {
     <div className="min-h-screen bg-background flex flex-col">
       <Header activeTab={activeTab} onTabChange={handleTabChange} />
 
-      {/* Chamber-style benefits / discover tiles */}
-      <section className="bg-card border-b border-border">
-        <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 py-10 md:py-14 text-center">
-          <h3 className="text-2xl md:text-3xl font-semibold text-primary tracking-tight">
-            Everything around town, in one place.
+      <section className="relative z-10 -mt-1 bg-card border-b border-border">
+        <div className="max-w-7xl mx-auto px-5 md:px-8 py-10 md:py-14">
+          <div className="grid lg:grid-cols-[.8fr_1.2fr] gap-5 lg:gap-16 items-start">
+            <p className="font-utility text-[10px] font-medium uppercase tracking-[.17em] text-secondary">In the neighborhood</p>
+            <div>
+          <h3 className="font-editorial text-3xl md:text-5xl font-bold text-primary tracking-tight leading-[1.03]">
+            Your town, with better timing.
           </h3>
-          <p className="mt-3 text-base md:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+          <p className="mt-4 text-base md:text-lg text-muted-foreground max-w-3xl leading-relaxed">
             We know how easy it is to miss what's happening in Chappaqua. From the Library and town meetings to brunch
             specials, the farmers market, and the next show at CPAC — Chappaqua Pulse pulls it all together so
             you can show up, support local, and feel connected.
           </p>
+            </div>
+          </div>
         </div>
-        <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 border-t border-border">
-          <button onClick={() => handleTabChange("events")} className="group flex flex-col items-center justify-center gap-2 py-6 px-3 bg-secondary text-secondary-foreground hover:bg-secondary/85 transition-colors text-center" data-testid="tile-discover-events">
+        <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 border-l border-t border-border">
+          <button onClick={() => handleTabChange("events")} className="group flex min-h-28 flex-col items-start justify-between gap-2 py-5 px-4 border-r border-b border-border bg-background hover:bg-accent transition-colors text-left" data-testid="tile-discover-events">
             <CalendarDays className="w-7 h-7" />
-            <span className="text-xs md:text-sm font-semibold uppercase tracking-wide">Discover Events</span>
+            <span className="text-xs font-bold uppercase tracking-wide">Discover Events</span>
           </button>
-          <button onClick={() => handleTabChange("specials")} className="group flex flex-col items-center justify-center gap-2 py-6 px-3 bg-primary text-primary-foreground hover:bg-primary/90 transition-colors text-center" data-testid="tile-dine-local">
+          <button onClick={() => handleTabChange("specials")} className="group flex min-h-28 flex-col items-start justify-between gap-2 py-5 px-4 border-r border-b border-border bg-secondary text-secondary-foreground hover:brightness-95 transition-colors text-left" data-testid="tile-dine-local">
             <UtensilsCrossed className="w-7 h-7" />
-            <span className="text-xs md:text-sm font-semibold uppercase tracking-wide">Dine Local</span>
+            <span className="text-xs font-bold uppercase tracking-wide">Dine Local</span>
           </button>
-          <button onClick={() => handleTabChange("retailers")} className="group flex flex-col items-center justify-center gap-2 py-6 px-3 bg-secondary text-secondary-foreground hover:bg-secondary/85 transition-colors text-center" data-testid="tile-shop-local">
+          <button onClick={() => handleTabChange("retailers")} className="group flex min-h-28 flex-col items-start justify-between gap-2 py-5 px-4 border-r border-b border-border bg-background hover:bg-accent transition-colors text-left" data-testid="tile-shop-local">
             <Store className="w-7 h-7" />
-            <span className="text-xs md:text-sm font-semibold uppercase tracking-wide">Shop Local</span>
+            <span className="text-xs font-bold uppercase tracking-wide">Shop Local</span>
           </button>
-          <a href="/living-map.html" className="group flex flex-col items-center justify-center gap-2 py-6 px-3 bg-secondary text-secondary-foreground hover:bg-secondary/85 transition-colors text-center" data-testid="tile-explore-map">
+          <a href="/living-map.html" className="group flex min-h-28 flex-col items-start justify-between gap-2 py-5 px-4 border-r border-b border-border bg-primary text-primary-foreground hover:brightness-110 transition-colors text-left" data-testid="tile-explore-map">
             <MapIcon className="w-7 h-7" />
-            <span className="text-xs md:text-sm font-semibold uppercase tracking-wide">Explore the Map</span>
+            <span className="text-xs font-bold uppercase tracking-wide">Explore the Map</span>
           </a>
-          <a href="mailto:hello@chappaquadaily.com?subject=Submit%20an%20Event" className="group flex flex-col items-center justify-center gap-2 py-6 px-3 bg-primary text-primary-foreground hover:bg-primary/90 transition-colors text-center" data-testid="tile-promote-event">
+          <a href="mailto:hello@chappaquadaily.com?subject=Submit%20an%20Event" className="group flex min-h-28 flex-col items-start justify-between gap-2 py-5 px-4 border-r border-b border-border bg-background hover:bg-accent transition-colors text-left" data-testid="tile-promote-event">
             <Megaphone className="w-7 h-7" />
-            <span className="text-xs md:text-sm font-semibold uppercase tracking-wide">Promote an Event</span>
+            <span className="text-xs font-bold uppercase tracking-wide">Promote an Event</span>
           </a>
-          <a href="https://www.instagram.com/chappaqua_millwood_chamber/" target="_blank" rel="noopener noreferrer" className="group flex flex-col items-center justify-center gap-2 py-6 px-3 bg-secondary text-secondary-foreground hover:bg-secondary/85 transition-colors text-center" data-testid="tile-connect-chamber">
+          <a href="https://www.instagram.com/chappaqua_millwood_chamber/" target="_blank" rel="noopener noreferrer" className="group flex min-h-28 flex-col items-start justify-between gap-2 py-5 px-4 border-r border-b border-border bg-background hover:bg-accent transition-colors text-left" data-testid="tile-connect-chamber">
             <Users className="w-7 h-7" />
-            <span className="text-xs md:text-sm font-semibold uppercase tracking-wide">Chamber & Community</span>
+            <span className="text-xs font-bold uppercase tracking-wide">Community</span>
           </a>
-          <a href="mailto:hello@chappaquadaily.com?subject=Submit%20an%20Event" className="group flex flex-col items-center justify-center gap-2 py-6 px-3 bg-primary text-primary-foreground hover:bg-primary/90 transition-colors text-center" data-testid="tile-list-business">
+          <a href="mailto:hello@chappaquadaily.com?subject=Submit%20an%20Event" className="group flex min-h-28 flex-col items-start justify-between gap-2 py-5 px-4 border-r border-b border-border bg-background hover:bg-accent transition-colors text-left" data-testid="tile-list-business">
             <Store className="w-7 h-7" />
-            <span className="text-xs md:text-sm font-semibold uppercase tracking-wide">List Your Business</span>
+            <span className="text-xs font-bold uppercase tracking-wide">List a Business</span>
           </a>
         </div>
       </section>
 
       <main className="flex-1">
-        <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 pt-8">
+        <div className="max-w-7xl mx-auto px-5 md:px-8 pt-10 md:pt-14">
 
           {activeTab === "events" && (
             <>
-              <div className="flex justify-end pt-2">
-                <div className="inline-flex rounded-md border border-border p-0.5 bg-muted/50" role="tablist" aria-label="Event view">
+              <div className="flex items-end justify-between gap-4 pb-5">
+                <div>
+                  <p className="font-utility text-[10px] uppercase tracking-[.17em] text-secondary">What&apos;s on</p>
+                  <h2 className="mt-2 font-editorial text-3xl md:text-4xl font-bold leading-none">Plan the week ahead</h2>
+                </div>
+                <div className="inline-flex rounded-full border border-border p-1 bg-card" role="tablist" aria-label="Event view">
                   <button
                     type="button"
                     onClick={() => setEventsView("week")}
                     className={`px-3 py-1.5 text-sm font-medium rounded-[5px] transition-colors ${
                       eventsView === "week"
-                        ? "bg-card text-foreground shadow-sm"
+                        ? "bg-primary text-primary-foreground shadow-sm"
                         : "text-muted-foreground hover:text-foreground"
                     }`}
                     data-testid="button-view-week"
@@ -273,7 +281,7 @@ export default function Home() {
                     onClick={() => setEventsView("month")}
                     className={`px-3 py-1.5 text-sm font-medium rounded-[5px] transition-colors ${
                       eventsView === "month"
-                        ? "bg-card text-foreground shadow-sm"
+                        ? "bg-primary text-primary-foreground shadow-sm"
                         : "text-muted-foreground hover:text-foreground"
                     }`}
                     data-testid="button-view-month"
@@ -358,8 +366,9 @@ export default function Home() {
 
           {activeTab === "specials" && (
             <>
-              <div className="py-6">
-                <h2 className="text-2xl font-semibold tracking-tight mb-2">
+              <div className="pb-7">
+                <p className="font-utility text-[10px] uppercase tracking-[.17em] text-secondary mb-2">Around the table</p>
+                <h2 className="font-editorial text-3xl md:text-4xl font-bold tracking-tight mb-2">
                   Dining & Specials
                 </h2>
                 <p className="text-muted-foreground">
@@ -400,7 +409,7 @@ export default function Home() {
               {!specialsLoading && !specialsError && filteredSpecials.length > 0 && (
                 <div className="space-y-12">
                   <section>
-                    <h3 className="text-lg font-semibold mb-4">Current Specials</h3>
+                    <h3 className="font-editorial text-2xl font-bold mb-5">Current Specials</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                       {filteredSpecials.map((special) => (
                         <SpecialCard 
@@ -414,7 +423,7 @@ export default function Home() {
 
                   {restaurantsData?.restaurants && restaurantsData.restaurants.length > 0 && (
                     <section>
-                      <h3 className="text-lg font-semibold mb-4">Local Restaurants</h3>
+                    <h3 className="font-editorial text-2xl font-bold mb-5">Local Restaurants</h3>
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {restaurantsData.restaurants.map((restaurant) => (
                           <RestaurantCard 

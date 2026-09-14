@@ -60,10 +60,10 @@ export function SpecialCard({ special, restaurantName }: SpecialCardProps) {
 
   return (
     <Card 
-      className="group overflow-visible hover-elevate transition-all duration-200"
+      className="guide-card group overflow-visible"
       data-testid={`card-special-${special.id}`}
     >
-      <CardContent className="p-6">
+      <CardContent className="p-5 md:p-6">
         <div className="flex flex-col gap-4">
           <div className="flex items-start justify-between gap-3 flex-wrap">
             <Badge 
@@ -83,7 +83,7 @@ export function SpecialCard({ special, restaurantName }: SpecialCardProps) {
 
           <div>
             <h3 
-              className="text-lg font-medium leading-snug mb-1"
+              className="font-editorial text-xl font-bold leading-[1.12] mb-1"
               data-testid={`text-title-${special.id}`}
             >
               {special.title}
@@ -103,7 +103,7 @@ export function SpecialCard({ special, restaurantName }: SpecialCardProps) {
             )}
           </div>
 
-          <div className="flex flex-col gap-2 text-sm">
+          <div className="flex flex-col gap-2 border-t paper-rule pt-4 text-sm">
             {dateRange && (
               <div className="flex items-center gap-2 text-muted-foreground">
                 <Calendar className="w-4 h-4 shrink-0" />

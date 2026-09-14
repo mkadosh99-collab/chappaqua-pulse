@@ -33,10 +33,10 @@ export function RestaurantCard({ restaurant, onViewSpecials }: RestaurantCardPro
 
   return (
     <Card 
-      className="group overflow-visible hover-elevate transition-all duration-200"
+      className="guide-card group overflow-visible"
       data-testid={`card-restaurant-${restaurant.id}`}
     >
-      <CardContent className="p-6">
+      <CardContent className="p-5 md:p-6">
         <div className="flex flex-col gap-4">
           <div className="flex items-start justify-between gap-3 flex-wrap">
             <Badge 
@@ -56,7 +56,7 @@ export function RestaurantCard({ restaurant, onViewSpecials }: RestaurantCardPro
 
           <div>
             <h3 
-              className="text-lg font-medium leading-snug mb-2"
+              className="font-editorial text-xl font-bold leading-[1.12] mb-2"
               data-testid={`text-name-${restaurant.id}`}
             >
               {restaurant.name}
@@ -71,7 +71,7 @@ export function RestaurantCard({ restaurant, onViewSpecials }: RestaurantCardPro
             )}
           </div>
 
-          <div className="flex flex-col gap-2 text-sm">
+          <div className="flex flex-col gap-2 border-t paper-rule pt-4 text-sm">
             {restaurant.address && (
               <div className="flex items-center gap-2 text-muted-foreground">
                 <MapPin className="w-4 h-4 shrink-0" />

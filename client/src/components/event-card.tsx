@@ -18,10 +18,10 @@ export function EventCard({ event }: EventCardProps) {
 
   return (
     <Card 
-      className="group overflow-visible hover-elevate transition-all duration-200"
+      className="guide-card group overflow-visible"
       data-testid={`card-event-${event.id}`}
     >
-      <CardContent className="p-6">
+      <CardContent className="p-5 md:p-6">
         <div className="flex flex-col gap-4">
           <div className="flex items-start justify-between gap-3">
             <Badge 
@@ -36,7 +36,7 @@ export function EventCard({ event }: EventCardProps) {
 
           <div>
             <h3 
-              className="text-lg font-medium leading-snug line-clamp-2 mb-2"
+              className="font-editorial text-xl font-bold leading-[1.12] line-clamp-2 mb-2"
               data-testid={`text-title-${event.id}`}
             >
               {event.title}
@@ -51,7 +51,7 @@ export function EventCard({ event }: EventCardProps) {
             )}
           </div>
 
-          <div className="flex flex-col gap-2 text-sm">
+          <div className="flex flex-col gap-2 border-t paper-rule pt-4 text-sm">
             <div className="flex items-center gap-2 text-muted-foreground">
               <Calendar className="w-4 h-4 shrink-0" />
               <span data-testid={`text-date-${event.id}`}>

@@ -12,10 +12,9 @@ interface HeaderProps {
 export function Header({ activeTab = "events", onTabChange }: HeaderProps) {
   return (
     <>
-      {/* Top utility bar */}
-      <div className="bg-primary text-primary-foreground border-b border-primary/40">
+      <div className="bg-primary text-primary-foreground">
         <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-9 text-xs">
+          <div className="flex items-center justify-between h-10 text-[10px] font-medium uppercase tracking-[.14em]">
             <div className="flex items-center gap-3">
               <a href="https://www.instagram.com/chappaqua.ny/" target="_blank" rel="noopener noreferrer" aria-label="Chappaqua.NY on Instagram" className="opacity-80 hover:opacity-100 transition-opacity" data-testid="link-social-ig-chappaqua">
                 <Instagram className="w-4 h-4" />
@@ -24,7 +23,7 @@ export function Header({ activeTab = "events", onTabChange }: HeaderProps) {
                 <Facebook className="w-4 h-4" />
               </a>
             </div>
-            <div className="flex items-center gap-4 font-medium tracking-wide uppercase">
+            <div className="flex items-center gap-3">
               <a href="/living-map.html" className="opacity-90 hover:opacity-100" data-testid="link-utility-map">Living Map</a>
               <span className="opacity-40" aria-hidden="true">|</span>
               <a href="mailto:hello@chappaquadaily.com?subject=Submit%20an%20Event" className="opacity-90 hover:opacity-100" data-testid="link-utility-submit">Submit an Event</a>
@@ -33,20 +32,19 @@ export function Header({ activeTab = "events", onTabChange }: HeaderProps) {
         </div>
       </div>
 
-      {/* Brand band */}
-      <header className="sticky top-0 z-50 bg-primary text-primary-foreground shadow-md">
+      <header className="sticky top-0 z-50 border-b border-primary/15 bg-background/95 text-foreground backdrop-blur">
         <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
-          <div className="flex items-center justify-between gap-4 py-4">
+          <div className="flex items-center justify-between gap-4 py-3">
             <div className="flex items-center gap-3">
-              <div className="flex items-center justify-center w-12 h-12 rounded-md bg-primary-foreground/10 border border-primary-foreground/20">
-                <CalendarDays className="w-6 h-6" />
+              <div className="flex items-center justify-center w-11 h-11 rounded-full bg-secondary text-primary">
+                <CalendarDays className="w-5 h-5" />
               </div>
               <div>
-                <h1 className="text-xl md:text-2xl font-semibold tracking-tight" data-testid="text-app-title">
+                <h1 className="font-editorial text-2xl md:text-3xl font-bold leading-none tracking-tight" data-testid="text-app-title">
                   Chappaqua Pulse
                 </h1>
-                <p className="text-[11px] md:text-xs uppercase tracking-widest opacity-80">
-                  Discover · Dine · Connect
+                <p className="mt-1 font-utility text-[9px] uppercase tracking-[.16em] text-muted-foreground">
+                  The local edit
                 </p>
               </div>
             </div>
@@ -55,10 +53,10 @@ export function Header({ activeTab = "events", onTabChange }: HeaderProps) {
               <label className="relative w-full block">
                 <span className="sr-only">Search events, restaurants, and places</span>
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground/60 pointer-events-none" aria-hidden="true" />
-                <input
+                 <input
                   type="search"
                   placeholder="Use Cmd/Ctrl+F to search this page..."
-                  className="w-full h-10 pl-9 pr-4 rounded-md text-sm text-foreground bg-background border border-primary-foreground/20 focus:outline-none focus:ring-2 focus:ring-secondary"
+                   className="w-full h-10 pl-9 pr-4 rounded-full text-sm text-foreground bg-muted/60 border border-border focus:outline-none focus:ring-2 focus:ring-secondary"
                   data-testid="input-global-search"
                 />
               </label>
@@ -67,7 +65,7 @@ export function Header({ activeTab = "events", onTabChange }: HeaderProps) {
             <div className="flex items-center gap-2">
               <a
                 href="mailto:hello@chappaquadaily.com?subject=Submit%20an%20Event"
-                className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-md text-sm font-semibold uppercase tracking-wide bg-orange-600 text-white hover:bg-orange-700 dark:bg-orange-500 dark:hover:bg-orange-600 transition-colors"
+                className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wide bg-secondary text-secondary-foreground hover:brightness-95 transition-colors"
                 data-testid="link-submit-cta"
               >
                 Submit an Event
@@ -77,17 +75,16 @@ export function Header({ activeTab = "events", onTabChange }: HeaderProps) {
           </div>
         </div>
 
-        {/* Nav band */}
-        <nav className="bg-secondary text-secondary-foreground border-t border-primary-foreground/10">
+        <nav className="border-t border-border bg-card">
           <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
             <ul className="flex items-center gap-1 overflow-x-auto">
               <li>
                 <button
                   onClick={() => onTabChange?.("events")}
-                  className={`px-4 md:px-6 py-3 text-sm font-semibold uppercase tracking-wide whitespace-nowrap border-b-4 transition-colors ${
+                    className={`px-4 md:px-6 py-3 text-xs font-bold uppercase tracking-[.08em] whitespace-nowrap border-b-2 transition-colors ${
                     activeTab === "events"
-                      ? "border-primary-foreground bg-secondary-foreground/10"
-                      : "border-transparent hover:bg-secondary-foreground/10"
+                      ? "border-secondary text-primary"
+                      : "border-transparent text-muted-foreground hover:text-primary"
                   }`}
                   data-testid="link-nav-events"
                 >
@@ -123,7 +120,7 @@ export function Header({ activeTab = "events", onTabChange }: HeaderProps) {
               <li>
                 <a
                   href="/living-map.html"
-                  className="inline-flex items-center gap-1.5 px-4 md:px-6 py-3 text-sm font-semibold uppercase tracking-wide whitespace-nowrap border-b-4 border-transparent hover:bg-secondary-foreground/10 transition-colors"
+                  className="inline-flex items-center gap-1.5 px-4 md:px-6 py-3 text-xs font-bold uppercase tracking-[.08em] whitespace-nowrap border-b-2 border-transparent text-muted-foreground hover:text-primary transition-colors"
                   data-testid="link-nav-living-map"
                 >
                   <MapIcon className="w-4 h-4" />
@@ -135,22 +132,22 @@ export function Header({ activeTab = "events", onTabChange }: HeaderProps) {
         </nav>
       </header>
 
-      {/* Hero with title overlay */}
-      <div className="relative w-full h-56 md:h-72 lg:h-96 overflow-hidden" data-testid="hero-banner">
+       <div className="relative w-full h-[23rem] md:h-[31rem] overflow-hidden" data-testid="hero-banner">
         <img
           src={heroImage}
           alt="Downtown Chappaqua, New York"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-primary/55" />
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
-          <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white tracking-tight drop-shadow-lg uppercase" data-testid="text-hero-title">
-            Your Weekly Chappaqua
+         <div className="absolute inset-0 bg-gradient-to-r from-primary/90 via-primary/55 to-primary/10" />
+         <div className="absolute inset-0 flex flex-col items-start justify-end pb-10 md:pb-16 max-w-7xl mx-auto px-5 md:px-8">
+           <p className="font-utility text-[10px] uppercase tracking-[.2em] text-secondary mb-3">Chappaqua, New York</p>
+           <h2 className="max-w-3xl text-4xl md:text-6xl lg:text-7xl font-bold text-primary-foreground tracking-tight leading-[.95]" data-testid="text-hero-title">
+             The good stuff,<br />close to home.
           </h2>
-          <p className="mt-3 text-base md:text-xl text-white/95 max-w-2xl drop-shadow-md">
+           <p className="mt-5 text-base md:text-lg text-primary-foreground/90 max-w-xl">
             Everything happening around town — events, dining, and the places that make our community.
           </p>
-          <div className="mt-5 flex items-center gap-1.5 text-white/90 text-sm">
+           <div className="mt-6 flex items-center gap-1.5 text-primary-foreground/85 text-sm">
             <MapPin className="w-4 h-4" />
             <span className="font-medium uppercase tracking-widest text-xs">Chappaqua · Millwood · New Castle</span>
           </div>
