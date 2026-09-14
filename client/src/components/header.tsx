@@ -143,7 +143,7 @@ export function Header({ activeTab = "events", onTabChange }: HeaderProps) {
           <div className="relative min-h-[34rem] md:min-h-[38rem] flex flex-col items-start justify-end py-12 md:py-16 max-w-7xl mx-auto px-5 md:px-8">
            <p className="font-utility text-[10px] uppercase tracking-[.2em] text-secondary mb-3">Chappaqua, New York</p>
             <h2 className="max-w-4xl text-3xl md:text-5xl lg:text-6xl font-bold text-primary-foreground tracking-tight leading-[1.02]" data-testid="text-hero-title">
-              Where Chappaqua comes together.
+              A town where everyone knows your name.
           </h2>
             <p className="mt-5 text-base md:text-xl text-primary-foreground/95 max-w-3xl leading-relaxed">
               We know how easy it is to miss what&apos;s happening in Chappaqua. From Town events and restaurant specials
