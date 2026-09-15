@@ -196,19 +196,30 @@ export default function Home() {
     setSelectedSpecialType(null);
   };
 
+  const handleToday = () => {
+    setActiveTab("events");
+    setEventsView("week");
+    setWeekStart(startOfWeek(new Date(), { weekStartsOn: 0 }));
+    setSelectedCategory(null);
+    setSelectedSpecialType(null);
+    window.setTimeout(() => {
+      document.getElementById("today-schedule")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 0);
+  };
+
   const lastUpdated = activeTab === "events" 
     ? (eventsView === "month" ? monthData?.lastUpdated : eventsData?.lastUpdated)
     : specialsData?.lastUpdated || restaurantsData?.lastUpdated;
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <Header activeTab={activeTab} onTabChange={handleTabChange} />
+       <Header activeTab={activeTab} onTabChange={handleTabChange} onToday={handleToday} />
 
       <main className="flex-1">
         <div className="max-w-7xl mx-auto px-5 md:px-8 pt-8 md:pt-10">
 
           {activeTab === "events" && (
-            <>
+            <section id="today-schedule">
               <div className="flex items-end justify-between gap-4 pb-5">
                 <div>
                   <p className="font-utility text-[10px] uppercase tracking-[.17em] text-secondary">What&apos;s on</p>
@@ -310,7 +321,7 @@ export default function Home() {
                   )}
                 </>
               )}
-            </>
+            </section>
           )}
 
           {activeTab === "retailers" && <RetailersSection />}
