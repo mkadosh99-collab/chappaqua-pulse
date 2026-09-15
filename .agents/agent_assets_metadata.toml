@@ -50,3 +50,17 @@ mtime_ms = 1789505556307
 storage_uri = "gcs://replit-rams-assets-picard/rams/assets/repl:0a2445ce-6f97-4b3c-89f8-2eea0c5065d4/2f9c89b6-f15c-4610-9258-d831b93e9111/c4c79833-b5a0-4dab-af61-9ddcb13f74dc"
 storage_version_token = "1789505560663019"
 content_type = "image/jpeg"
+
+[[outputs]]
+id = "AReNgtGxy6ah44GLIErnn"
+uri = "file://attached_assets/generated_videos/chappaqua-pulse-promo-final.mp4"
+type = "video"
+title = "Chappaqua Pulse — Animated Promo"
+description = "8-second vertical promo, 720 × 1280. Station footage, animated feature titles, Urbanist and Poppins typography, and your orange/light-grey branding. Silent MP4, ready for social media music."
+logical_id = "40c020be-98a9-4c6f-839a-3d1fac67de89"
+content_hash = "sha256:a667caaa953f5331429125217a64e33a8c8962d85a779481511f36a64bf6a6d1"
+size = 951291
+mtime_ms = 1789506528235
+storage_uri = "gcs://replit-rams-assets-picard/rams/assets/repl:0a2445ce-6f97-4b3c-89f8-2eea0c5065d4/40c020be-98a9-4c6f-839a-3d1fac67de89/6a76e305-00ed-48ae-af40-1cc0155c17a1"
+storage_version_token = "1789506540590483"
+content_type = "video/mp4"
