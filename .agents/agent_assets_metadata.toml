@@ -36,3 +36,17 @@ mtime_ms = 1789399730530
 storage_uri = "gcs://replit-rams-assets-picard/rams/assets/repl:0a2445ce-6f97-4b3c-89f8-2eea0c5065d4/31b65f7d-40a2-437a-81ac-52d07b5e6944/6f01fafe-f0bf-4413-8e3d-96dedd21acf1"
 storage_version_token = "1789399746878833"
 content_type = "application/pdf"
+
+[[outputs]]
+id = "CPI9N-YH2DUJsnhRwHV2z"
+uri = "file://screenshots/updated-homepage.jpg"
+type = "image"
+title = "Updated Chappaqua Pulse homepage"
+description = "Current running site with Urbanist headings, Poppins body copy, orange buttons, and light-grey, white, and black styling."
+logical_id = "2f9c89b6-f15c-4610-9258-d831b93e9111"
+content_hash = "sha256:9780414d029cd79ef60be7fada3a5af5c5acad091d26561b7f5ae00225a03ea0"
+size = 209888
+mtime_ms = 1789505556307
+storage_uri = "gcs://replit-rams-assets-picard/rams/assets/repl:0a2445ce-6f97-4b3c-89f8-2eea0c5065d4/2f9c89b6-f15c-4610-9258-d831b93e9111/c4c79833-b5a0-4dab-af61-9ddcb13f74dc"
+storage_version_token = "1789505560663019"
+content_type = "image/jpeg"
