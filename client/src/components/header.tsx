@@ -12,7 +12,7 @@ interface HeaderProps {
 export function Header({ activeTab = "events", onTabChange }: HeaderProps) {
   return (
     <>
-      <div className="bg-primary text-primary-foreground">
+      <div className="bg-black text-white dark:bg-black dark:text-white">
         <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
           <div className="flex items-center justify-between h-10 text-[10px] font-medium uppercase tracking-[.14em]">
             <div className="flex items-center gap-3">
@@ -94,10 +94,10 @@ export function Header({ activeTab = "events", onTabChange }: HeaderProps) {
               <li>
                 <button
                   onClick={() => onTabChange?.("specials")}
-                  className={`px-4 md:px-6 py-3 text-sm font-semibold uppercase tracking-wide whitespace-nowrap border-b-4 transition-colors ${
+                  className={`px-4 md:px-6 py-3 text-sm font-semibold uppercase tracking-wide whitespace-nowrap border-b-2 transition-colors ${
                     activeTab === "specials"
-                      ? "border-primary-foreground bg-secondary-foreground/10"
-                      : "border-transparent hover:bg-secondary-foreground/10"
+                      ? "border-secondary text-primary"
+                      : "border-transparent text-muted-foreground hover:text-primary"
                   }`}
                   data-testid="link-nav-dining"
                 >
@@ -107,10 +107,10 @@ export function Header({ activeTab = "events", onTabChange }: HeaderProps) {
               <li>
                 <button
                   onClick={() => onTabChange?.("retailers")}
-                  className={`px-4 md:px-6 py-3 text-sm font-semibold uppercase tracking-wide whitespace-nowrap border-b-4 transition-colors ${
+                  className={`px-4 md:px-6 py-3 text-sm font-semibold uppercase tracking-wide whitespace-nowrap border-b-2 transition-colors ${
                     activeTab === "retailers"
-                      ? "border-primary-foreground bg-secondary-foreground/10"
-                      : "border-transparent hover:bg-secondary-foreground/10"
+                      ? "border-secondary text-primary"
+                      : "border-transparent text-muted-foreground hover:text-primary"
                   }`}
                   data-testid="link-nav-retailers"
                 >
@@ -139,7 +139,7 @@ export function Header({ activeTab = "events", onTabChange }: HeaderProps) {
            alt="Chappaqua train station in autumn"
            className="absolute inset-0 w-full h-full object-cover"
         />
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/72 to-primary/20" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/[0.78] via-black/[0.52] to-black/[0.18]" />
           <div className="relative min-h-[34rem] md:min-h-[38rem] flex flex-col items-start justify-end py-12 md:py-16 max-w-7xl mx-auto px-5 md:px-8">
            <p className="font-utility text-[10px] uppercase tracking-[.2em] text-secondary mb-3">Chappaqua, New York</p>
             <h2 className="max-w-4xl text-3xl md:text-5xl lg:text-6xl font-bold text-primary-foreground tracking-tight leading-[1.02]" data-testid="text-hero-title">

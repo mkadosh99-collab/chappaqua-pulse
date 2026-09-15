@@ -4,27 +4,30 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Chappaqua-Millwood Living Map · Regional v2</title>
-<style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Urbanist:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --paper: #FBF7EA;
-    --cream: #F5F1E6;
-    --deep-cream: #EDE5CE;
-    --rule: #D4B576;
-    --rule-soft: #E5D4A1;
+    --paper: #ffffff;
+    --cream: #eaeaee;
+    --deep-cream: #eaeaee;
+    --rule: #c9c9cf;
+    --rule-soft: #dbdbe0;
 
-    --forest: #2D5016;
-    --pine: #4A7C2C;
-    --moss: #97C459;
+    --forest: #000000;
+    --pine: #ed7e32;
+    --moss: #ed7e32;
 
-    --gold: #B8893B;
-    --gold-soft: #D4B576;
-    --gold-bg: #F5E8C8;
+    --gold: #ed7e32;
+    --gold-soft: #ed7e32;
+    --gold-bg: #fbe5d6;
 
-    --ink: #1A1A1A;
-    --gray: #6B6963;
-    --soft: #B4B0A1;
+    --ink: #000000;
+    --gray: #55555b;
+    --soft: #85858d;
 
     --cat-food: #C56B17;
     --cat-food-bg: #FCE9D0;
@@ -44,10 +47,13 @@
 
   html, body {
     height: 100%;
-    font-family: -apple-system, BlinkMacSystemFont, "Inter", system-ui, sans-serif;
+    font-family: "Poppins", sans-serif;
     background: var(--cream);
     color: var(--ink);
     -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, .panel-title, .panel-empty-title, .stat-num {
+    font-family: "Urbanist", sans-serif;
   }
 
   .app {
@@ -74,7 +80,7 @@
     display: flex; align-items: center; justify-content: center;
     font-weight: 600; font-size: 11px; letter-spacing: 1.5px;
   }
-  .brand-name { font-size: 19px; font-weight: 600; color: var(--forest); letter-spacing: -0.2px; }
+  .brand-name { font-family: "Urbanist", sans-serif; font-size: 21px; font-weight: 800; color: var(--forest); letter-spacing: -0.5px; }
   .brand-tag { font-size: 11.5px; color: var(--gray); margin-top: 3px; letter-spacing: 0.2px; }
 
   .search-wrap { position: relative; min-width: 240px; flex: 0 0 280px; }
@@ -84,7 +90,7 @@
     background: var(--paper); font-size: 13.5px;
     font-family: inherit; color: var(--ink);
   }
-  #search:focus { outline: none; border-color: var(--forest); box-shadow: 0 0 0 3px rgba(45, 80, 22, 0.1); }
+  #search:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(237, 126, 50, 0.18); }
 
   .layer-bar {
     padding: 14px 4px;
@@ -106,9 +112,9 @@
     cursor: pointer; transition: all 0.15s;
     display: inline-flex; align-items: center; gap: 6px;
   }
-  .layer-btn:hover { border-color: var(--forest); color: var(--forest); background: var(--paper); }
-  .layer-btn.active { background: var(--forest); color: var(--paper); border-color: var(--forest); }
-  .layer-btn.active:hover { background: var(--pine); }
+  .layer-btn:hover { border-color: var(--gold); color: var(--ink); background: var(--paper); }
+  .layer-btn.active { background: var(--gold); color: var(--ink); border-color: var(--gold); }
+  .layer-btn.active:hover { background: #f09452; }
   .layer-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
 
   .main {
@@ -146,7 +152,7 @@
     position: absolute;
     bottom: 12px; left: 12px;
     width: 280px;
-    background: rgba(251, 247, 234, 0.94);
+    background: rgba(255, 255, 255, 0.94);
     border: 1px solid var(--rule);
     border-radius: 6px;
     padding: 10px 14px 11px;
@@ -165,7 +171,7 @@
   .legend {
     position: absolute;
     top: 12px; right: 12px;
-    background: rgba(251, 247, 234, 0.94);
+    background: rgba(255, 255, 255, 0.94);
     border: 1px solid var(--rule);
     border-radius: 6px;
     padding: 10px 14px;
@@ -262,11 +268,11 @@
 
   /* Story layer styling */
   .story-poly { transition: opacity 0.2s; }
-  .story-poly-farm { fill: #B8893B; stroke: #8B6E2E; stroke-width: 1.5; stroke-dasharray: 6 4; opacity: 0.18; }
-  .story-poly-quaker { fill: #4A7C2C; stroke: #2D5016; stroke-width: 1.5; stroke-dasharray: 6 4; opacity: 0.20; }
-  .story-line-railroad { stroke: #2D5016; stroke-width: 3.5; stroke-linecap: round; stroke-dasharray: 1 8; opacity: 0.7; }
-  .story-line-tour { stroke: #B8893B; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; fill: none; opacity: 0.85; }
-  .story-line-tour-spur { stroke: #B8893B; stroke-width: 2.5; stroke-linecap: round; stroke-dasharray: 6 5; fill: none; opacity: 0.7; }
+  .story-poly-farm { fill: var(--gold); stroke: var(--gold); stroke-width: 1.5; stroke-dasharray: 6 4; opacity: 0.18; }
+  .story-poly-quaker { fill: var(--gold); stroke: var(--ink); stroke-width: 1.5; stroke-dasharray: 6 4; opacity: 0.20; }
+  .story-line-railroad { stroke: var(--ink); stroke-width: 3.5; stroke-linecap: round; stroke-dasharray: 1 8; opacity: 0.7; }
+  .story-line-tour { stroke: var(--gold); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; fill: none; opacity: 0.85; }
+  .story-line-tour-spur { stroke: var(--gold); stroke-width: 2.5; stroke-linecap: round; stroke-dasharray: 6 5; fill: none; opacity: 0.7; }
   .story-label { fill: var(--gray); font-size: 11px; font-style: italic; pointer-events: none; }
   .story-poly-label-farm { fill: #7a5a1f; font-weight: 600; font-size: 12px; }
   .story-poly-label-quaker { fill: #355010; font-weight: 600; font-size: 12px; }
@@ -345,69 +351,69 @@
       <svg id="map" viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid meet">
         <defs>
           <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-            <path d="M2 1L8 5L2 9" fill="none" stroke="#B8893B" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M2 1L8 5L2 9" fill="none" stroke="#ed7e32" stroke-width="1.5" stroke-linecap="round"/>
           </marker>
         </defs>
 
                 <g id="basemap">
           <!-- Saw Mill River corridor (winds N-S through Westchester) -->
           <path d="M 555 0 Q 562 100 565 230 Q 568 320 562 410 Q 555 510 460 540 Q 350 580 270 605 Q 200 625 160 700"
-                stroke="#A8C8DE" stroke-width="3.5" fill="none" stroke-linecap="round" opacity="0.55"/>
-          <text x="558" y="60" fill="#558AB0" font-size="9.5" font-style="italic" opacity="0.7">Saw Mill River</text>
+                stroke="#9a9aa1" stroke-width="3.5" fill="none" stroke-linecap="round" opacity="0.55"/>
+           <text x="558" y="60" fill="#55555b" font-size="9.5" font-style="italic" opacity="0.7">Saw Mill River</text>
 
           <!-- Metro-North Harlem Line (N-S through downtown, terminates at canvas edges) -->
-          <line x1="595" y1="0" x2="595" y2="700" stroke="#5F5E5A" stroke-width="1.8" opacity="0.55"/>
-          <text x="600" y="55" fill="#5F5E5A" font-size="8.5" font-style="italic" opacity="0.55">Metro-North · Harlem Line</text>
+           <line x1="595" y1="0" x2="595" y2="700" stroke="#55555b" stroke-width="1.8" opacity="0.55"/>
+           <text x="600" y="55" fill="#55555b" font-size="8.5" font-style="italic" opacity="0.55">Metro-North · Harlem Line</text>
 
           <!-- Major roads: gold tinted strokes -->
           <!-- Route 120 / King Street: E-W through downtown, extends east toward Quaker Hill -->
-          <path d="M 80 360 Q 350 350 637 348 Q 750 320 843 246" stroke="#D4B576" stroke-width="14" fill="none" stroke-linecap="round" opacity="0.5"/>
+           <path d="M 80 360 Q 350 350 637 348 Q 750 320 843 246" stroke="#ed7e32" stroke-width="14" fill="none" stroke-linecap="round" opacity="0.35"/>
           <!-- N Bedford Rd / Rt 117: downtown to Crossing -->
-          <path d="M 637 348 Q 600 240 549 104" stroke="#D4B576" stroke-width="12" fill="none" stroke-linecap="round" opacity="0.5"/>
+           <path d="M 637 348 Q 600 240 549 104" stroke="#ed7e32" stroke-width="12" fill="none" stroke-linecap="round" opacity="0.35"/>
           <!-- Saw Mill River Rd / Rt 9A: downtown south to Millwood -->
-          <path d="M 562 410 Q 480 470 380 530 Q 290 565 250 580" stroke="#D4B576" stroke-width="11" fill="none" stroke-linecap="round" opacity="0.5"/>
+           <path d="M 562 410 Q 480 470 380 530 Q 290 565 250 580" stroke="#ed7e32" stroke-width="11" fill="none" stroke-linecap="round" opacity="0.35"/>
           <!-- Millwood Rd: E-W through Millwood -->
-          <path d="M 165 580 Q 245 575 325 590" stroke="#D4B576" stroke-width="10" fill="none" stroke-linecap="round" opacity="0.5"/>
+           <path d="M 165 580 Q 245 575 325 590" stroke="#ed7e32" stroke-width="10" fill="none" stroke-linecap="round" opacity="0.35"/>
           <!-- Quaker Road: NW of downtown to Friends Meeting -->
-          <path d="M 600 270 Q 555 215 520 160" stroke="#D4B576" stroke-width="9" fill="none" stroke-linecap="round" opacity="0.45"/>
+           <path d="M 600 270 Q 555 215 520 160" stroke="#ed7e32" stroke-width="9" fill="none" stroke-linecap="round" opacity="0.35"/>
 
           <!-- Cluster region patches (soft tinted backgrounds for orientation) -->
           <g id="cluster-patches">
-            <rect x="494" y="68" width="110" height="72" rx="9" fill="#F5E8C8" stroke="#D4B576" stroke-width="0.7" opacity="0.55"/>
-            <rect x="557" y="278" width="160" height="140" rx="11" fill="#FBF7EA" stroke="#B8893B" stroke-width="0.9" opacity="0.6"/>
-            <rect x="799" y="223" width="88"  height="46" rx="7" fill="#F5E8C8" stroke="#D4B576" stroke-width="0.7" opacity="0.55"/>
-            <rect x="180" y="534" width="140" height="90" rx="9" fill="#F5E8C8" stroke="#D4B576" stroke-width="0.7" opacity="0.55"/>
+            <rect x="494" y="68" width="110" height="72" rx="9" fill="#fbe5d6" stroke="#ed7e32" stroke-width="0.7" opacity="0.55"/>
+            <rect x="557" y="278" width="160" height="140" rx="11" fill="#ffffff" stroke="#ed7e32" stroke-width="0.9" opacity="0.6"/>
+            <rect x="799" y="223" width="88"  height="46" rx="7" fill="#fbe5d6" stroke="#ed7e32" stroke-width="0.7" opacity="0.55"/>
+            <rect x="180" y="534" width="140" height="90" rx="9" fill="#fbe5d6" stroke="#ed7e32" stroke-width="0.7" opacity="0.55"/>
           </g>
 
           <!-- Cluster labels (above each patch) -->
           <g id="cluster-labels">
-            <text x="549" y="56" text-anchor="middle" font-size="11.5" font-weight="600" fill="#5C4F1F">CHAPPAQUA CROSSING</text>
-            <text x="549" y="68" text-anchor="middle" font-size="9" font-style="italic" fill="#8A8578">Modern retail · 480 N Bedford</text>
+            <text x="549" y="56" text-anchor="middle" font-size="11.5" font-weight="600" fill="#000000">CHAPPAQUA CROSSING</text>
+            <text x="549" y="68" text-anchor="middle" font-size="9" font-style="italic" fill="#55555b">Modern retail · 480 N Bedford</text>
 
-            <text x="637" y="266" text-anchor="middle" font-size="12.5" font-weight="600" fill="#5C4F1F">CHAPPAQUA DOWNTOWN</text>
-            <text x="637" y="278" text-anchor="middle" font-size="9" font-style="italic" fill="#8A8578">Historic core · 1846 depot · 66 retailers</text>
+            <text x="637" y="266" text-anchor="middle" font-size="12.5" font-weight="600" fill="#000000">CHAPPAQUA DOWNTOWN</text>
+            <text x="637" y="278" text-anchor="middle" font-size="9" font-style="italic" fill="#55555b">Historic core · 1846 depot · 66 retailers</text>
 
-            <text x="843" y="211" text-anchor="middle" font-size="11.5" font-weight="600" fill="#5C4F1F">QUAKER HILL CENTER</text>
-            <text x="843" y="223" text-anchor="middle" font-size="9" font-style="italic" fill="#8A8578">Shopping center · 7 retailers</text>
+            <text x="843" y="211" text-anchor="middle" font-size="11.5" font-weight="600" fill="#000000">QUAKER HILL CENTER</text>
+            <text x="843" y="223" text-anchor="middle" font-size="9" font-style="italic" fill="#55555b">Shopping center · 7 retailers</text>
 
-            <text x="250" y="522" text-anchor="middle" font-size="11.5" font-weight="600" fill="#5C4F1F">MILLWOOD HAMLET</text>
-            <text x="250" y="534" text-anchor="middle" font-size="9" font-style="italic" fill="#8A8578">Saw Mill River corridor · 19 retailers</text>
+            <text x="250" y="522" text-anchor="middle" font-size="11.5" font-weight="600" fill="#000000">MILLWOOD HAMLET</text>
+            <text x="250" y="534" text-anchor="middle" font-size="9" font-style="italic" fill="#55555b">Saw Mill River corridor · 19 retailers</text>
           </g>
 
           <!-- Greeley Park (subtle tint inside downtown) -->
           <ellipse cx="618" cy="338" rx="22" ry="20" fill="#DEECCB" opacity="0.55"/>
 
           <!-- Road labels (subtle) -->
-          <text x="195" y="356" fill="#8B6F2A" font-size="10" font-style="italic" opacity="0.7">Route 120 · King St</text>
-          <text x="555" y="240" fill="#8B6F2A" font-size="9.5" font-style="italic" opacity="0.65">N Bedford Rd</text>
-          <text x="445" y="498" fill="#8B6F2A" font-size="9.5" font-style="italic" opacity="0.65">Rt 9A</text>
-          <text x="333" y="582" fill="#8B6F2A" font-size="9" font-style="italic" opacity="0.65">Millwood Rd</text>
+           <text x="195" y="356" fill="#ed7e32" font-size="10" font-style="italic" opacity="0.7">Route 120 · King St</text>
+           <text x="555" y="240" fill="#ed7e32" font-size="9.5" font-style="italic" opacity="0.65">N Bedford Rd</text>
+           <text x="445" y="498" fill="#ed7e32" font-size="9.5" font-style="italic" opacity="0.65">Rt 9A</text>
+           <text x="333" y="582" fill="#ed7e32" font-size="9" font-style="italic" opacity="0.65">Millwood Rd</text>
 
           <!-- Compass -->
           <g transform="translate(940, 78)">
-            <circle r="22" fill="#FBF7EA" stroke="#D4B576" stroke-width="1"/>
-            <path d="M 0 -14 L 4 0 L 0 12 L -4 0 Z" fill="#B8893B"/>
-            <text y="-25" text-anchor="middle" fill="#5F5E5A" font-size="10" font-weight="600">N</text>
+            <circle r="22" fill="#ffffff" stroke="#ed7e32" stroke-width="1"/>
+            <path d="M 0 -14 L 4 0 L 0 12 L -4 0 Z" fill="#ed7e32"/>
+            <text y="-25" text-anchor="middle" fill="#000000" font-size="10" font-weight="600">N</text>
           </g>
 
           <!-- Scale bar -->
@@ -416,7 +422,7 @@
             <line x1="0" y1="-4" x2="0" y2="4" stroke="#5F5E5A" stroke-width="1.5"/>
             <line x1="80" y1="-4" x2="80" y2="4" stroke="#5F5E5A" stroke-width="1.5"/>
             <text x="40" y="18" text-anchor="middle" fill="#5F5E5A" font-size="9.5">approx. 1/2 mile</text>
-            <text x="40" y="32" text-anchor="middle" fill="#8A8578" font-size="8.5" font-style="italic">stylized projection · not to true scale</text>
+            <text x="40" y="32" text-anchor="middle" fill="#55555b" font-size="8.5" font-style="italic">stylized projection · not to true scale</text>
           </g>
         </g>
 
@@ -434,7 +440,7 @@
 
                 <g id="layer-railroad" class="layer hidden">
           <line x1="595" y1="0" x2="595" y2="700" class="story-line-railroad"/>
-          <text x="608" y="660" fill="#2D5016" font-size="10" font-style="italic" font-weight="600">1846 · Harlem Line</text>
+          <text x="608" y="660" fill="#000000" font-size="10" font-style="italic" font-weight="600">1846 · Harlem Line</text>
         </g>
 
                 <g id="layer-tour" class="layer hidden">
@@ -931,15 +937,15 @@ function showTooltip(e, place) {
   if (place.kind === 'landmark') {
     const labelMap = { greeley: 'Greeley Heritage', quaker: 'Quaker founding', civic: 'Civic landmark' };
     label = labelMap[place.lm_kind] || 'Landmark';
-    const lmColors = { greeley: '#D4B576', quaker: '#9DBC72', civic: '#7AA8D6' };
-    color = lmColors[place.lm_kind] || '#D4B576';
+    const lmColors = { greeley: '#ed7e32', quaker: '#ed7e32', civic: '#7AA8D6' };
+    color = lmColors[place.lm_kind] || '#ed7e32';
   } else if (place.kind === 'retailer' && place.category) {
     label = place.category;
     const catBgMap = {
       food: '#F5C8A0', apparel: '#A4C4F0', specialty: '#C8B0E8',
       home: '#B6D78F', service: '#D6C8AA', wellness: '#F0B8CC', civic: '#9DD0DE'
     };
-    color = catBgMap[place.category] || '#FBF7EA';
+    color = catBgMap[place.category] || '#ffffff';
   }
   tip.innerHTML = `<div class="map-tooltip-name">${place.name}</div>${label ? `<div class="map-tooltip-cat" style="color: ${color}">${label}</div>` : ''}`;
   tip.classList.add('visible');
