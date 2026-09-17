@@ -10,6 +10,7 @@ import { EventGridSkeleton } from "@/components/event-skeleton";
 import { EmptyState } from "@/components/empty-state";
 import { ErrorState } from "@/components/error-state";
 import { Footer } from "@/components/footer";
+import { GetInvolved } from "@/components/get-involved";
 import { RetailersSection } from "@/components/retailers-section";
 import { RestaurantCard } from "@/components/restaurant-card";
 import { SpecialCard } from "@/components/special-card";
@@ -403,6 +404,7 @@ export default function Home() {
         </div>
       </main>
 
+      <GetInvolved />
       <Footer lastUpdated={lastUpdated ? new Date(lastUpdated) : undefined} />
     </div>
   );

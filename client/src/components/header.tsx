@@ -29,6 +29,7 @@ export function Header({ activeTab = "events", onTabChange, onToday }: HeaderPro
               <button onClick={() => selectTab("specials")} className="pulse-nav-link" data-testid="link-nav-dining">Dining &amp; Specials</button>
               <button onClick={() => selectTab("retailers")} className="pulse-nav-link" data-testid="link-nav-retailers">Retailers</button>
               <a href="/living-map.html" className="pulse-nav-link" data-testid="link-nav-living-map">Living Map</a>
+              <a href="#get-involved" className="pulse-nav-link" data-testid="link-nav-get-involved">Get involved</a>
               <a href="mailto:hello@chappaquadaily.com?subject=Submit%20an%20Event" className="pulse-nav-link">Submit event</a>
             </nav>
             <div className="flex items-center gap-2">
@@ -41,6 +42,7 @@ export function Header({ activeTab = "events", onTabChange, onToday }: HeaderPro
             </div>
           </div>
           {menuOpen && <nav className="grid border-t border-black/10 py-3 lg:hidden" aria-label="Mobile navigation">
+            <a href="#get-involved" onClick={() => setMenuOpen(false)} className="pulse-mobile-link">Get involved</a>
             <button onClick={() => selectTab("events")} className="pulse-mobile-link">Events</button><button onClick={() => selectTab("specials")} className="pulse-mobile-link">Dining &amp; Specials</button><button onClick={() => selectTab("retailers")} className="pulse-mobile-link">Retailers</button><a href="/living-map.html" className="pulse-mobile-link">Living Map</a><a href="mailto:hello@chappaquadaily.com?subject=Submit%20an%20Event" className="pulse-mobile-link">Submit event</a>
           </nav>}
         </div>
