@@ -1,11 +1,11 @@
 import { Badge } from "@/components/ui/badge";
 import { eventCategories, type EventCategory } from "@shared/schema";
-import { 
-  Building2, 
-  BookOpen, 
-  Theater, 
-  TreePine, 
-  GraduationCap, 
+import {
+  Building2,
+  BookOpen,
+  Theater,
+  TreePine,
+  GraduationCap,
   Landmark,
   LayoutGrid,
   Trophy,
@@ -20,43 +20,43 @@ interface CategoryFilterProps {
 }
 
 const categoryConfig: Record<EventCategory, { label: string; icon: typeof Building2; color: string }> = {
-  community: { 
-    label: "Community", 
+  community: {
+    label: "Community",
     icon: Building2,
     color: "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300"
   },
-  library: { 
-    label: "Library", 
+  library: {
+    label: "Library",
     icon: BookOpen,
     color: "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300"
   },
-  "performing-arts": { 
-    label: "Arts", 
+  "performing-arts": {
+    label: "Arts",
     icon: Theater,
     color: "bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300"
   },
-  recreation: { 
-    label: "Recreation", 
+  recreation: {
+    label: "Recreation",
     icon: TreePine,
     color: "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300"
   },
-  schools: { 
-    label: "Schools", 
+  schools: {
+    label: "Schools",
     icon: GraduationCap,
     color: "bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-300"
   },
-  government: { 
-    label: "Government", 
+  government: {
+    label: "Government",
     icon: Landmark,
     color: "bg-slate-100 text-slate-700 dark:bg-slate-800/60 dark:text-slate-300"
   },
-  sports: { 
-    label: "Sports", 
+  sports: {
+    label: "Sports",
     icon: Trophy,
     color: "bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-300"
   },
-  holiday: { 
-    label: "Holiday", 
+  holiday: {
+    label: "Holiday",
     icon: PartyPopper,
     color: "bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300"
   },
@@ -88,13 +88,13 @@ export function CategoryFilter({
           <span className="ml-1 text-xs opacity-70">({categoryCounts.all})</span>
         )}
       </Badge>
-      
+
       {eventCategories.map((category) => {
         const config = categoryConfig[category];
         const Icon = config.icon;
         const isSelected = selectedCategory === category;
         const count = categoryCounts[category];
-        
+
         return (
           <Badge
             key={category}

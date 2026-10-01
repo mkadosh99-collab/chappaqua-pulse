@@ -20,9 +20,9 @@ export function Footer({ lastUpdated }: FooterProps) {
               </span>
             )}
           </div>
-          
+
           <div className="flex flex-wrap items-center gap-4">
-            <a 
+            <a
               href="https://www.mynewcastleny.gov/calendar.aspx"
               target="_blank"
               rel="noopener noreferrer"
@@ -32,7 +32,7 @@ export function Footer({ lastUpdated }: FooterProps) {
               Town of New Castle
               <ExternalLink className="w-3 h-3" />
             </a>
-            <a 
+            <a
               href="https://www.chappaqualibrary.org/events"
               target="_blank"
               rel="noopener noreferrer"
@@ -42,7 +42,7 @@ export function Footer({ lastUpdated }: FooterProps) {
               Chappaqua Library
               <ExternalLink className="w-3 h-3" />
             </a>
-            <a 
+            <a
               href="https://www.chappaquaschools.org"
               target="_blank"
               rel="noopener noreferrer"

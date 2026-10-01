@@ -10,7 +10,7 @@ export function RestaurantSkeleton() {
             <Skeleton className="h-6 w-24 rounded-full" />
             <Skeleton className="h-5 w-12" />
           </div>
-          
+
           <div>
             <Skeleton className="h-6 w-3/4 mb-2" />
             <Skeleton className="h-4 w-full" />
@@ -56,7 +56,7 @@ export function SpecialSkeleton() {
             <Skeleton className="h-6 w-28 rounded-full" />
             <Skeleton className="h-5 w-16" />
           </div>
-          
+
           <div>
             <Skeleton className="h-6 w-3/4 mb-2" />
             <Skeleton className="h-4 w-1/2 mb-2" />

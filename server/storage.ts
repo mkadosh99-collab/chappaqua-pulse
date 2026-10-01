@@ -1,6 +1,6 @@
-import { 
-  type Event, 
-  type InsertEvent, 
+import {
+  type Event,
+  type InsertEvent,
   type EventCategory,
   type Restaurant,
   type InsertRestaurant,
@@ -26,13 +26,13 @@ export interface IStorage {
   clearEvents(): Promise<void>;
   getLastUpdated(): Date | null;
   setLastUpdated(date: Date): void;
-  
+
   getRestaurants(): Promise<Restaurant[]>;
   getRestaurantById(id: string): Promise<Restaurant | undefined>;
   createRestaurant(restaurant: InsertRestaurant): Promise<Restaurant>;
   createManyRestaurants(restaurants: InsertRestaurant[]): Promise<Restaurant[]>;
   clearRestaurants(): Promise<void>;
-  
+
   getSpecials(): Promise<Special[]>;
   getSpecialsByRestaurant(restaurantId: string): Promise<Special[]>;
   getSpecialsByType(type: SpecialType): Promise<Special[]>;
@@ -40,7 +40,7 @@ export interface IStorage {
   createSpecial(special: InsertSpecial): Promise<Special>;
   createManySpecials(specials: InsertSpecial[]): Promise<Special[]>;
   clearSpecials(): Promise<void>;
-  
+
   getRestaurantsWithSpecials(): Promise<RestaurantWithSpecials[]>;
 
   createBusinessSubmission(submission: InsertBusinessSubmission): Promise<BusinessSubmission>;
@@ -210,7 +210,7 @@ export class MemStorage implements IStorage {
   async getRestaurantsWithSpecials(): Promise<RestaurantWithSpecials[]> {
     const restaurants = await this.getRestaurants();
     const result: RestaurantWithSpecials[] = [];
-    
+
     for (const restaurant of restaurants) {
       const specials = await this.getSpecialsByRestaurant(restaurant.id);
       result.push({
@@ -218,7 +218,7 @@ export class MemStorage implements IStorage {
         specials,
       });
     }
-    
+
     return result;
   }
 
