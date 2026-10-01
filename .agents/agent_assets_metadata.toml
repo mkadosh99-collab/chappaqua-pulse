@@ -64,3 +64,17 @@ mtime_ms = 1789506528235
 storage_uri = "gcs://replit-rams-assets-picard/rams/assets/repl:0a2445ce-6f97-4b3c-89f8-2eea0c5065d4/40c020be-98a9-4c6f-839a-3d1fac67de89/6a76e305-00ed-48ae-af40-1cc0155c17a1"
 storage_version_token = "1789506540590483"
 content_type = "video/mp4"
+
+[[outputs]]
+id = "rE_VW2tkddVAeVzU7xpmd"
+uri = "file://exports/chappaqua-pulse-project.zip"
+type = "unspecified"
+title = "Download Chappaqua Pulse project"
+description = "Current source code and assets (40.4 MB), including Get involved and LOCAL-SETUP.md instructions. Secrets, dependencies, and database records are excluded."
+logical_id = "cb2fec5c-eb7f-4d90-91e3-45feb7f86f9a"
+content_hash = "sha256:300c24b8aa84a8e0117a262b61836ca7f1cd8635a948f71c1a5e048f0a9e8478"
+size = 42345457
+mtime_ms = 1790878998797
+storage_uri = "gcs://replit-rams-assets-picard/rams/assets/repl:0a2445ce-6f97-4b3c-89f8-2eea0c5065d4/cb2fec5c-eb7f-4d90-91e3-45feb7f86f9a/4cbf3988-4b55-4052-9a83-165186e41c24"
+storage_version_token = "1790879012154844"
+content_type = "application/octet-stream"
