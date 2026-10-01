@@ -95,9 +95,9 @@ export function getChappaquaRestaurants(): InsertRestaurant[] {
 export function getRestaurantSpecials(restaurantIds: Map<string, string>): InsertSpecial[] {
   const today = new Date();
   const weekStart = startOfWeek(today, { weekStartsOn: 0 });
-  
+
   const specials: InsertSpecial[] = [];
-  
+
   const bassoId = restaurantIds.get("Basso by PXK");
   if (bassoId) {
     specials.push(
@@ -121,7 +121,7 @@ export function getRestaurantSpecials(restaurantIds: Map<string, string>): Inser
       }
     );
   }
-  
+
   const kittleId = restaurantIds.get("The Kittle House Inn & Restaurant");
   if (kittleId) {
     specials.push(
@@ -146,7 +146,7 @@ export function getRestaurantSpecials(restaurantIds: Map<string, string>): Inser
       }
     );
   }
-  
+
   const ibizaId = restaurantIds.get("Ibiza Kitchen");
   if (ibizaId) {
     specials.push(
@@ -170,7 +170,7 @@ export function getRestaurantSpecials(restaurantIds: Map<string, string>): Inser
       }
     );
   }
-  
+
   const quakerId = restaurantIds.get("Quaker Hill Tavern");
   if (quakerId) {
     specials.push(
@@ -194,7 +194,7 @@ export function getRestaurantSpecials(restaurantIds: Map<string, string>): Inser
       }
     );
   }
-  
+
   const leJardinId = restaurantIds.get("Le Jardin du Roi");
   if (leJardinId) {
     specials.push(
@@ -219,7 +219,7 @@ export function getRestaurantSpecials(restaurantIds: Map<string, string>): Inser
       }
     );
   }
-  
+
   const biaId = restaurantIds.get("Bia American Kitchen");
   if (biaId) {
     specials.push(
@@ -243,7 +243,7 @@ export function getRestaurantSpecials(restaurantIds: Map<string, string>): Inser
       }
     );
   }
-  
+
   const mentorsId = restaurantIds.get("Mentor's Mediterranean Steakhouse");
   if (mentorsId) {
     specials.push(
@@ -268,7 +268,7 @@ export function getRestaurantSpecials(restaurantIds: Map<string, string>): Inser
       }
     );
   }
-  
+
   const deliId = restaurantIds.get("Chappaqua Deli & Cafe");
   if (deliId) {
     specials.push(
@@ -283,6 +283,6 @@ export function getRestaurantSpecials(restaurantIds: Map<string, string>): Inser
       }
     );
   }
-  
+
   return specials;
 }

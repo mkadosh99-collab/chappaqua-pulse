@@ -38,13 +38,13 @@ export function SpecialsFilter({
           <span className="ml-1 text-xs opacity-70">({typeCounts.all})</span>
         )}
       </Badge>
-      
+
       {specialTypes.map((type) => {
         const config = typeConfig[type];
         const Icon = config.icon;
         const isSelected = selectedType === type;
         const count = typeCounts[type];
-        
+
         return (
           <Badge
             key={type}

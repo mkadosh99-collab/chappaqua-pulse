@@ -163,7 +163,7 @@ async function scrapeTownCalendar(): Promise<ScrapedEvent[]> {
       const tooltipId = $el.closest("[id^='showDetails']").attr("id") || "";
       const parentDiv = $el.closest(".monthItem");
       const timeEl = parentDiv.find("dd").first();
-      const timeStr = timeEl.text().trim().replace(/\u2009/g, " ");
+      const timeStr = timeEl.text().trim().replace(/ /g, " ");
 
       const locationName = $el.find("[itemprop='location'] [itemprop='name']").text().trim() ||
         $el.find(".name p").text().trim();
@@ -257,7 +257,7 @@ async function scrapeRecreationEvents(): Promise<ScrapedEvent[]> {
             let location = "";
             $el.find("dt").each((_, dt) => {
               const label = $(dt).text().trim().toLowerCase();
-              const dd = $(dt).next("dd").text().replace(/[\u2009\u00a0]/g, " ").trim();
+              const dd = $(dt).next("dd").text().replace(/[  ]/g, " ").trim();
               if (label.startsWith("when")) time = dd;
               else if (label.startsWith("location")) location = dd;
             });

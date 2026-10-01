@@ -46,12 +46,12 @@ const REFRESH_INTERVAL_MS = 60 * 60 * 1000; // 1 hour
 async function refreshData() {
   try {
     console.log(`[${new Date().toISOString()}] Scheduled refresh starting...`);
-    
+
     const events = await scrapeAllEvents();
     await storage.clearEvents();
     await storage.createManyEvents(events);
     console.log(`[${new Date().toISOString()}] Refreshed ${events.length} events`);
-    
+
     storage.setLastUpdated(new Date());
   } catch (error) {
     console.error(`[${new Date().toISOString()}] Scheduled refresh failed:`, error);
@@ -62,54 +62,54 @@ function startScheduledRefresh() {
   if (scheduledRefreshInterval) {
     clearInterval(scheduledRefreshInterval);
   }
-  
+
   scheduledRefreshInterval = setInterval(async () => {
     await refreshData();
   }, REFRESH_INTERVAL_MS);
-  
+
   console.log(`Scheduled refresh started - will refresh every ${REFRESH_INTERVAL_MS / 1000 / 60} minutes`);
 }
 
 async function initializeData() {
   if (isInitialized) return;
-  
+
   if (initializationPromise) {
     await initializationPromise;
     return;
   }
-  
+
   initializationPromise = (async () => {
     try {
       console.log("Initializing data...");
-      
+
       const events = await scrapeAllEvents();
       await storage.clearEvents();
       await storage.createManyEvents(events);
       console.log(`Loaded ${events.length} events`);
-      
+
       const restaurantData = getChappaquaRestaurants();
       await storage.clearRestaurants();
       const createdRestaurants = await storage.createManyRestaurants(restaurantData);
       console.log(`Loaded ${createdRestaurants.length} restaurants`);
-      
+
       const restaurantIds = new Map<string, string>();
       createdRestaurants.forEach((r) => restaurantIds.set(r.name, r.id));
-      
+
       const specialsData = getRestaurantSpecials(restaurantIds);
       await storage.clearSpecials();
       await storage.createManySpecials(specialsData);
       console.log(`Loaded ${specialsData.length} specials`);
-      
+
       storage.setLastUpdated(new Date());
       isInitialized = true;
-      
+
       startScheduledRefresh();
     } catch (error) {
       console.error("Error initializing data:", error);
       throw error;
     }
   })();
-  
+
   await initializationPromise;
 }
 
@@ -117,18 +117,18 @@ export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
-  
+
   app.get("/api/events", async (req, res) => {
     try {
       await initializeData();
-      
+
       const weekStartParam = req.query.weekStart as string | undefined;
       const fromParam = req.query.from as string | undefined;
       const toParam = req.query.to as string | undefined;
-      
+
       let weekStart: Date;
       let weekEnd: Date;
-      
+
       // Arbitrary date range (used by the month calendar view)
       if (fromParam && toParam) {
         const from = parseISO(fromParam);
@@ -156,10 +156,10 @@ export async function registerRoutes(
         }
         weekEnd = endOfWeek(weekStart, { weekStartsOn: 0 });
       }
-      
+
       const events = await storage.getEventsByWeek(weekStart, weekEnd);
       const lastUpdated = storage.getLastUpdated();
-      
+
       res.json({
         events,
         lastUpdated: lastUpdated?.toISOString() || null,
@@ -168,7 +168,7 @@ export async function registerRoutes(
       });
     } catch (error) {
       console.error("Error fetching events:", error);
-      res.status(500).json({ 
+      res.status(500).json({
         error: "Failed to fetch events",
         message: error instanceof Error ? error.message : "Unknown error"
       });
@@ -178,17 +178,17 @@ export async function registerRoutes(
   app.get("/api/restaurants", async (req, res) => {
     try {
       await initializeData();
-      
+
       const restaurantsWithSpecials = await storage.getRestaurantsWithSpecials();
       const lastUpdated = storage.getLastUpdated();
-      
+
       res.json({
         restaurants: restaurantsWithSpecials,
         lastUpdated: lastUpdated?.toISOString() || null,
       });
     } catch (error) {
       console.error("Error fetching restaurants:", error);
-      res.status(500).json({ 
+      res.status(500).json({
         error: "Failed to fetch restaurants",
         message: error instanceof Error ? error.message : "Unknown error"
       });
@@ -198,33 +198,33 @@ export async function registerRoutes(
   app.get("/api/specials", async (req, res) => {
     try {
       await initializeData();
-      
+
       const typeParam = req.query.type as string | undefined;
-      
+
       let specials;
       if (typeParam) {
         specials = await storage.getSpecialsByType(typeParam as any);
       } else {
         specials = await storage.getActiveSpecials();
       }
-      
+
       const restaurants = await storage.getRestaurants();
       const restaurantMap = new Map(restaurants.map(r => [r.id, r.name]));
-      
+
       const specialsWithRestaurant = specials.map(special => ({
         ...special,
         restaurantName: restaurantMap.get(special.restaurantId) || "Unknown",
       }));
-      
+
       const lastUpdated = storage.getLastUpdated();
-      
+
       res.json({
         specials: specialsWithRestaurant,
         lastUpdated: lastUpdated?.toISOString() || null,
       });
     } catch (error) {
       console.error("Error fetching specials:", error);
-      res.status(500).json({ 
+      res.status(500).json({
         error: "Failed to fetch specials",
         message: error instanceof Error ? error.message : "Unknown error"
       });
@@ -237,14 +237,14 @@ export async function registerRoutes(
       isInitialized = false;
       initializationPromise = null;
       await initializeData();
-      
+
       res.json({
         success: true,
         lastUpdated: storage.getLastUpdated()?.toISOString(),
       });
     } catch (error) {
       console.error("Error refreshing data:", error);
-      res.status(500).json({ 
+      res.status(500).json({
         error: "Failed to refresh data",
         message: error instanceof Error ? error.message : "Unknown error"
       });

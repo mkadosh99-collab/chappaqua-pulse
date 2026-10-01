@@ -32,15 +32,15 @@ export function RestaurantCard({ restaurant, onViewSpecials }: RestaurantCardPro
   const activeSpecials = restaurant.specials?.filter(s => s.isActive) || [];
 
   return (
-    <Card 
-      className="group overflow-visible hover-elevate transition-all duration-200"
+    <Card
+      className="guide-card group overflow-visible"
       data-testid={`card-restaurant-${restaurant.id}`}
     >
-      <CardContent className="p-6">
+      <CardContent className="p-5 md:p-6">
         <div className="flex flex-col gap-4">
           <div className="flex items-start justify-between gap-3 flex-wrap">
-            <Badge 
-              variant="secondary" 
+            <Badge
+              variant="secondary"
               className={cn("shrink-0 gap-1.5", cuisineInfo.color)}
               data-testid={`badge-cuisine-${restaurant.id}`}
             >
@@ -55,14 +55,14 @@ export function RestaurantCard({ restaurant, onViewSpecials }: RestaurantCardPro
           </div>
 
           <div>
-            <h3 
-              className="text-lg font-medium leading-snug mb-2"
+            <h3
+              className="font-editorial text-xl font-bold leading-[1.12] mb-2"
               data-testid={`text-name-${restaurant.id}`}
             >
               {restaurant.name}
             </h3>
             {restaurant.description && (
-              <p 
+              <p
                 className="text-sm text-muted-foreground line-clamp-2"
                 data-testid={`text-description-${restaurant.id}`}
               >
@@ -71,7 +71,7 @@ export function RestaurantCard({ restaurant, onViewSpecials }: RestaurantCardPro
             )}
           </div>
 
-          <div className="flex flex-col gap-2 text-sm">
+          <div className="flex flex-col gap-2 border-t paper-rule pt-4 text-sm">
             {restaurant.address && (
               <div className="flex items-center gap-2 text-muted-foreground">
                 <MapPin className="w-4 h-4 shrink-0" />
@@ -84,7 +84,7 @@ export function RestaurantCard({ restaurant, onViewSpecials }: RestaurantCardPro
             {restaurant.phone && (
               <div className="flex items-center gap-2 text-muted-foreground">
                 <Phone className="w-4 h-4 shrink-0" />
-                <a 
+                <a
                   href={`tel:${restaurant.phone}`}
                   className="hover:text-foreground transition-colors"
                   data-testid={`link-phone-${restaurant.id}`}
@@ -109,8 +109,8 @@ export function RestaurantCard({ restaurant, onViewSpecials }: RestaurantCardPro
                   {activeSpecials.length} {activeSpecials.length === 1 ? 'Special' : 'Specials'} Available
                 </Badge>
                 {onViewSpecials && (
-                  <Button 
-                    variant="ghost" 
+                  <Button
+                    variant="ghost"
                     size="sm"
                     onClick={onViewSpecials}
                     className="h-8 px-2 text-sm"
@@ -125,15 +125,15 @@ export function RestaurantCard({ restaurant, onViewSpecials }: RestaurantCardPro
 
           {restaurant.website && (
             <div className="pt-2 border-t border-border">
-              <Button 
-                variant="ghost" 
-                size="sm" 
+              <Button
+                variant="ghost"
+                size="sm"
                 asChild
                 className="h-8 px-2 -ml-2 text-sm gap-1.5"
               >
-                <a 
-                  href={restaurant.website} 
-                  target="_blank" 
+                <a
+                  href={restaurant.website}
+                  target="_blank"
                   rel="noopener noreferrer"
                   data-testid={`link-website-${restaurant.id}`}
                 >

@@ -17,15 +17,15 @@ export function EventCard({ event }: EventCardProps) {
   const eventDate = new Date(event.date);
 
   return (
-    <Card 
-      className="group overflow-visible hover-elevate transition-all duration-200"
+    <Card
+      className="guide-card group overflow-visible"
       data-testid={`card-event-${event.id}`}
     >
-      <CardContent className="p-6">
+      <CardContent className="p-5 md:p-6">
         <div className="flex flex-col gap-4">
           <div className="flex items-start justify-between gap-3">
-            <Badge 
-              variant="secondary" 
+            <Badge
+              variant="secondary"
               className={cn("shrink-0 gap-1.5", categoryConfig.color)}
               data-testid={`badge-category-${event.id}`}
             >
@@ -35,14 +35,14 @@ export function EventCard({ event }: EventCardProps) {
           </div>
 
           <div>
-            <h3 
-              className="text-lg font-medium leading-snug line-clamp-2 mb-2"
+            <h3
+              className="font-editorial text-xl font-bold leading-[1.12] line-clamp-2 mb-2"
               data-testid={`text-title-${event.id}`}
             >
               {event.title}
             </h3>
             {event.description && (
-              <p 
+              <p
                 className="text-sm text-muted-foreground line-clamp-2"
                 data-testid={`text-description-${event.id}`}
               >
@@ -51,7 +51,7 @@ export function EventCard({ event }: EventCardProps) {
             )}
           </div>
 
-          <div className="flex flex-col gap-2 text-sm">
+          <div className="flex flex-col gap-2 border-t paper-rule pt-4 text-sm">
             <div className="flex items-center gap-2 text-muted-foreground">
               <Calendar className="w-4 h-4 shrink-0" />
               <span data-testid={`text-date-${event.id}`}>
@@ -69,7 +69,7 @@ export function EventCard({ event }: EventCardProps) {
             {event.location && (
               <div className="flex items-center gap-2 text-muted-foreground">
                 <MapPin className="w-4 h-4 shrink-0" />
-                <span 
+                <span
                   className="line-clamp-1"
                   data-testid={`text-location-${event.id}`}
                 >
@@ -81,15 +81,15 @@ export function EventCard({ event }: EventCardProps) {
 
           {event.sourceUrl && (
             <div className="pt-2 border-t border-border">
-              <Button 
-                variant="ghost" 
-                size="sm" 
+              <Button
+                variant="ghost"
+                size="sm"
                 asChild
                 className="h-8 px-2 -ml-2 text-sm gap-1.5"
               >
-                <a 
-                  href={event.sourceUrl} 
-                  target="_blank" 
+                <a
+                  href={event.sourceUrl}
+                  target="_blank"
                   rel="noopener noreferrer"
                   data-testid={`link-source-${event.id}`}
                 >

@@ -7,7 +7,7 @@ interface EmptyStateProps {
   onReset?: () => void;
 }
 
-export function EmptyState({ 
+export function EmptyState({
   title = "No events this week",
   description = "There are no events scheduled for this time period. Try browsing other weeks or clearing your filters.",
   onReset
@@ -17,15 +17,15 @@ export function EmptyState({
       <div className="flex items-center justify-center w-16 h-16 rounded-full bg-muted mb-6">
         <CalendarX2 className="w-8 h-8 text-muted-foreground" />
       </div>
-      
-      <h3 
+
+      <h3
         className="text-xl font-semibold mb-2"
         data-testid="text-empty-title"
       >
         {title}
       </h3>
-      
-      <p 
+
+      <p
         className="text-muted-foreground max-w-md mb-6"
         data-testid="text-empty-description"
       >
@@ -33,8 +33,8 @@ export function EmptyState({
       </p>
 
       {onReset && (
-        <Button 
-          variant="outline" 
+        <Button
+          variant="outline"
           onClick={onReset}
           className="gap-2"
           data-testid="button-clear-filters"

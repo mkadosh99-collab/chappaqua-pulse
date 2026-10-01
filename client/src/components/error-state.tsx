@@ -8,7 +8,7 @@ interface ErrorStateProps {
   onRetry?: () => void;
 }
 
-export function ErrorState({ 
+export function ErrorState({
   title = "Unable to load events",
   description = "We're having trouble fetching the latest events. Please try again.",
   onRetry
@@ -19,15 +19,15 @@ export function ErrorState({
         <div className="flex items-center justify-center w-14 h-14 rounded-full bg-destructive/10 mb-4">
           <AlertCircle className="w-7 h-7 text-destructive" />
         </div>
-        
-        <h3 
+
+        <h3
           className="text-lg font-semibold mb-2"
           data-testid="text-error-title"
         >
           {title}
         </h3>
-        
-        <p 
+
+        <p
           className="text-muted-foreground max-w-md mb-6"
           data-testid="text-error-description"
         >
@@ -35,8 +35,8 @@ export function ErrorState({
         </p>
 
         {onRetry && (
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             onClick={onRetry}
             className="gap-2"
             data-testid="button-retry"

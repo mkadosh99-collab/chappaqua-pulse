@@ -7,7 +7,7 @@ export function EventSkeleton() {
       <CardContent className="p-6">
         <div className="flex flex-col gap-4">
           <Skeleton className="h-6 w-24 rounded-full" />
-          
+
           <div>
             <Skeleton className="h-6 w-3/4 mb-2" />
             <Skeleton className="h-4 w-full" />
